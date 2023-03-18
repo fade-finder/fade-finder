@@ -1,7 +1,8 @@
-const BigButton = ({ type, texto, icono='' }) => {
+const BigButton = ({ type, texto, icono='', onClick }) => {
 	return (
 		<button
 			type={type}
+			onClick={onClick}
 			className='flex justify-center items-center gap-x-2 h-full px-4 py-2 rounded-md bg-[var(--colorPrimario)] text-white hover:opacity-80'
 		>
 			{icono && icono}

@@ -1,10 +1,20 @@
+// * * * * * * * * * * * * * * REQUIRES * * * * * * * * * * *
+// paquetes
 const express = require("express")
-const app = express()
-
-// Routers
+const cors = require('cors')
+// routes
 const clienteRoutes = require('./routes/cliente')
+const adminRoutes = require('./routes/admin')
+const generalRoutes = require('./routes/general')
 
+// * * * * * * * * * * * * * * USE * * * * * * * * * * *
+const app = express()
+app.use(cors())
+app.use(express.json())   // Analiza las solicitudes JSON entrantes y coloca los datos analizados en formato req.body.
+// routes
 app.use(clienteRoutes)
+app.use('/admin', adminRoutes)
+app.use(generalRoutes)
 
 app.get('/', (req, res, next) => {
   res.send('Todo funciona')

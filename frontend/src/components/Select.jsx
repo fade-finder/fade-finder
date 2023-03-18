@@ -1,16 +1,18 @@
-const Select = ({id, opciones}) => {
+const Select = ({ id, opciones, value, onChange }) => {
 	return (
 		<select
 			name={id}
 			id={id}
-			className='w-[200px] py-1 text-lg font-light rounded-md outline-none border focus:border-[var(--colorPrimario)] duration-200'
+			value={value}
+			onChange={onChange}
+			className='w-full py-1 text-lg font-light rounded-md outline-none border focus:border-[var(--colorPrimario)] duration-200'
 		>
-      {
-        opciones.map(opcion => (
-          <option value={opcion.value} key={opcion.value}>{opcion.texto}</option>
-        ))
-      }
-			
+			<option value="" disabled >SELECCIONA UNA OPCION</option>
+			{opciones.map(opcion => (
+				<option value={opcion.value} key={opcion.value}>
+					{opcion.texto}
+				</option>
+			))}
 		</select>
 	)
 }

@@ -10,7 +10,6 @@ import { BsCardList, BsClock } from 'react-icons/bs'
 import { AiOutlineCheck } from 'react-icons/ai'
 import { FiAlertTriangle } from 'react-icons/fi'
 
-
 const Citas = () => {
 	return (
 		<>
@@ -46,16 +45,18 @@ const Citas = () => {
 				<div className='flex justify-between items-center gap-x-5'>
 					{/* Buscador */}
 					<BuscadorAdmin id='buscadorCita' placeholder='Buscar cita' />
-					<Select
-						id='selectorCita'
-						opciones={[
-							{ value: 'todas', texto: 'Todas' },
-							{ value: 'realizadas', texto: 'Realizadas' },
-							{ value: 'pendientes', texto: 'Pendientes' },
-							{ value: 'por_confirmar', texto: 'Por confirmar' },
-							{ value: 'canceladas', texto: 'Canceladas' },
-						]}
-					/>
+					<div className='w-[200px]'>
+						<Select
+							id='selectorCita'
+							opciones={[
+								{ value: 'todas', texto: 'Todas' },
+								{ value: 'realizadas', texto: 'Realizadas' },
+								{ value: 'pendientes', texto: 'Pendientes' },
+								{ value: 'por_confirmar', texto: 'Por confirmar' },
+								{ value: 'canceladas', texto: 'Canceladas' },
+							]}
+						/>
+					</div>
 				</div>
 				{/* Contenedor de las Cards */}
 				<div className='w-full h-max flex gap-x-8 justify-between items-start my-6'>

@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
+// Controlador
+const adminControlador = require('../controllers/admin')
+
 // * * * * * * * GET * * * * * * * *
 // login
 // pefil
@@ -11,15 +14,15 @@ const router = express.Router()
 // ver estadisticas del negocio
 
 // * * * * * * POST * * * * * * * * 
-router.post('/barberos/agregar')   // agregar barbero
+router.post('/barberos/agregar', adminControlador.postAgregarBarbero)   // agregar barbero
 // login
 
 // * * * * * * PUT * * * * * * * * *
-router.put('/barberos/:idBarbero')   // actualizar barbero
+router.put('/barberos/:id', adminControlador.putBarbero)   // actualizar barbero
 // cancelar cita
 // actualizar perfil
 
 // * * * * * * DELETE * * * * * * * *
-router.delete('/barberos/:idBarbero')    // eliminar barbero
+router.delete('/barberos/:id', adminControlador.deleteBarbero)    // eliminar barbero
 
 module.exports = router

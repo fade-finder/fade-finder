@@ -1,15 +1,15 @@
 import { FaEdit } from 'react-icons/fa'
 import { AiFillDelete } from 'react-icons/ai'
 
-const BarberoCard = ({ img, nombre, servicios, pendientes, puntaje }) => {
+const BarberoCard = ({ img, nombre, servicios, pendientes, puntaje, onClickEditar, onClickEliminar }) => {
 	return (
 		<div className='relative bg-[#fff] flex flex-col gap-y-4 justify-center items-center p-10 rounded-lg hover:shadow-lg hover:-translate-y-2 duration-300 select-none'>
 			{/* Icons */}
 			<div className='absolute top-5 left-5 flex flex-col gap-y-3'>
-				<button>
+				<button onClick={onClickEditar}>
 					<FaEdit className='text-2xl duration-200 text-blue-500 hover:opacity-80' />
 				</button>
-				<button>
+				<button onClick={onClickEliminar}>
 					<AiFillDelete className='text-2xl duration-200 text-red-500 hover:opacity-80' />
 				</button>
 			</div>

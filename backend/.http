@@ -1,4 +1,4 @@
-POST http://localhost:3000/crear-cuenta HTTP/1.1
+POST http://localhost:3000/admin/barberos/agregar HTTP/1.1
 content-type: application/json
 
 {

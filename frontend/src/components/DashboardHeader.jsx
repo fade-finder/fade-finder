@@ -4,7 +4,7 @@ import { BiLogOut } from 'react-icons/bi'
 
 const DashboardHeader = ({ titulo }) => {
 	return (
-		<div className='fixed z-50 top-0 right-0 left-[290px] bg-[#F5F8FE] h-[100px] flex justify-between items-center px-10'>
+		<div className='fixed z-40 top-0 right-0 left-[290px] bg-[#F5F8FE] h-[100px] flex justify-between items-center px-10'>
 			<h1 className='text-3xl font-semibold'>{titulo}</h1>
 			<div className='flex items-center gap-x-4 px-4 py-2 rounded-full bg-white shadow-sm'>
 				<a href='/' className=''>
