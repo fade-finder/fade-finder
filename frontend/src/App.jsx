@@ -18,14 +18,20 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
+				{/* plantilla header y footer */}
 				<Route path='/' element={<Layout />}>
 					<Route index element={<LandingPage />} />
-					<Route index path='register' element={<Register />} />
           <Route path='*' element={<NoPage />} />
 				</Route>
+				{/* plantilla limpia */}
 				<Route>
 					<Route path='login' element={<Login />} />
 				</Route>
+				{/* Cliente plantilla limpia */}
+				<Route path='/cliente' >
+					<Route path='register' element={<Register />} />
+				</Route>
+				{/* Plantilla con dashboard */}
 				<Route path='/admin' element={<LayoutAdmin />}>
 					<Route index element={<Negocio />} />
 					<Route path='negocio' element={<Negocio />} />

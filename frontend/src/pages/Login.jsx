@@ -88,7 +88,7 @@ const Login = () => {
 						<p className='text-xs font-base'>
 							¿No tienes cuenta?
 							<Link
-								to='/'
+								to='/cliente/register'
 								className='font-semibold text-[var(--colorPrimario)] hover:opacity-80 duration-200'
 							>
 								{' '}

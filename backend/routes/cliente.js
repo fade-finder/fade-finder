@@ -13,7 +13,7 @@ const controladorCliente = require('../controllers/cliente')
 // ver citas
 
 // * * * * * * * * * POST * * * * * * * * * * *
-router.post('/register')
+router.post('/register', controladorCliente.postRegister)
 router.post('/agendar-cita')  // agendar cita
 // login
 
