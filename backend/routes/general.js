@@ -7,7 +7,7 @@ const controladorGeneral = require('../controllers/general')
 router.get('/barberos', controladorGeneral.getBarberos)
 
 // * * * * * * * * POST * * * * * * * * *
-router.post('/login')
+router.post('/login', controladorGeneral.postLogin)
 
 // * * * * * * * * PUT * * * * * * * * *
 router.put('/perfil')   // actualizar pefil
