@@ -2,6 +2,7 @@
 // paquetes
 const express = require("express")
 const cors = require('cors')
+const baseDeDatos = require('./utils/baseDeDatos')
 // routes
 const clienteRoutes = require('./routes/cliente')
 const adminRoutes = require('./routes/admin')
@@ -19,5 +20,14 @@ app.use(generalRoutes)
 app.get('/', (req, res, next) => {
   res.send('Todo funciona')
 })
+
+//Funcion para verificar que hay conexion con la base de datos
+baseDeDatos.execute('SELECT * FROM barberia')
+  .then(resultado => {
+    console.log(resultado);
+  })
+  .catch(err => {
+    console.log(err);
+  })
 
 app.listen(3000)
