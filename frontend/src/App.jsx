@@ -26,10 +26,7 @@ function App() {
 				{/* plantilla limpia */}
 				<Route>
 					<Route path='login' element={<Login />} />
-				</Route>
-				{/* Cliente plantilla limpia */}
-				<Route path='/cliente' >
-					<Route path='register' element={<Register />} />
+					<Route path='/cliente/register' element={<Register />} />
 				</Route>
 				{/* Plantilla con dashboard */}
 				<Route path='/admin' element={<LayoutAdmin />}>
