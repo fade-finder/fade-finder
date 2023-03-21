@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/logo.png'
 import Input from '../components/Input'
-import Select from '../components/Select'
 
 // Hooks
 import { useState } from 'react'
@@ -189,7 +188,7 @@ const Register = () => {
 						/>
 						<Input
 							label='Número exterior'
-							type='text'
+							type='number'
 							name='numero'
 							id='numero'
 							placeholder='Escribe tu número exterior'
