@@ -2,8 +2,7 @@ const baseDeDatos = require('../utils/baseDeDatos');
 
 class Barbero
 {
-    constructor(idBarbero, nombre, ap_paterno, ap_materno, correo, password, genero, telefono, foto, direccion, fecha_nacimiento, estado){
-        this.idBarbero = idBarbero
+    constructor(nombre, ap_paterno, ap_materno, correo, password, genero, telefono, foto, direccion, fecha_nacimiento, estado){
         this.nombre = nombre
         this.ap_paterno = ap_paterno
         this.ap_materno = ap_materno
@@ -19,7 +18,8 @@ class Barbero
 
     AgregarBarbero()
     {
-        return baseDeDatos.execute('INSERT INTO barbero ()')
+        return baseDeDatos.execute('INSERT INTO barbero (idBarbero, nombre, ap_paterno, ap_materno, correo, password, genero, telefono, foto, direccion, fecha_nacimiento, estado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+        [null, this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.estado])
     }
 }
 
