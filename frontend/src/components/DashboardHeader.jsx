@@ -1,6 +1,7 @@
 import { AiOutlineBell, AiOutlineComment } from 'react-icons/ai'
 import { HiMoon } from 'react-icons/hi'
 import { BiLogOut } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 
 const DashboardHeader = ({ titulo }) => {
 	return (
@@ -25,13 +26,13 @@ const DashboardHeader = ({ titulo }) => {
 				<button>
 					<HiMoon className='text-xl text-[#2424249c] hover:text-[#242424e5] duration-200' />
 				</button>
-				<button className=''>
+				<Link to='/perfil'>
 					<img
 						className='rounded-full w-[40px] h-[40px]'
 						src='https://editorialtelevisa.brightspotcdn.com/dims4/default/4876408/2147483647/strip/true/crop/1194x672+1+0/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-editorial-televisa.s3.amazonaws.com%2Fbrightspot%2Fwp-content%2Fuploads%2F2022%2F09%2F10-datos-curiosos-que-debes-saber-sobre-Mario-Bros.jpg'
 						alt='Foto de perfil'
 					/>
-				</button>
+				</Link>
 			</div>
 		</div>
 	)

@@ -24,10 +24,14 @@ const Barberos = () => {
 	const [editando, setEditando] = useState(false)
 	const [barberos, setBarberos] = useState([])
 	const [barbero, setBarbero] = useState({
+		email: '',
+		password: '',
 		nombre: '',
 		ap_paterno: '',
 		ap_materno: '',
+		genero: '',
 		telefono: '',
+		fecha_nacimiento: '',
 		foto: '',
 		calle: '',
 		colonia: '',
@@ -41,122 +45,123 @@ const Barberos = () => {
 			setBarbero({ ...barbero })
 			setVentanaModal(true)
 		} else {
-			setBarbero({
-				nombre: '',
-				ap_paterno: '',
-				ap_materno: '',
-				telefono: '',
-				foto: '',
-				calle: '',
-				colonia: '',
-				ciudad: '',
-				numero: '',
-			})
+			limpiarCampos()
 		}
 	}, [editando])
+
 	useEffect(() => {
 		getBarberos()
 	}, [])
 
 	// * * * * * * * * * * * * * * * FUNCIONES * * * * * * * * * * * * * *
+
+	// Funcion para acutalizar el estado de mi objeto
 	const changeInputValue = (tag, value) => {
 		setBarbero({
 			...barbero,
 			[tag]: value,
 		})
 	}
+
+	// Funcion para cerrar la ventana modal
 	const cerrarVentanaModal = () => {
 		setVentanaModal(false)
 		if (editando) setEditando(false)
 	}
+
+	// Funcion para limpiar los campos de la ventana modal
+	const limpiarCampos = () => {
+		setBarbero({
+			email: '',
+			password: '',
+			nombre: '',
+			ap_paterno: '',
+			ap_materno: '',
+			genero: '',
+			telefono: '',
+			fecha_nacimiento: '',
+			foto: '',
+			calle: '',
+			colonia: '',
+			ciudad: '',
+			numero: '',
+		})
+	}
+
+	// Funcion para traer los barberos del backend, la utilizo cuando se esta renderizando la pagina
 	const getBarberos = async () => {
 		try {
 			const res = await axios.get('http://localhost:3000/barberos')
 			setBarberos(res.data)
 		} catch (error) {
-			console.log(error);
+			console.log(error)
 		}
 	}
+
+	// Funcion que carga los datos del barbero seleccionado para editar al formulario
 	const cargarDatosBarberoFormulario = id => {
-		// Cargamos los datos del barbero a editar a la ventana modal
 		const barberoEditar = barberos.filter(barbero => barbero.id == id)
 		setBarbero(barberoEditar[0])
 		setEditando(true)
 	}
+
+	// Funcion para agregar un nuevo barbero a la bd
 	const onClickAddBarbero = async e => {
 		e.preventDefault()
 		setVentanaModal(false)
-		// Logica para enviar los datos
 		try {
 			const res = await axios.post(
 				'http://localhost:3000/admin/barberos/agregar',
 				barbero
 			)
-			console.log(res.data);
-			setBarbero({
-				nombre: '',
-				ap_paterno: '',
-				ap_materno: '',
-				telefono: '',
-				foto: '',
-				calle: '',
-				colonia: '',
-				ciudad: '',
-				numero: '',
-			})
-			getBarberos()		// azctualizamos el estado de los barberos
+			console.log(res.data)
+			limpiarCampos()
+			getBarberos()
 			cerrarVentanaModal()
 			Swal.fire({
 				icon: 'success',
 				title: 'Barbero agregado',
 				showConfirmButton: false,
-				timer: 2000
+				timer: 2000,
 			})
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Error',
-				text: error.message + ': ' + error.code
+				text: error.message + ': ' + error.code,
 			})
 		}
 	}
+
+	// Funcion para actualizar un barbero
 	const onClickUpdateBarbero = async e => {
 		e.preventDefault()
 		setVentanaModal(false)
-		// Logica para enviar los datos
 		try {
 			const res = await axios.put(
-				'http://localhost:3000/admin/barberos/'+barbero.id,
+				'http://localhost:3000/admin/barberos/' + barbero.id,
 				barbero
 			)
-			console.log(res.data);
-			setBarbero({
-				nombre: '',
-				ap_paterno: '',
-				ap_materno: '',
-				telefono: '',
-				foto: '',
-				calle: '',
-				colonia: '',
-				ciudad: '',
-				numero: '',
-			})
-			getBarberos()		// azctualizamos el estado de los barberos
+			console.log(res.data)
+			limpiarCampos()
+			getBarberos()
 			cerrarVentanaModal()
 			Swal.fire({
 				icon: 'success',
 				title: 'Barbero actualizado',
 				showConfirmButton: false,
-				timer: 2000
+				timer: 2000,
 			})
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Error',
-				text: error.message + ': ' + error.code
+				text: error.message + ': ' + error.code,
 			})
 		}
 	}
+
+	// Funcion para eliminar a un barbero
 	const onClickDeleteBarbero = async id => {
 		const { isConfirmed } = await Swal.fire({
 			title: '¿Estas seguro?',
@@ -170,18 +175,18 @@ const Barberos = () => {
 		})
 		if (isConfirmed) {
 			Swal.fire('Eliminado!', 'El barbero fue eliminado del sistema', 'success')
-			// Logica de parte del frontend para eliminar al barbero
 			const barberosFiltrados = barberos.filter(barbero => barbero.id != id)
 			setBarberos(barberosFiltrados)
-			// Logica para eliminar al barbero de la bd
 			try {
-				const res = await axios.delete('http://localhost:3000/admin/barberos/'+id)
+				const res = await axios.delete(
+					'http://localhost:3000/admin/barberos/' + id
+				)
 				console.log(res.data)
 			} catch (error) {
 				Swal.fire({
 					icon: 'error',
 					title: 'Error',
-					text: error.message + ': ' + error.code
+					text: error.message + ': ' + error.code,
 				})
 			}
 		}
@@ -195,6 +200,29 @@ const Barberos = () => {
 					cerrarModal={() => cerrarVentanaModal()}
 					titulo={editando ? 'Editar barbero' : 'Agregar barbero'}
 				>
+					<div className='flex justify-between items-center gap-x-8'>
+						{/* Email */}
+						<Input
+							label='Correo electrónico'
+							type='email'
+							name='email'
+							id='email'
+							placeholder='Escribe el correo electrónico'
+							value={barbero.email}
+							onChange={e => changeInputValue(e.target.id, e.target.value)}
+						/>
+						{/* Password */}
+						<Input
+							label='Contraseña'
+							type='text'
+							name='password'
+							id='password'
+							placeholder='Establece una contraseña'
+							value={barbero.password}
+							onChange={e => changeInputValue(e.target.id, e.target.value)}
+						/>
+					</div>
+					<div className='w-full h-[1px] bg-[#0000002d] my-4'></div>
 					{/* Nombre */}
 					<Input
 						label='Nombre(s)'
@@ -241,8 +269,8 @@ const Barberos = () => {
 								value={barbero.genero}
 								onChange={e => changeInputValue(e.target.id, e.target.value)}
 								opciones={[
-									{ value: 'masculino', texto: 'Masculino' },
-									{ value: 'femenino', texto: 'Femenino' },
+									{ value: 'm', texto: 'Masculino' },
+									{ value: 'f', texto: 'Femenino' },
 								]}
 							/>
 						</div>
@@ -257,34 +285,46 @@ const Barberos = () => {
 							onChange={e => changeInputValue(e.target.id, e.target.value)}
 						/>
 					</div>
-					{/* Foto */}
-					{editando ? (
-						<div className='flex flex-col w-full gap-y-1'>
-							<label
-								htmlFor='correo'
-								className='text-base font-semibold text-gray-600'
-							>
-								Foto de perfil
-							</label>
-							<input
+					<div className='flex justify-between items-center gap-x-8'>
+						{/* Foto */}
+						{editando ? (
+							<div className='flex flex-col w-full gap-y-1'>
+								<label
+									htmlFor='correo'
+									className='text-base font-semibold text-gray-600'
+								>
+									Foto de perfil
+								</label>
+								<input
+									type='file'
+									name='foto'
+									id='foto'
+									onChange={e => changeInputValue(e.target.id, e.target.value)}
+									className='w-full outline-none border border-gray-300 duration-200 focus:border-[var(--colorPrimario)] px-3 py-2 text-sm'
+								/>
+							</div>
+						) : (
+							<Input
+								label='Foto de perfil'
 								type='file'
 								name='foto'
 								id='foto'
+								placeholder='Selecciona una foto'
+								value={barbero.foto}
 								onChange={e => changeInputValue(e.target.id, e.target.value)}
-								className='w-full outline-none border border-gray-300 duration-200 focus:border-[var(--colorPrimario)] px-3 py-2 text-sm'
 							/>
-						</div>
-					) : (
+						)}
+						{/* Fecha de nacimiento */}
 						<Input
-							label='Foto de perfil'
-							type='file'
-							name='foto'
-							id='foto'
-							placeholder='Selecciona una foto'
-							value={barbero.foto}
+							label='Fecha de nacimiento'
+							type='date'
+							name='fecha_nacimiento'
+							id='fecha_nacimiento'
+							placeholder='Escribe la fecha de nacimiento'
+							value={barbero.fecha_nacimiento}
 							onChange={e => changeInputValue(e.target.id, e.target.value)}
 						/>
-					)}
+					</div>
 					<div className='w-full h-[1px] bg-[#0000002d] my-4'></div>
 					<div className='flex justify-between items-center gap-x-8'>
 						{/* Calle */}
@@ -334,7 +374,11 @@ const Barberos = () => {
 						<BigButton
 							type='submit'
 							texto={editando ? 'Editar barbero' : 'Agregar barbero'}
-							onClick={editando ? e => onClickUpdateBarbero(e) : e => onClickAddBarbero(e)}
+							onClick={
+								editando
+									? e => onClickUpdateBarbero(e)
+									: e => onClickAddBarbero(e)
+							}
 							icono={
 								editando ? (
 									<FaEdit className='text-xl' />

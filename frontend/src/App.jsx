@@ -6,7 +6,7 @@ import LandingPage from './pages/LandingPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NoPage from './pages/NoPage'
-
+import Perfil from './pages/Perfil'
 import LayoutAdmin from './components/LayoutAdmin'
 import Barberos from './pages/Barberos'
 import Clientes from './pages/Clientes'
@@ -15,6 +15,9 @@ import Negocio from './pages/Negocio'
 import Resenas from './pages/Resenas'
 
 function App() {
+	const usuario = {
+		rol: 1
+	}
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -26,10 +29,8 @@ function App() {
 				{/* plantilla limpia */}
 				<Route>
 					<Route path='login' element={<Login />} />
-				</Route>
-				{/* Cliente plantilla limpia */}
-				<Route path='/cliente' >
-					<Route path='register' element={<Register />} />
+					<Route path='/cliente/register' element={<Register />} />
+					<Route path='/perfil' element={<Perfil />} />
 				</Route>
 				{/* Plantilla con dashboard */}
 				<Route path='/admin' element={<LayoutAdmin />}>

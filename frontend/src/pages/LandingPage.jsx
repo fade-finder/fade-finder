@@ -81,6 +81,9 @@ const LandingPage = () => {
 							<label htmlFor="mensaje" className='text-lg font-bold'>Mensaje</label>
 							<textarea name="mensaje" id="mensaje" placeholder='Redacta tu mensaje' className='w-full min-h-[250px] outline-none border border-gray-300 duration-200 focus:border-[var(--colorPrimario)] px-3 py-2'></textarea>
 						</div>
+						<div>
+							<button type="submit" className='bg-[var(--colorPrimario)] text-white px-5 py-2 hover:opacity-90 hover:shadow-lg'>Enviar</button>
+						</div>
 					</form>
 				</div>
 			</Section>

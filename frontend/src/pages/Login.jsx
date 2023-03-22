@@ -66,6 +66,7 @@ const Login = () => {
 					/>
 
 					<div className='w-1/2'>
+						<label htmlFor="rol" className='text-base font-semibold text-gray-600'>Rol</label>
 						<Select
 							id='rol'
 							value={rol}
@@ -73,11 +74,12 @@ const Login = () => {
 							opciones={[
 								{ value: 0, texto: 'Cliente' },
 								{ value: 1, texto: 'Empleado' },
+								{ value: 2, texto: 'Administrador' }
 							]}
 						/>
 					</div>
 
-					<div>
+					<div className='mt-2'>
 						<button
 							type='submit'
 							onClick={e => onClickLogin(e)}

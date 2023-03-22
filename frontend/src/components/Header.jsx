@@ -24,7 +24,7 @@ const Header = () => {
 	// }, [])
 
 	return (
-		<header className='h-[120px] w-[100%] px-[30px] sm:px-[60px] md:px-[80px] lg:px-[100px] bg-[#ffffffab] fixed top-0 shadow-lg flex justify-between items-center z-50'>
+		<header className='h-[120px] w-[100%] px-[30px] sm:px-[60px] md:px-[80px] lg:px-[100px] bg-[#fff] fixed top-0 shadow-lg flex justify-between items-center z-50'>
 			<Link className='h-[80px] flex items-center' to='/'>
 				<img src={Logo} alt='FadeFiner Logo' />
 			</Link>
