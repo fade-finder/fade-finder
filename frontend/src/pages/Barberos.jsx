@@ -269,8 +269,8 @@ const Barberos = () => {
 								value={barbero.genero}
 								onChange={e => changeInputValue(e.target.id, e.target.value)}
 								opciones={[
-									{ value: 'masculino', texto: 'Masculino' },
-									{ value: 'femenino', texto: 'Femenino' },
+									{ value: 'm', texto: 'Masculino' },
+									{ value: 'f', texto: 'Femenino' },
 								]}
 							/>
 						</div>
