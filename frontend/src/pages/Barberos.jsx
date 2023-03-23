@@ -29,14 +29,8 @@ const Barberos = () => {
 		nombre: '',
 		ap_paterno: '',
 		ap_materno: '',
-		genero: '',
 		telefono: '',
-		fecha_nacimiento: '',
 		foto: '',
-		calle: '',
-		colonia: '',
-		ciudad: '',
-		numero: '',
 	})
 
 	// * * * * * * * * * * * * * * * USE EFFECT * * * * * * * * * * * * * *
@@ -77,14 +71,8 @@ const Barberos = () => {
 			nombre: '',
 			ap_paterno: '',
 			ap_materno: '',
-			genero: '',
 			telefono: '',
-			fecha_nacimiento: '',
 			foto: '',
-			calle: '',
-			colonia: '',
-			ciudad: '',
-			numero: '',
 		})
 	}
 
@@ -114,7 +102,7 @@ const Barberos = () => {
 				'http://localhost:3000/admin/barberos/agregar',
 				barbero
 			)
-			console.log(res.data)
+			console.log(res.data);
 			limpiarCampos()
 			getBarberos()
 			cerrarVentanaModal()
@@ -142,7 +130,7 @@ const Barberos = () => {
 				'http://localhost:3000/admin/barberos/' + barbero.idBarbero,
 				barbero
 			)
-			console.log(res.data)
+			console.log(res.data);
 			limpiarCampos()
 			getBarberos()
 			cerrarVentanaModal()
@@ -184,7 +172,9 @@ const Barberos = () => {
 					'El barbero fue eliminado del sistema',
 					'success'
 				)
-				const barberosFiltrados = barberos.filter(barbero => barbero.idBarbero != id)
+				const barberosFiltrados = barberos.filter(
+					barbero => barbero.idBarbero != id
+				)
 				setBarberos(barberosFiltrados)
 			} catch (error) {
 				Swal.fire({
@@ -226,7 +216,7 @@ const Barberos = () => {
 							onChange={e => changeInputValue(e.target.id, e.target.value)}
 						/>
 					</div>
-					<div className='w-full h-[1px] bg-[#0000002d] my-4'></div>
+					<div className='w-full h-[1px] bg-[#0000002d] my-2'></div>
 					{/* Nombre */}
 					<Input
 						label='Nombre(s)'
@@ -260,24 +250,6 @@ const Barberos = () => {
 						/>
 					</div>
 					<div className='flex justify-between items-center gap-x-8'>
-						{/* Genero */}
-						<div className='flex flex-col justify-between w-full h-full'>
-							<label
-								htmlFor='genero'
-								className='text-base font-semibold text-gray-600'
-							>
-								Genero
-							</label>
-							<Select
-								id='genero'
-								value={barbero.genero}
-								onChange={e => changeInputValue(e.target.id, e.target.value)}
-								opciones={[
-									{ value: 'm', texto: 'Masculino' },
-									{ value: 'f', texto: 'Femenino' },
-								]}
-							/>
-						</div>
 						{/* Telefono */}
 						<Input
 							label='Número Telefónico'
@@ -288,8 +260,6 @@ const Barberos = () => {
 							value={barbero.telefono}
 							onChange={e => changeInputValue(e.target.id, e.target.value)}
 						/>
-					</div>
-					<div className='flex justify-between items-center gap-x-8'>
 						{/* Foto */}
 						{editando ? (
 							<div className='flex flex-col w-full gap-y-1'>
@@ -318,61 +288,6 @@ const Barberos = () => {
 								onChange={e => changeInputValue(e.target.id, e.target.value)}
 							/>
 						)}
-						{/* Fecha de nacimiento */}
-						<Input
-							label='Fecha de nacimiento'
-							type='date'
-							name='fecha_nacimiento'
-							id='fecha_nacimiento'
-							placeholder='Escribe la fecha de nacimiento'
-							value={barbero.fecha_nacimiento}
-							onChange={e => changeInputValue(e.target.id, e.target.value)}
-						/>
-					</div>
-					<div className='w-full h-[1px] bg-[#0000002d] my-4'></div>
-					<div className='flex justify-between items-center gap-x-8'>
-						{/* Calle */}
-						<Input
-							label='Calle'
-							type='text'
-							name='calle'
-							id='calle'
-							placeholder='Escribe el nombre de la calle'
-							value={barbero.calle}
-							onChange={e => changeInputValue(e.target.id, e.target.value)}
-						/>
-						{/* Colornia */}
-						<Input
-							label='Colonia'
-							type='text'
-							name='colonia'
-							id='colonia'
-							placeholder='Escribe el nombre de la colonia'
-							value={barbero.colonia}
-							onChange={e => changeInputValue(e.target.id, e.target.value)}
-						/>
-					</div>
-					<div className='flex justify-between items-center gap-x-8 mb-5'>
-						{/* Ciudad */}
-						<Input
-							label='Ciudad'
-							type='text'
-							name='ciudad'
-							id='ciudad'
-							placeholder='Escribe el nombre de la ciudad'
-							value={barbero.ciudad}
-							onChange={e => changeInputValue(e.target.id, e.target.value)}
-						/>
-						{/* Numero exterior */}
-						<Input
-							label='Número exterior'
-							type='number'
-							name='numero'
-							id='numero'
-							placeholder='Escribe el número exterior'
-							value={barbero.numero}
-							onChange={e => changeInputValue(e.target.id, e.target.value)}
-						/>
 					</div>
 					<div>
 						<BigButton
@@ -419,7 +334,9 @@ const Barberos = () => {
 							servicios={12}
 							pendientes={2}
 							puntaje={4.8}
-							onClickEditar={() => cargarDatosBarberoFormulario(barbero.idBarbero)}
+							onClickEditar={() =>
+								cargarDatosBarberoFormulario(barbero.idBarbero)
+							}
 							onClickEliminar={() => onClickDeleteBarbero(barbero.idBarbero)}
 						/>
 					))}
