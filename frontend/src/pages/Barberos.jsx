@@ -100,7 +100,7 @@ const Barberos = () => {
 
 	// Funcion que carga los datos del barbero seleccionado para editar al formulario
 	const cargarDatosBarberoFormulario = id => {
-		const barberoEditar = barberos.filter(barbero => barbero.id == id)
+		const barberoEditar = barberos.filter(barbero => barbero.idBarbero == id)
 		setBarbero(barberoEditar[0])
 		setEditando(true)
 	}
@@ -139,7 +139,7 @@ const Barberos = () => {
 		setVentanaModal(false)
 		try {
 			const res = await axios.put(
-				'http://localhost:3000/admin/barberos/' + barbero.id,
+				'http://localhost:3000/admin/barberos/' + barbero.idBarbero,
 				barbero
 			)
 			console.log(res.data)
