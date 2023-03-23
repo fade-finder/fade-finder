@@ -1,9 +1,14 @@
 import { AiOutlineLeft } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-
 import { useState } from 'react'
+import Input from '../components/Input'
+import SmallButton from '../components/SmallButton'
+import Select from '../components/Select'
+import Header from '../components/Header'
 
 const Perfil = () => {
+	const rol = 1
+
 	const [usuario, setUsuario] = useState({
 		email: '',
 		password: '',
@@ -17,9 +22,27 @@ const Perfil = () => {
 		colonia: '',
 		ciudad: '',
 		numero: '',
+		genero: '',
+		estado: '',
 	})
+
+	// Funciones
+	const changeStateValue = (name, value) => {
+		setUsuario({
+			...usuario,
+			[name]: value,
+		})
+	}
+
+	const handleClickActualizarPassword = () => {}
+
+	const handleClickGuardarTodo = () => {}
+
+	const handleClickEliminarCuenta = () => {}
+
 	return (
-		<div className='px-[140px] py-20 min-h-screen w-full bg-[#F5F8FE] flex justify-center'>
+		<div className='px-[140px] py-20 pt-[160px] min-h-screen w-full bg-[#F5F8FE] flex justify-center'>
+			<Header />
 			<div className='w-full max-w-[1080px]'>
 				<div>
 					<Link to='/admin'>
@@ -41,124 +64,189 @@ const Perfil = () => {
 								/>
 							</div>
 							<div className='h-1/2 w-full flex items-end p-6'>
-								<h2 className='text-lg font-semibold'>
+								<h2 className='text-xl font-semibold uppercase'>
 									Daniel Ramón Solís Medina
 								</h2>
 							</div>
 						</div>
 
 						{/* Nombres */}
-						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-3 py-6 px-10'>
-							<h2 className='text-lg font-semibold'>Nombre completo</h2>
-							<input
+						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
+							<Input
+								label='Nombre'
 								type='text'
 								name='nombre'
 								id='nombre'
-								placeholder='Nombre'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder='Actualiza tu nombre'
+								value={usuario.nombre}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<input
+							<Input
+								label='Apellido paterno'
 								type='text'
 								name='ap_paterno'
 								id='ap_paterno'
-								placeholder='Apellido paterno'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder='Actualiza tu apellido paterno'
+								value={usuario.ap_paterno}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<input
+							<Input
+								label='Apellido materno'
 								type='text'
 								name='ap_materno'
 								id='ap_materno'
-								placeholder='Apellido materno'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder='Actualiza tu apellido materno'
+								value={usuario.ap_materno}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
 						</div>
 						{/* Direccion */}
-						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-3 py-6 px-10'>
-							<h2 className='text-lg font-semibold'>Dirección</h2>
+						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
+							<h2 className='text-lg font-bold'>Dirección</h2>
 							<div className='flex justify-center items-center gap-x-5'>
-								<input
+								<Input
+									label='Calle'
 									type='text'
 									name='calle'
 									id='calle'
-									placeholder='Calle'
-									className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+									placeholder='Actualiza tu calle'
+									value={usuario.calle}
+									onChange={e => changeStateValue(e.target.id, e.target.value)}
 								/>
-								<input
+								<Input
+									label='Colonia'
 									type='text'
 									name='colonia'
 									id='colonia'
-									placeholder='Colonia'
-									className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+									placeholder='Actualiza tu colonia'
+									value={usuario.colonia}
+									onChange={e => changeStateValue(e.target.id, e.target.value)}
 								/>
 							</div>
 							<div className='flex justify-center items-center gap-x-5'>
-								<input
+								<Input
+									label='Ciudad'
 									type='text'
 									name='ciudad'
 									id='ciudad'
-									placeholder='Ciudad'
-									className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+									placeholder='Actualiza tu ciudad'
+									value={usuario.ciudad}
+									onChange={e => changeStateValue(e.target.id, e.target.value)}
 								/>
-								<input
+								<Input
+									label='Número Exterior'
 									type='number'
 									name='numero'
 									id='numero'
-									placeholder='Número exterior'
-									className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+									placeholder='Actualiza tu número ext.'
+									value={usuario.numero}
+									onChange={e => changeStateValue(e.target.id, e.target.value)}
 								/>
 							</div>
 						</div>
 					</div>
 					<div className='min-h-[500px] w-1/2 flex flex-col gap-y-8'>
-						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-3 py-6 px-10'>
-							<h2 className='text-lg font-semibold'>Actualizar contraseña</h2>
-							<input
-								type='text'
+						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
+							<h2 className='text-lg font-bold'>Actualizar contraseña</h2>
+							<Input
+								label='Email'
+								type='email'
 								name='email'
 								id='email'
-								placeholder='Correo electrónico'
-								disabled='on'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder=''
+								value={usuario.email}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
+								activo={false}
 							/>
-							<input
-								type='password'
+							<Input
+								label='Contraseña'
+								type='text'
 								name='password'
 								id='password'
-								placeholder='Contraseña'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400 mb-3'
+								placeholder='Nueva contraseña'
+								value={usuario.password}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<button className='bg-[var(--colorPrimario)] text-white px-4 py-2 rounded-sm hover:opacity-80'>
-								Actualizar
-							</button>
+							<SmallButton
+								type='submit'
+								texto='Actualizar contraseña'
+								onClick={() => handleClickActualizarPassword}
+							/>
 						</div>
-						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-3 py-6 px-10'>
-							<input
+						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
+							{(rol == 1 || rol == 2) && (
+								<div className='flex flex-col justify-between w-full h-full'>
+									<label
+										htmlFor='genero'
+										className='text-base font-semibold text-gray-600'
+									>
+										Genero
+									</label>
+									<Select
+										id='genero'
+										value={usuario.genero}
+										onChange={e =>
+											changeStateValue(e.target.id, e.target.value)
+										}
+										opciones={[
+											{ value: 'm', texto: 'Masculino' },
+											{ value: 'f', texto: 'Femenino' },
+										]}
+									/>
+								</div>
+							)}
+							<Input
+								label='Número telefónico'
 								type='text'
 								name='telefono'
 								id='telefono'
-								placeholder='Número telefónico'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder='Nuevo número telefónico'
+								value={usuario.telefono}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<input
+							<Input
+								label='Fecha de nacimiento'
 								type='date'
 								name='fecha_nacimiento'
 								id='fecha_nacimiento'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder='Nueva fecha de nacimiento'
+								value={usuario.fecha_nacimiento}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<input
+							<Input
+								label='Fotografía'
 								type='file'
 								name='foto'
 								id='foto'
-								className='w-full text-lg font-light border-b outline-none px-3 py-2 duration-200 focus:border-b-gray-400'
+								placeholder='Nueva foto'
+								value={usuario.foto}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
+							{rol == 1 && (
+								<Input
+									label='Estado'
+									type='text'
+									name='estado'
+									id='estado'
+									placeholder=''
+									value={usuario.estado}
+									activo={false}
+									onChange={e => changeStateValue(e.target.id, e.target.value)}
+								/>
+							)}
 						</div>
 						<div className='w-full flex flex-col justify-center items-start gap-y-5'>
-							<button className='bg-[var(--colorPrimario)] text-white px-4 py-2 rounded-sm hover:opacity-80'>
-								Guardar todo
-							</button>
-							<button className='bg-red-500 text-white px-4 py-2 rounded-sm hover:opacity-80'>
-								Eliminar cuenta
-							</button>
+							<SmallButton
+								type='submit'
+								texto='Guardar todo'
+								onClick={() => handleClickGuardarTodo()}
+							/>
+							<SmallButton
+								type='submit'
+								texto='Eliminar cuenta'
+								onClick={() => handleClickEliminarCuenta()}
+								color='bg-red-500'
+							/>
 						</div>
 					</div>
 				</div>
