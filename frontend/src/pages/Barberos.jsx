@@ -184,7 +184,7 @@ const Barberos = () => {
 					'El barbero fue eliminado del sistema',
 					'success'
 				)
-				const barberosFiltrados = barberos.filter(barbero => barbero.id != id)
+				const barberosFiltrados = barberos.filter(barbero => barbero.idBarbero != id)
 				setBarberos(barberosFiltrados)
 			} catch (error) {
 				Swal.fire({
