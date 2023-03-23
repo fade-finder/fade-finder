@@ -1,5 +1,6 @@
 //Modelos
 const Barbero = require('../models/barbero');
+const baseDeDatos = require('../utils/baseDeDatos');
 
 //Metodo para agregar un barbero a la base de datos
 exports.postAgregarBarbero = (req, res, next) => {
@@ -32,22 +33,41 @@ exports.postAgregarBarbero = (req, res, next) => {
 }
 
 
-  exports.putBarbero = (req, res) => {
-    console.log('Aqui va la lógica para actualizar un barbero');
-    console.log(req.params.id)   // con esta linea obtengo el id del barbero que debo modificar de la base de datos
-    console.log(req.body)    // Todos los datos que el admin ingreso al formulario para editar al barbero estan en req.body, solo debes crear la interaccion con la bd para modificarlo
-  
+exports.putBarbero = (req, res) => {
+  var nombre = req.body.nombre
+  var ap_paterno = req.body.ap_paterno
+  var ap_materno = req.body.ap_materno
+  var correo = req.body.email
+  var password = req.body.password
+  var genero = req.body.genero
+  var telefono = req.body.telefono
+  var foto = req.body.foto
+  var direccion = req.body.calle+','+req.body.numero+','+req.body.colonia+','+req.body.ciudad
+  var fecha_nacimiento = req.body.fecha_nacimiento
+  var id = req.params.id
+
+  baseDeDatos.execute("UPDATE barbero SET nombre = ? WHERE idBarbero = ?", [nombre, id])
+  .then(() => {
+    console.log('Se actualizo correctamente')
     res.json({status: true})
-    // retorna al cliente lo siguiente si se modifica el barbero
-    // res.json({status: true})
-    // retorna al cliente lo siguiente si ocurre un error
-    // res.json({status: false})
-  }
-  exports.deleteBarbero = (req, res) => {
-    console.log(req.params.id)    // con esta linea obtengo el id del barbero que debo eliminar de la base de datos
+  })
+  .catch(err => {
+    console.log(err)
+    res.json({status: false})
+  })
+
+}
+
+exports.deleteBarbero = (req, res) => {
+  const id = req.params.id
+  Barbero.BorrarBarbero(id)
+  .then(() => {
     res.json({status: true})
-    // retorna al cliente lo siguiente si se elimina al barbero
-    // res.json({status: true})
-    // retorna al cliente lo siguiente si ocurre un error
-    // res.json({status: false})
-  }
+  })
+  .catch(err => {
+    console.log(err) 
+    res.json({status: false})
+  })
+    
+
+}

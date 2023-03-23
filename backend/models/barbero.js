@@ -21,6 +21,22 @@ class Barbero
         return baseDeDatos.execute('INSERT INTO barbero (idBarbero, nombre, ap_paterno, ap_materno, correo, password, genero, telefono, foto, direccion, fecha_nacimiento, estado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
         [null, this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.estado])
     }
+
+    static VerBarberos()
+    {
+        return baseDeDatos.execute('SELECT * FROM barbero')
+    }
+
+    static BorrarBarbero(id)
+    {
+        return baseDeDatos.execute('DELETE FROM barbero WHERE idBarbero = ?',[id])
+    }
+
+    // ActualizarBarbero(id)
+    // {
+    //     return baseDeDatos.execute('UPDATE barbero SET nombre=?, ap_paterno=?, ap_materno=?, correo=?, password=?, genero=?, telefono=?, foto=?, direccion=?, fecha_nacimiento=? WHERE idBarbero = ?', 
+    //     [this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.id])
+    // }
 }
 
 
