@@ -11,3 +11,9 @@ exports.postRegister = (req, res) => {
 
   // Aqui va la logica para crear una cuenta de cliente
 }
+
+exports.deleteCliente = (req, res) => {
+  const id = req.params.idCliente;
+  console.log(`El id del cliente a eliminar es ${id}`);
+  res.end()
+}

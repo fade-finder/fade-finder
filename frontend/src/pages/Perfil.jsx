@@ -5,9 +5,14 @@ import Input from '../components/Input'
 import SmallButton from '../components/SmallButton'
 import Select from '../components/Select'
 import Header from '../components/Header'
+import Swal from 'sweetalert2'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Perfil = () => {
-	const rol = 1
+	const navigate = useNavigate()
+	const rol = 0
+	const id = 1
 
 	const [usuario, setUsuario] = useState({
 		email: '',
@@ -38,7 +43,41 @@ const Perfil = () => {
 
 	const handleClickGuardarTodo = () => {}
 
-	const handleClickEliminarCuenta = () => {}
+	const handleClickEliminarCuenta = async () => {
+		const { isConfirmed } = await Swal.fire({
+			title: '¿Estas seguro?',
+			text: 'No podras revertir la acción',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Si, eliminar',
+			cancelButtonText: 'No',
+		})
+		if (isConfirmed) {
+			try {
+				const res = await axios.delete(
+					'http://localhost:3000/cliente/perfil/' + id
+				)
+				Swal.fire({
+					title: 'Cuenta eliminada!',
+					text: 'La cuenta fue eliminada de la base de datos',
+					icon: 'success',
+					showConfirmButton: false,
+					timer: 2000,
+				})
+				setTimeout(() => {
+					navigate('/')
+				}, 2000)
+			} catch (error) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: error.message + ': ' + error.code,
+				})
+			}
+		}
+	}
 
 	return (
 		<div className='px-[140px] py-20 pt-[160px] min-h-screen w-full bg-[#F5F8FE] flex justify-center'>
@@ -241,12 +280,14 @@ const Perfil = () => {
 								texto='Guardar todo'
 								onClick={() => handleClickGuardarTodo()}
 							/>
-							<SmallButton
-								type='submit'
-								texto='Eliminar cuenta'
-								onClick={() => handleClickEliminarCuenta()}
-								color='bg-red-500'
-							/>
+							{rol == 0 && (
+								<SmallButton
+									type='submit'
+									texto='Eliminar cuenta'
+									onClick={() => handleClickEliminarCuenta()}
+									color='bg-red-500'
+								/>
+							)}
 						</div>
 					</div>
 				</div>

@@ -23,6 +23,6 @@ router.post('/agendar-cita')  // agendar cita
 
 // * * * * * * * * * DELETE * * * * * * * * * * *
 router.delete('/citas/:idCita')   // eliminar cita
-router.delete('/perfil')    // eliminar cuenta
+router.delete('/perfil/:idCliente', controladorCliente.deleteCliente)    // eliminar cuenta
 
 module.exports = router;
