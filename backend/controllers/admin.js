@@ -27,7 +27,8 @@ exports.postAgregarBarbero = (req, res, next) => {
   })
   .catch(err => { //Si se agrego incorrectamente retorna un false
     console.log(err)
-    res.json({status: false})
+    // res.json({status: false})
+    res.status(500).json({ error: 'Error al realizar la petición al backend' });
   })
 
 }

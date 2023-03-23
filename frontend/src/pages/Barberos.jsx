@@ -128,7 +128,7 @@ const Barberos = () => {
 			Swal.fire({
 				icon: 'error',
 				title: 'Error',
-				text: error.message + ': ' + error.code,
+				text: error.response.data.error + ': ' + error.code,
 			})
 		}
 	}
