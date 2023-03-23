@@ -26,6 +26,11 @@ class Barbero
     {
         return baseDeDatos.execute('SELECT * FROM barbero')
     }
+
+    static BorrarBarbero(id)
+    {
+        return baseDeDatos.execute('DELETE FROM barbero WHERE idBarbero = ?',[id])
+    }
 }
 
 

@@ -35,7 +35,7 @@ exports.postAgregarBarbero = (req, res, next) => {
 exports.putBarbero = (req, res) => {
     console.log('Aqui va la lógica para actualizar un barbero');
     console.log(req.params.id)   // con esta linea obtengo el id del barbero que debo modificar de la base de datos
-    console.log(req.body)    // Todos los datos que el admin ingreso al formulario para editar al barbero estan en req.body, solo debes crear la interaccion con la bd para modificarlo
+    // console.log(req.body)    // Todos los datos que el admin ingreso al formulario para editar al barbero estan en req.body, solo debes crear la interaccion con la bd para modificarlo
   
     res.json({status: true})
     // retorna al cliente lo siguiente si se modifica el barbero
@@ -45,10 +45,15 @@ exports.putBarbero = (req, res) => {
 }
 
 exports.deleteBarbero = (req, res) => {
-    console.log(req.params.id)    // con esta linea obtengo el id del barbero que debo eliminar de la base de datos
+  const id = req.params.id
+  Barbero.BorrarBarbero(id)
+  .then(() => {
     res.json({status: true})
-    // retorna al cliente lo siguiente si se elimina al barbero
-    // res.json({status: true})
-    // retorna al cliente lo siguiente si ocurre un error
-    // res.json({status: false})
+  })
+  .catch(err => {
+    console.log(err) 
+    res.json({status: false})
+  })
+    
+
 }
