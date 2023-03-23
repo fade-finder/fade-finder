@@ -3,7 +3,15 @@ const Barbero = require('../models/barbero')
 exports.getBarberos = (req, res) => {
   // Aqui estoy devolviendo al cliente los barberos tomados de un documento de js el cual importo arriba
   // debes sustituir este codigo por uno que retorne los barberos de la bd
-  res.send(Barbero.VerBarberos)
+  // res.send(Barbero.VerBarberos)
+  Barbero.VerBarberos()
+  .then(resultado => {
+    console.log(resultado)
+    res.send(resultado)
+  })
+  .catch(err => {
+    console.log(err)
+  })
 }
 
 exports.postLogin = (req, res) => {
