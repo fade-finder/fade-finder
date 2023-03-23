@@ -174,14 +174,18 @@ const Barberos = () => {
 			cancelButtonText: 'No',
 		})
 		if (isConfirmed) {
-			Swal.fire('Eliminado!', 'El barbero fue eliminado del sistema', 'success')
-			const barberosFiltrados = barberos.filter(barbero => barbero.id != id)
-			setBarberos(barberosFiltrados)
 			try {
 				const res = await axios.delete(
 					'http://localhost:3000/admin/barberos/' + id
 				)
 				console.log(res.data)
+				Swal.fire(
+					'Eliminado!',
+					'El barbero fue eliminado del sistema',
+					'success'
+				)
+				const barberosFiltrados = barberos.filter(barbero => barbero.id != id)
+				setBarberos(barberosFiltrados)
 			} catch (error) {
 				Swal.fire({
 					icon: 'error',
