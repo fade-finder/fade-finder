@@ -175,7 +175,7 @@ const Barberos = () => {
 		})
 		if (isConfirmed) {
 			Swal.fire('Eliminado!', 'El barbero fue eliminado del sistema', 'success')
-			const barberosFiltrados = barberos.filter(barbero => barbero.id != id)
+			const barberosFiltrados = barberos.filter(barbero => barbero.idBarbero != id)
 			setBarberos(barberosFiltrados)
 			try {
 				const res = await axios.delete(
