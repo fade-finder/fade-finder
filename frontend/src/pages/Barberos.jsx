@@ -409,14 +409,14 @@ const Barberos = () => {
 				<div className='w-full h-max my-6 grid grid-cols-3 gap-3 2xl:grid-cols-4 xl:gap-6'>
 					{barberos.map(barbero => (
 						<BarberoCard
-							key={barbero.id}
+							key={barbero.idBarbero}
 							img='https://elcomercio.pe/resizer/-OZqwZSaiqrZ_moopwodC_iJcRs=/1200x1200/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/FHVPWJMHKVFJ7MNVVGKJZL5JA4.png'
 							nombre={barbero.nombre}
 							servicios={12}
 							pendientes={2}
 							puntaje={4.8}
-							onClickEditar={() => cargarDatosBarberoFormulario(barbero.id)}
-							onClickEliminar={() => onClickDeleteBarbero(barbero.id)}
+							onClickEditar={() => cargarDatosBarberoFormulario(barbero.idBarbero)}
+							onClickEliminar={() => onClickDeleteBarbero(barbero.idBarbero)}
 						/>
 					))}
 				</div>
