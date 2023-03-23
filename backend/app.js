@@ -2,6 +2,7 @@
 // paquetes
 const express = require("express")
 const cors = require('cors')
+const baseDeDatos = require('./utils/baseDeDatos')
 // routes
 const clienteRoutes = require('./routes/cliente')
 const adminRoutes = require('./routes/admin')
@@ -19,5 +20,6 @@ app.use(generalRoutes)
 app.get('/', (req, res, next) => {
   res.send('Todo funciona')
 })
+
 
 app.listen(3000)
