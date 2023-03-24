@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import Input from '../components/Input'
 import SmallButton from '../components/SmallButton'
-import Select from '../components/Select'
 import Header from '../components/Header'
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -11,8 +10,8 @@ import { useNavigate } from 'react-router-dom'
 
 const Perfil = () => {
 	const navigate = useNavigate()
-	const rol = 0
 	const id = 1
+	const rol = 0
 
 	const [usuario, setUsuario] = useState({
 		email: '',
@@ -21,13 +20,7 @@ const Perfil = () => {
 		ap_paterno: '',
 		ap_materno: '',
 		telefono: '',
-		fecha_nacimiento: '',
 		foto: '',
-		calle: '',
-		colonia: '',
-		ciudad: '',
-		numero: '',
-		genero: '',
 		estado: '',
 	})
 
@@ -103,7 +96,7 @@ const Perfil = () => {
 								/>
 							</div>
 							<div className='h-1/2 w-full flex items-end p-6'>
-								<h2 className='text-xl font-semibold uppercase'>
+								<h2 className='text-xl font-semibold uppercase text-gray-800'>
 									Daniel Ramón Solís Medina
 								</h2>
 							</div>
@@ -139,52 +132,38 @@ const Perfil = () => {
 								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
 						</div>
-						{/* Direccion */}
-						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
-							<h2 className='text-lg font-bold'>Dirección</h2>
-							<div className='flex justify-center items-center gap-x-5'>
-								<Input
-									label='Calle'
-									type='text'
-									name='calle'
-									id='calle'
-									placeholder='Actualiza tu calle'
-									value={usuario.calle}
-									onChange={e => changeStateValue(e.target.id, e.target.value)}
-								/>
-								<Input
-									label='Colonia'
-									type='text'
-									name='colonia'
-									id='colonia'
-									placeholder='Actualiza tu colonia'
-									value={usuario.colonia}
-									onChange={e => changeStateValue(e.target.id, e.target.value)}
-								/>
-							</div>
-							<div className='flex justify-center items-center gap-x-5'>
-								<Input
-									label='Ciudad'
-									type='text'
-									name='ciudad'
-									id='ciudad'
-									placeholder='Actualiza tu ciudad'
-									value={usuario.ciudad}
-									onChange={e => changeStateValue(e.target.id, e.target.value)}
-								/>
-								<Input
-									label='Número Exterior'
-									type='number'
-									name='numero'
-									id='numero'
-									placeholder='Actualiza tu número ext.'
-									value={usuario.numero}
-									onChange={e => changeStateValue(e.target.id, e.target.value)}
-								/>
-							</div>
-						</div>
 					</div>
 					<div className='min-h-[500px] w-1/2 flex flex-col gap-y-8'>
+						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
+							<Input
+								label='Número telefónico'
+								type='text'
+								name='telefono'
+								id='telefono'
+								placeholder='Nuevo número telefónico'
+								value={usuario.telefono}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
+							/>
+							<Input
+								label='Fotografía'
+								type='file'
+								name='foto'
+								id='foto'
+								placeholder='Nueva foto'
+								value={usuario.foto}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
+							/>
+							<Input
+								label='Estado'
+								type='text'
+								name='estado'
+								id='estado'
+								placeholder=''
+								value={usuario.estado}
+								activo={false}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
+							/>
+						</div>
 						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
 							<h2 className='text-lg font-bold'>Actualizar contraseña</h2>
 							<Input
@@ -211,68 +190,6 @@ const Perfil = () => {
 								texto='Actualizar contraseña'
 								onClick={() => handleClickActualizarPassword}
 							/>
-						</div>
-						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
-							{(rol == 1 || rol == 2) && (
-								<div className='flex flex-col justify-between w-full h-full'>
-									<label
-										htmlFor='genero'
-										className='text-base font-semibold text-gray-600'
-									>
-										Genero
-									</label>
-									<Select
-										id='genero'
-										value={usuario.genero}
-										onChange={e =>
-											changeStateValue(e.target.id, e.target.value)
-										}
-										opciones={[
-											{ value: 'm', texto: 'Masculino' },
-											{ value: 'f', texto: 'Femenino' },
-										]}
-									/>
-								</div>
-							)}
-							<Input
-								label='Número telefónico'
-								type='text'
-								name='telefono'
-								id='telefono'
-								placeholder='Nuevo número telefónico'
-								value={usuario.telefono}
-								onChange={e => changeStateValue(e.target.id, e.target.value)}
-							/>
-							<Input
-								label='Fecha de nacimiento'
-								type='date'
-								name='fecha_nacimiento'
-								id='fecha_nacimiento'
-								placeholder='Nueva fecha de nacimiento'
-								value={usuario.fecha_nacimiento}
-								onChange={e => changeStateValue(e.target.id, e.target.value)}
-							/>
-							<Input
-								label='Fotografía'
-								type='file'
-								name='foto'
-								id='foto'
-								placeholder='Nueva foto'
-								value={usuario.foto}
-								onChange={e => changeStateValue(e.target.id, e.target.value)}
-							/>
-							{rol == 1 && (
-								<Input
-									label='Estado'
-									type='text'
-									name='estado'
-									id='estado'
-									placeholder=''
-									value={usuario.estado}
-									activo={false}
-									onChange={e => changeStateValue(e.target.id, e.target.value)}
-								/>
-							)}
 						</div>
 						<div className='w-full flex flex-col justify-center items-start gap-y-5'>
 							<SmallButton
