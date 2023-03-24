@@ -127,7 +127,7 @@ const Barberos = () => {
 		setVentanaModal(false)
 		try {
 			const res = await axios.put(
-				'http://localhost:3000/admin/barberos/' + barbero.idBarbero,
+				'http://localhost:3000/admin/barberos/' + barbero.idUsuario,
 				barbero
 			)
 			console.log(res.data);
