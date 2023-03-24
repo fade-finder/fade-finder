@@ -10,10 +10,8 @@ import { useNavigate } from 'react-router-dom'
 
 const Perfil = () => {
 	const navigate = useNavigate()
-	const id = 1
-	const rol = 0
-
 	const [usuario, setUsuario] = useState({
+		id: '1',
 		email: '',
 		password: '',
 		nombre: '',
@@ -21,7 +19,7 @@ const Perfil = () => {
 		ap_materno: '',
 		telefono: '',
 		foto: '',
-		estado: '',
+		rol: '0',
 	})
 
 	// Funciones
@@ -31,8 +29,6 @@ const Perfil = () => {
 			[name]: value,
 		})
 	}
-
-	const handleClickActualizarPassword = () => {}
 
 	const handleClickGuardarTodo = () => {}
 
@@ -49,9 +45,7 @@ const Perfil = () => {
 		})
 		if (isConfirmed) {
 			try {
-				const res = await axios.delete(
-					'http://localhost:3000/cliente/perfil/' + id
-				)
+				await axios.delete('http://localhost:3000/cliente/perfil/' + usuario.id)
 				Swal.fire({
 					title: 'Cuenta eliminada!',
 					text: 'La cuenta fue eliminada de la base de datos',
@@ -60,14 +54,10 @@ const Perfil = () => {
 					timer: 2000,
 				})
 				setTimeout(() => {
-					navigate('/')
+					navigate('/login')
 				}, 2000)
 			} catch (error) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Error',
-					text: error.message + ': ' + error.code,
-				})
+				Swal.fire('Error', error, 'error')
 			}
 		}
 	}
@@ -153,19 +143,8 @@ const Perfil = () => {
 								value={usuario.foto}
 								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<Input
-								label='Estado'
-								type='text'
-								name='estado'
-								id='estado'
-								placeholder=''
-								value={usuario.estado}
-								activo={false}
-								onChange={e => changeStateValue(e.target.id, e.target.value)}
-							/>
 						</div>
 						<div className='w-full bg-white rounded-md shadow-md flex flex-col justify-center items-start gap-y-5 py-10 px-12'>
-							<h2 className='text-lg font-bold'>Actualizar contraseña</h2>
 							<Input
 								label='Email'
 								type='email'
@@ -185,11 +164,6 @@ const Perfil = () => {
 								value={usuario.password}
 								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
-							<SmallButton
-								type='submit'
-								texto='Actualizar contraseña'
-								onClick={() => handleClickActualizarPassword}
-							/>
 						</div>
 						<div className='w-full flex flex-col justify-center items-start gap-y-5'>
 							<SmallButton
@@ -197,7 +171,7 @@ const Perfil = () => {
 								texto='Guardar todo'
 								onClick={() => handleClickGuardarTodo()}
 							/>
-							{rol == 0 && (
+							{usuario.rol == 0 && (
 								<SmallButton
 									type='submit'
 									texto='Eliminar cuenta'
