@@ -4,7 +4,7 @@ const pool = MySQL.createPool({
     host: 'localhost',
     user: 'root',
     database: 'fadefinder',
-    password: 'ByV12@bx2' //Aqui va tu password de MySQL workbench
+    password: '140503' //Aqui va tu password de MySQL workbench
 });
 
 module.exports = pool.promise();

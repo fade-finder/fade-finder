@@ -1,4 +1,5 @@
 /* Se crea la base de datos */
+DROP DATABASE IF EXISTS fadefinder;
 Create database FadeFinder;
 use FadeFinder;
 
@@ -13,7 +14,7 @@ create table usuario(
     nombre varchar(45),
     ap_paterno varchar(45),
     ap_materno varchar(45),
-    correo varchar(45) unique,
+    email varchar(45) unique,
     password varchar(45),
     telefono varchar(10),
     foto varchar(100),
@@ -65,7 +66,8 @@ insert into rol (idRol, nombre) values (1, 'cliente');
 insert into rol (idRol, nombre) values (2, 'barbero');
 insert into rol (idRol, nombre) values (3, 'admin');
 
-insert into usuario values (null, 'Kike', 'Camarena', 'Garcia', 'kike@gmail.com', '1234', '1234567890', '', 1, 1);
+insert into usuario values (null, 'Kike', 'Camarena', 'Garcia', 'kike@gmail.com', '1234', '1234567890', '', 1, 2);
 
 select * from usuario;
+select * from rol;
 

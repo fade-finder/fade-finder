@@ -2,11 +2,11 @@ const baseDeDatos = require('../utils/baseDeDatos');
 
 class Usuario
 {
-    constructor(nombre, ap_paterno, ap_materno, correo, password, telefono, foto, estado){
+    constructor(nombre, ap_paterno, ap_materno, email, password, telefono, foto, estado){
         this.nombre = nombre
         this.ap_paterno = ap_paterno
         this.ap_materno = ap_materno
-        this.correo = correo
+        this.email = email
         this.password = password
         this.telefono = telefono
         this.foto = foto
@@ -14,8 +14,8 @@ class Usuario
 
     AgregarBarbero()
     {
-        return baseDeDatos.execute('INSERT INTO usuario (idUsuario, nombre, ap_paterno, ap_materno, correo, password, telefono, foto, estado, idRol) VALUES (?,?,?,?,?,?,?,?,?,?)',
-        [null, this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.telefono, this.foto, 1, 2])
+        return baseDeDatos.execute('INSERT INTO usuario (idUsuario, nombre, ap_paterno, ap_materno, email, password, telefono, foto, estado, idRol) VALUES (?,?,?,?,?,?,?,?,?,?)',
+        [null, this.nombre, this.ap_paterno, this.ap_materno, this.email, this.password, this.telefono, this.foto, 1, 2])
     }
 
     static VerBarberos()
@@ -30,8 +30,8 @@ class Usuario
 
     // ActualizarBarbero(id)
     // {
-    //     return baseDeDatos.execute('UPDATE barbero SET nombre=?, ap_paterno=?, ap_materno=?, correo=?, password=?, genero=?, telefono=?, foto=?, direccion=?, fecha_nacimiento=? WHERE idBarbero = ?', 
-    //     [this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.id])
+    //     return baseDeDatos.execute('UPDATE barbero SET nombre=?, ap_paterno=?, ap_materno=?, email=?, password=?, genero=?, telefono=?, foto=?, direccion=?, fecha_nacimiento=? WHERE idBarbero = ?', 
+    //     [this.nombre, this.ap_paterno, this.ap_materno, this.email, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.id])
     // }
 }
 

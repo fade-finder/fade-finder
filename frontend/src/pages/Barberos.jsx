@@ -88,7 +88,7 @@ const Barberos = () => {
 
 	// Funcion que carga los datos del barbero seleccionado para editar al formulario
 	const cargarDatosBarberoFormulario = id => {
-		const barberoEditar = barberos.filter(barbero => barbero.idBarbero == id)
+		const barberoEditar = barberos.filter(barbero => barbero.idUsuario == id)
 		setBarbero(barberoEditar[0])
 		setEditando(true)
 	}
@@ -98,20 +98,15 @@ const Barberos = () => {
 		e.preventDefault()
 		setVentanaModal(false)
 		try {
-			const res = await axios.post(
-				'http://localhost:3000/admin/barberos/agregar',
-				barbero
-			)
-			console.log(res.data);
+			await axios.post('http://localhost:3000/admin/barberos/agregar', barbero)
 			limpiarCampos()
 			getBarberos()
 			cerrarVentanaModal()
-			Swal.fire({
-				icon: 'success',
-				title: 'Barbero agregado',
-				showConfirmButton: false,
-				timer: 2000,
-			})
+			Swal.fire(
+				'Barbero agregado',
+				'El barbero fue agregado correctamente',
+				'success'
+			)
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
@@ -126,20 +121,18 @@ const Barberos = () => {
 		e.preventDefault()
 		setVentanaModal(false)
 		try {
-			const res = await axios.put(
+			await axios.put(
 				'http://localhost:3000/admin/barberos/' + barbero.idUsuario,
 				barbero
 			)
-			console.log(res.data);
 			limpiarCampos()
 			getBarberos()
 			cerrarVentanaModal()
-			Swal.fire({
-				icon: 'success',
-				title: 'Barbero actualizado',
-				showConfirmButton: false,
-				timer: 2000,
-			})
+			Swal.fire(
+				'Barbero actualizado',
+				'El barbero fue actualizado correctamente',
+				'success'
+			)
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
@@ -163,24 +156,21 @@ const Barberos = () => {
 		})
 		if (isConfirmed) {
 			try {
-				const res = await axios.delete(
-					'http://localhost:3000/admin/barberos/' + id
-				)
-				console.log(res.data)
+				await axios.delete('http://localhost:3000/admin/barberos/' + id)
 				Swal.fire(
 					'Eliminado!',
 					'El barbero fue eliminado del sistema',
 					'success'
 				)
 				const barberosFiltrados = barberos.filter(
-					barbero => barbero.idBarbero != id
+					barbero => barbero.idUsuario != id
 				)
 				setBarberos(barberosFiltrados)
 			} catch (error) {
 				Swal.fire({
 					icon: 'error',
 					title: 'Error',
-					text: error.message + ': ' + error.code,
+					text: error,
 				})
 			}
 		}
@@ -328,16 +318,16 @@ const Barberos = () => {
 				<div className='w-full h-max my-6 grid grid-cols-3 gap-3 2xl:grid-cols-4 xl:gap-6'>
 					{barberos.map(barbero => (
 						<BarberoCard
-							key={barbero.idBarbero}
+							key={barbero.idUsuario}
 							img='https://elcomercio.pe/resizer/-OZqwZSaiqrZ_moopwodC_iJcRs=/1200x1200/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/FHVPWJMHKVFJ7MNVVGKJZL5JA4.png'
 							nombre={barbero.nombre}
 							servicios={12}
 							pendientes={2}
 							puntaje={4.8}
 							onClickEditar={() =>
-								cargarDatosBarberoFormulario(barbero.idBarbero)
+								cargarDatosBarberoFormulario(barbero.idUsuario)
 							}
-							onClickEliminar={() => onClickDeleteBarbero(barbero.idBarbero)}
+							onClickEliminar={() => onClickDeleteBarbero(barbero.idUsuario)}
 						/>
 					))}
 				</div>
