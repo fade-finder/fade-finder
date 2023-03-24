@@ -2,7 +2,7 @@ const baseDeDatos = require('../utils/baseDeDatos');
 
 class Usuario
 {
-    constructor(nombre, ap_paterno, ap_materno, email, password, telefono, foto, estado){
+    constructor(nombre, ap_paterno, ap_materno, email, password, telefono, foto){
         this.nombre = nombre
         this.ap_paterno = ap_paterno
         this.ap_materno = ap_materno
@@ -12,7 +12,7 @@ class Usuario
         this.foto = foto
     }
 
-    AgregarBarbero()
+    AgregarBarbero(id)
     {
         return baseDeDatos.execute('INSERT INTO usuario (idUsuario, nombre, ap_paterno, ap_materno, email, password, telefono, foto, estado, idRol) VALUES (?,?,?,?,?,?,?,?,?,?)',
         [null, this.nombre, this.ap_paterno, this.ap_materno, this.email, this.password, this.telefono, this.foto, 1, 2])
@@ -28,11 +28,11 @@ class Usuario
         return baseDeDatos.execute('DELETE FROM usuario WHERE idUsuario = ?',[id])
     }
 
-    // ActualizarBarbero(id)
-    // {
-    //     return baseDeDatos.execute('UPDATE barbero SET nombre=?, ap_paterno=?, ap_materno=?, email=?, password=?, genero=?, telefono=?, foto=?, direccion=?, fecha_nacimiento=? WHERE idBarbero = ?', 
-    //     [this.nombre, this.ap_paterno, this.ap_materno, this.email, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.id])
-    // }
+    ActualizarBarbero(id)
+    {
+        return baseDeDatos.execute('UPDATE usuario SET nombre=?, ap_paterno=?, ap_materno=?, email=?, password=?, telefono=?, foto=? WHERE idUsuario = ?', 
+        [this.nombre, this.ap_paterno, this.ap_materno, this.email, this.password, this.telefono, this.foto, id])
+    }
 }
 
 
