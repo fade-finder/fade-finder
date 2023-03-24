@@ -7,9 +7,11 @@ exports.postRegister = (req, res) => {
   // De esta forma extraes cada dato
   console.log(req.body.nombre);
   console.log(req.body.ap_paterno);
-  // res.send()
 
   // Aqui va la logica para crear una cuenta de cliente
+
+  // res.end()  //-- todo bien
+  // res.status(500)  //-- error
 }
 
 exports.deleteCliente = (req, res) => {

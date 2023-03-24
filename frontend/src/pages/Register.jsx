@@ -9,8 +9,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 const Register = () => {
-
-  const navigate = useNavigate()
+	const navigate = useNavigate()
 
 	const [cliente, setCliente] = useState({
 		email: '',
@@ -19,12 +18,7 @@ const Register = () => {
 		ap_paterno: '',
 		ap_materno: '',
 		telefono: '',
-		fecha_nacimiento: '',
 		foto: '',
-		calle: '',
-		colonia: '',
-		ciudad: '',
-		numero: '',
 	})
 
 	// Funciones
@@ -38,25 +32,20 @@ const Register = () => {
 	const onClickRegister = async e => {
 		e.preventDefault()
 		try {
-			axios.post('http://localhost:3000/cliente/register', cliente)
+			await axios.post('http://localhost:3000/cliente/register', cliente)
 			// Lo redireccionamo al login
-      Swal.fire({
-        icon: 'success',
-        title: 'Cuenta creada',
-        text: 'La cuenta se creo correctamente, iniciar sesión para continuar.',
-        showConfirmButton: false,
-				timer: 2500
-      })
-      setTimeout(() => {
-        navigate("/login")
-      }, 2500);
-
-		} catch (error) {
 			Swal.fire({
-				icon: 'error',
-				title: 'Error',
-				text: error.message + ': ' + error.code,
+				icon: 'success',
+				title: 'Cuenta creada',
+				text: 'La cuenta se creo correctamente, iniciar sesión para continuar.',
+				showConfirmButton: false,
+				timer: 2500,
 			})
+			setTimeout(() => {
+				navigate('/login')
+			}, 2500)
+		} catch (error) {
+			Swal.fire('Error', error, 'error')
 		}
 	}
 
@@ -86,7 +75,7 @@ const Register = () => {
 							{/* Pasword */}
 							<Input
 								label='Contraseña'
-								type='password'
+								type='text'
 								name='password'
 								id='password'
 								placeholder='*****'
@@ -135,69 +124,16 @@ const Register = () => {
 							onChange={e => changeStateValue(e.target.id, e.target.value)}
 						/>
 						<Input
-							label='Fecha de nacimiento'
-							type='date'
-							name='fecha_nacimiento'
-							id='fecha_nacimiento'
-							placeholder='Indica tu fecha de nacimiento'
-							value={cliente.fecha_nacimiento}
+							label='Foto de perfil'
+							type='file'
+							name='foto'
+							id='foto'
+							placeholder='Selecciona una foto'
+							value={cliente.foto}
 							onChange={e => changeStateValue(e.target.id, e.target.value)}
 						/>
 					</div>
-					<Input
-						label='Foto de perfil'
-						type='file'
-						name='foto'
-						id='foto'
-						placeholder='Selecciona una foto'
-						value={cliente.foto}
-						onChange={e => changeStateValue(e.target.id, e.target.value)}
-					/>
-					<div className='w-full h-[1px] bg-gray-300 my-4'></div>
-
-					<div className='flex items-center gap-x-3'>
-						<Input
-							label='Calle'
-							type='text'
-							name='calle'
-							id='calle'
-							placeholder='Escribe tu calle'
-							value={cliente.calle}
-							onChange={e => changeStateValue(e.target.id, e.target.value)}
-						/>
-						<Input
-							label='Colonia'
-							type='text'
-							name='colonia'
-							id='colonia'
-							placeholder='Escribe tu colonia'
-							value={cliente.colonia}
-							onChange={e => changeStateValue(e.target.id, e.target.value)}
-						/>
-					</div>
-
-          <div className='flex items-center gap-x-3'>
-						<Input
-							label='Ciudad'
-							type='text'
-							name='ciudad'
-							id='ciudad'
-							placeholder='Escribe tu ciudad'
-							value={cliente.ciudad}
-							onChange={e => changeStateValue(e.target.id, e.target.value)}
-						/>
-						<Input
-							label='Número exterior'
-							type='number'
-							name='numero'
-							id='numero'
-							placeholder='Escribe tu número exterior'
-							value={cliente.numero}
-							onChange={e => changeStateValue(e.target.id, e.target.value)}
-						/>
-					</div>
-
-					<div className='mt-4'>
+					<div className='mt-6'>
 						<button
 							type='submit'
 							onClick={e => onClickRegister(e)}
@@ -211,7 +147,7 @@ const Register = () => {
 								to='/login'
 								className='font-semibold text-[var(--colorPrimario)] hover:opacity-80 duration-200'
 							>
-                {' '}
+								{' '}
 								Inciar sesión
 							</Link>
 						</p>
