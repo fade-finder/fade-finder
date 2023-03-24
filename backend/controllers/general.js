@@ -1,7 +1,7 @@
-const Barbero = require('../models/barbero')
+const Usuario = require('../models/usuario')
 
 exports.getBarberos = (req, res) => {
-  const barberos = Barbero.VerBarberos()
+  const barberos = Usuario.VerBarberos()
   .then(barberos => {
     res.send(barberos[0])
   })

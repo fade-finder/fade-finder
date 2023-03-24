@@ -1,35 +1,31 @@
 const baseDeDatos = require('../utils/baseDeDatos');
 
-class Barbero
+class Usuario
 {
-    constructor(nombre, ap_paterno, ap_materno, correo, password, genero, telefono, foto, direccion, fecha_nacimiento, estado){
+    constructor(nombre, ap_paterno, ap_materno, correo, password, telefono, foto, estado){
         this.nombre = nombre
         this.ap_paterno = ap_paterno
         this.ap_materno = ap_materno
         this.correo = correo
         this.password = password
-        this.genero = genero
         this.telefono = telefono
         this.foto = foto
-        this.direccion = direccion
-        this.fecha_nacimiento = fecha_nacimiento
-        this.estado = estado
     }
 
     AgregarBarbero()
     {
-        return baseDeDatos.execute('INSERT INTO barbero (idBarbero, nombre, ap_paterno, ap_materno, correo, password, genero, telefono, foto, direccion, fecha_nacimiento, estado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
-        [null, this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.genero, this.telefono, this.foto, this.direccion, this.fecha_nacimiento, this.estado])
+        return baseDeDatos.execute('INSERT INTO usuario (idUsuario, nombre, ap_paterno, ap_materno, correo, password, telefono, foto, estado, idRol) VALUES (?,?,?,?,?,?,?,?,?,?)',
+        [null, this.nombre, this.ap_paterno, this.ap_materno, this.correo, this.password, this.telefono, this.foto, 1, 2])
     }
 
     static VerBarberos()
     {
-        return baseDeDatos.execute('SELECT * FROM barbero')
+        return baseDeDatos.execute('SELECT * FROM usuario where idRol = 2')
     }
 
     static BorrarBarbero(id)
     {
-        return baseDeDatos.execute('DELETE FROM barbero WHERE idBarbero = ?',[id])
+        return baseDeDatos.execute('DELETE FROM usuario WHERE idUsuario = ?',[id])
     }
 
     // ActualizarBarbero(id)
@@ -40,7 +36,7 @@ class Barbero
 }
 
 
-module.exports = Barbero;
+module.exports = Usuario;
 
 // exports.postAgregarBarbero = (req, res, next) => {
 //     console.log('Aqui va la lógica para agregar un barbero');
