@@ -71,3 +71,4 @@ insert into usuario values (null, 'Kike', 'Camarena', 'Garcia', 'kike@gmail.com'
 select * from usuario;
 select * from rol;
 
+

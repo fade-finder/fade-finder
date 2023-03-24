@@ -1,7 +1,7 @@
 import { FaEdit } from 'react-icons/fa'
 import { AiFillDelete } from 'react-icons/ai'
 
-const ClienteCard = ({ img, nombre, servicios, pendientes}) => {
+const ClienteCard = ({ img, nombre, servicios, pendientes, onClickVer}) => {
 	return (
 		<div className='bg-[#fff] flex flex-col gap-y-4 justify-center items-center p-10 rounded-lg hover:shadow-lg hover:-translate-y-2 duration-300 select-none'>
 			<div className='w-[100px] h-[100px] rounded-full overflow-hidden'>

@@ -10,6 +10,10 @@ exports.getBarberos = (req, res) => {
   })
 }
 
+exports.getClientes = (req, res) => {
+  // aqui hacer logica para traer y devolver los clientes
+}
+
 exports.postLogin = (req, res) => {
   console.log(req.body.email);
   console.log(req.body.password);

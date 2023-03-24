@@ -1,10 +1,11 @@
 const MySQL = require('mysql2');
+require('dotenv').config()
 
 const pool = MySQL.createPool({
     host: 'localhost',
     user: 'root',
     database: 'fadefinder',
-    password: 'ByV12@bx2' //Aqui va tu password de MySQL workbench
+    password: process.env.DB_PASSWORD
 });
 
 module.exports = pool.promise();
