@@ -12,7 +12,6 @@ import Swal from 'sweetalert2'
 const Login = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [rol, setRol] = useState("0")
 
 	const onClickLogin = async e => {
 		e.preventDefault()
@@ -20,16 +19,11 @@ const Login = () => {
 			const res = await axios.post('http://localhost:3000/login', {
 				email,
 				password,
-				rol
 			})
 			// Aqui guardaremos el usuario en nuestro estado global
 			console.log(res.data)
 		} catch (error) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Error',
-				text: error.message + ': ' + error.code,
-			})
+			Swal.fire('Error', error, 'error')
 		}
 	}
 
@@ -64,21 +58,6 @@ const Login = () => {
 						value={password}
 						onChange={e => setPassword(e.target.value)}
 					/>
-
-					<div className='w-1/2'>
-						<label htmlFor="rol" className='text-base font-semibold text-gray-600'>Rol</label>
-						<Select
-							id='rol'
-							value={rol}
-							onChange={e => setRol(e.target.value)}
-							opciones={[
-								{ value: 0, texto: 'Cliente' },
-								{ value: 1, texto: 'Empleado' },
-								{ value: 2, texto: 'Administrador' }
-							]}
-						/>
-					</div>
-
 					<div className='mt-2'>
 						<button
 							type='submit'
