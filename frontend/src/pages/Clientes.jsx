@@ -1,8 +1,9 @@
 // Componentes
 import DashboardHeader from '../components/DashboardHeader'
 import DashboardContainer from '../components/DashboardContainer'
-import ClienteCard from '../components/ClienteCard'
+import ClienteRow from '../components/ClienteRow'
 import BuscadorAdmin from '../components/BuscadorAdmin'
+import VentanaModal from '../components/VentanaModal'
 
 // Hooks
 import { useState, useEffect } from 'react'
@@ -12,8 +13,49 @@ import axios from 'axios'
 
 const Clientes = () => {
 	// useState
-	const [clientes, setClientes] = useState([])
-	
+	const [ventanaModal, setVentanaModal] = useState(false)
+	const [cliente, setCliente] = useState({
+		idUsuario: '',
+		email: '',
+		password: '',
+		nombre: '',
+		ap_paterno: '',
+		ap_materno: '',
+		telefono: '',
+		foto: '',
+		estado: '',
+		servicios: '',
+		citas_pendientes: ''
+	})
+	const [clientes, setClientes] = useState([
+		{
+			idUsuario: '1',
+			email: 'email@gmail.com',
+			password: '12345',
+			nombre: 'Daniel Ramon',
+			ap_paterno: 'Solis',
+			ap_materno: 'Medina',
+			telefono: '4622835737',
+			foto: 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg',
+			estado: '1',
+			servicios: '5',
+			citas_pendientes: '2'
+		},
+		{
+			idUsuario: '2',
+			email: 'email@gmail.com',
+			password: '12345',
+			nombre: 'Daniel Ramon',
+			ap_paterno: 'Solis',
+			ap_materno: 'Medina',
+			telefono: '4622835737',
+			foto: 'https://media.revistagq.com/photos/5f3243ee64de88802df64b6a/master/pass/patricio.jpg',
+			estado: '0',
+			servicios: '5',
+			citas_pendientes: '6'
+		},
+	])
+
 	// useEffect
 	useEffect(() => {
 		getClientes()
@@ -28,12 +70,50 @@ const Clientes = () => {
 			console.log(error)
 		}
 	}
-
-	const onClickVer = () => {}
+	const setClienteModal = (id) => {
+		const clienteFiltrado = clientes.filter(cliente => cliente.idUsuario == id)
+		setCliente(clienteFiltrado[0])
+		setVentanaModal(true)
+	}
 
 	// Renderizado
 	return (
 		<>
+			{ventanaModal && (
+				<VentanaModal cerrarModal={() => setVentanaModal(false)} titulo='Cuenta de cliente'>
+					<div className='w-full h-full flex justify-between'>
+						<div className='w-[35%] h-[270.2px] 2xl:h-[364px] rounded-full overflow-hidden'>
+							<img src={cliente.foto} alt={`Fotografía de ${cliente.nombre}`} />
+						</div>
+						<div className='w-[55%] flex flex-col gap-y-10'>
+							<div className='flex w-full items-center'>
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Nombre</h3>
+								<input type="text" disabled={true} value={cliente.nombre} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+							</div>
+							<div className='flex w-full items-center'>
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Apellido paterno</h3>
+								<input type="text" disabled={true} value={cliente.ap_paterno} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+							</div>
+							<div className='flex w-full items-center'>
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Apellido materno</h3>
+								<input type="text" disabled={true} value={cliente.ap_materno} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+							</div>
+							<div className='flex w-full items-center'>
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Correo electrónico</h3>
+								<input type="text" disabled={true} value={cliente.email} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+							</div>
+							<div className='flex w-full items-center'>
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Número telefónico</h3>
+								<input type="text" disabled={true} value={cliente.telefono} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+							</div>
+							<div className='flex w-full items-center'>
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Estado</h3>
+								<input type="text" disabled={true} value={cliente.estado == 0 ? 'Desactiva' : 'Activa'} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+							</div>
+						</div>
+					</div>
+				</VentanaModal>
+			)}
 			<DashboardHeader titulo='Clientes' />
 			<DashboardContainer>
 				{/* Buscador */}
@@ -42,17 +122,37 @@ const Clientes = () => {
 					placeholder='Escribe el nombre del cliente'
 				/>
 				{/* Contenedor de las Cards */}
-				<div className='w-full h-max my-6 grid grid-cols-3 gap-3 2xl:grid-cols-4 xl:gap-6'>
-					{clientes.map(cliente => (
-						<ClienteCard
-							key={cliente.idUsuario}
-							img='https://elcomercio.pe/resizer/-OZqwZSaiqrZ_moopwodC_iJcRs=/1200x1200/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/FHVPWJMHKVFJ7MNVVGKJZL5JA4.png'
-							nombre={cliente.nombre}
-							servicios={12}
-							pendientes={2}
-							onClickVer={() => console.log(cliente.idUsuario)}
-						/>
-					))}
+				<div className='w-full h-max my-10'>
+					<table className='w-full bg-white rounded-lg shadow-sm select-none'>
+						<thead>
+							<tr className='h-[50px] text-gray-500 text-base border-b'>
+								<th className='font-medium px-5 py-3'>Nombre completo</th>
+								<th className='font-medium px-5 py-3'>Correo electrónico</th>
+								<th className='font-medium px-5 py-3'>Teléfono</th>
+								<th className='font-medium px-5 py-3'>Estado de cuenta</th>
+								<th className='font-medium px-5 py-3'>Servicios tomados</th>
+								<th className='font-medium px-5 py-3'>Citas pendientes</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{clientes.map(cliente => (
+								<ClienteRow
+									key={cliente.idUsuario}
+									email={cliente.email}
+									nombre={cliente.nombre}
+									ap_paterno={cliente.ap_paterno}
+									ap_materno={cliente.ap_materno}
+									telefono={cliente.telefono}
+									estado={cliente.estado}
+									foto={cliente.foto}
+									servicios={cliente.servicios}
+									citas_pendientes={cliente.citas_pendientes}
+									onClick={() => setClienteModal(cliente.idUsuario)}
+								/>
+							))}
+						</tbody>
+					</table>
 				</div>
 			</DashboardContainer>
 		</>
