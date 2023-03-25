@@ -73,7 +73,7 @@ const Navbar = () => {
 				)}
 				<li>
 					<NavLink
-						to='/admin/negocio'
+						to='/dashboard/negocio'
 						className={({ isActive }) =>
 							isActive ? 'text-green-500' : 'text-black font-medium'
 						}

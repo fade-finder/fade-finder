@@ -75,7 +75,7 @@ const Perfil = () => {
 			<Header />
 			<div className='w-full max-w-[1080px]'>
 				<div>
-					<Link to='/admin'>
+					<Link to='/dashboard'>
 						<AiOutlineLeft className='text-2xl text-gray-700 hover:text-gray-900 duration-200' />
 					</Link>
 				</div>
