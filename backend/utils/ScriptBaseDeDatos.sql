@@ -66,7 +66,7 @@ insert into rol (idRol, nombre) values (1, 'cliente');
 insert into rol (idRol, nombre) values (2, 'barbero');
 insert into rol (idRol, nombre) values (3, 'admin');
 
-insert into usuario values (null, 'Kike', 'Camarena', 'Garcia', 'kike@gmail.com', '1234', '1234567890', 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg', 1, 2);
+insert into usuario values (null, 'Kike', 'Camarena', 'Garcia', 'kike@gmail.com', '12345', '1234567890', 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg', 1, 2);
 insert into usuario values (null, 'Daniel Ramón', 'Solis', 'Medina', 'daniel@gmail.com', '140503', '4291002030', 'https://media.revistagq.com/photos/5f3243ee64de88802df64b6a/master/pass/patricio.jpg', 1, 1);
 
 select * from usuario;

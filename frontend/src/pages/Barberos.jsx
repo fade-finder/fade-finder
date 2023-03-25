@@ -6,17 +6,20 @@ import BigButton from '../components/BigButton'
 import VentanaModal from '../components/VentanaModal'
 // Componentes modal
 import Input from '../components/Input'
-import Select from '../components/Select'
-// Modulos
+// Paquetes
 import axios from 'axios'
 import Swal from 'sweetalert2'
+// Utils
+import {
+	validarEmail,
+	validarTelefono,
+	validarPassword,
+} from '../utils/validaciones'
 // Iconos
 import { GoPlus } from 'react-icons/go'
 import { FaEdit } from 'react-icons/fa'
 // Hooks
 import { useState, useEffect } from 'react'
-// Data
-// import { barberos } from '../../../backend/utils/barberosData'
 
 const Barberos = () => {
 	// * * * * * * * * * * * * * * * USE STATE * * * * * * * * * * * * * *
@@ -96,7 +99,10 @@ const Barberos = () => {
 	// Funcion para agregar un nuevo barbero a la bd
 	const onClickAddBarbero = async e => {
 		e.preventDefault()
-		setVentanaModal(false)
+		if (!validarCamposVacios()) return false
+		if (!validarEmail(barbero.email)) return false
+		if (!validarTelefono(barbero.telefono)) return false
+		if (!validarPassword(barbero.password)) return false
 		try {
 			await axios.post('http://localhost:3000/admin/barberos/agregar', barbero)
 			limpiarCampos()
@@ -108,14 +114,29 @@ const Barberos = () => {
 				'success'
 			)
 		} catch (error) {
-			Swal.fire('Error', error.name + ': ' + error.message, 'error')
+			switch (error.response.data.code) {
+				case 'ER_DUP_ENTRY':
+					Swal.fire(
+						'Error',
+						'El correo electrónico ya esta registrado en nuestra base de datos',
+						'error'
+					)
+					break
+
+				default:
+					Swal.fire('Error', 'Vuelve a intentarlo más tarde', 'error')
+					break
+			}
 		}
 	}
 
 	// Funcion para actualizar un barbero
 	const onClickUpdateBarbero = async e => {
 		e.preventDefault()
-		setVentanaModal(false)
+		if (!validarCamposVacios()) return false
+		if (!validarEmail(barbero.email)) return false
+		if (!validarTelefono(barbero.telefono)) return false
+		if (!validarPassword(barbero.password)) return false
 		try {
 			await axios.put(
 				'http://localhost:3000/admin/barberos/' + barbero.idUsuario,
@@ -130,7 +151,19 @@ const Barberos = () => {
 				'success'
 			)
 		} catch (error) {
-			Swal.fire('Error', error.name + ': ' + error.message, 'error')
+			switch (error.response.data.code) {
+				case 'ER_DUP_ENTRY':
+					Swal.fire(
+						'Error',
+						'El correo electrónico ya esta registrado en nuestra base de datos',
+						'error'
+					)
+					break
+
+				default:
+					Swal.fire('Error', 'Vuelve a intentarlo más tarde', 'error')
+					break
+			}
 		}
 	}
 
@@ -148,20 +181,41 @@ const Barberos = () => {
 		})
 		if (isConfirmed) {
 			try {
-				await axios.delete('http://localhost:3000/admin/barberos/' + id)
-				Swal.fire(
-					'Eliminado!',
-					'El barbero fue eliminado del sistema',
-					'success'
+				const res = await axios.delete(
+					'http://localhost:3000/admin/barberos/' + id
 				)
-				const barberosFiltrados = barberos.filter(
-					barbero => barbero.idUsuario != id
-				)
-				setBarberos(barberosFiltrados)
+				if (res.data.affectedRows > 0) {
+					Swal.fire(
+						'Eliminado!',
+						'El barbero fue eliminado del sistema',
+						'success'
+					)
+					const barberosFiltrados = barberos.filter(
+						barbero => barbero.idUsuario != id
+					)
+					setBarberos(barberosFiltrados)
+				}
 			} catch (error) {
-				Swal.fire('Error', error.name + ': ' + error.message, 'error')
+				Swal.fire('Error', error, 'error')
 			}
 		}
+	}
+
+	const validarCamposVacios = () => {
+		if (
+			barbero.email != '' &&
+			barbero.password != '' &&
+			barbero.nombre != '' &&
+			barbero.ap_paterno != '' &&
+			barbero.telefono != ''
+		)
+			return true
+		Swal.fire(
+			'Campos vacios',
+			'No puedes dejar campos vacíos, intentalo de nuevo',
+			'warning'
+		)
+		return false
 	}
 
 	// * * * * * * * * * * * * * * * RENDERIZADO * * * * * * * * * * * * * *

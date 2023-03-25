@@ -27,7 +27,7 @@ exports.postLogin = (req, res) => {
     res.send(usuario[0][0]);
   })
   .catch(err => {
-    res.status(500);
+    res.status(500).send(err);
   })
 
 }

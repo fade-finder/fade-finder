@@ -7,7 +7,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 // Utils
-import { validarEmail } from '../utils/validarEmail'
+import { validarEmail } from '../utils/validaciones'
 
 const Login = () => {
 	// Const
@@ -20,8 +20,10 @@ const Login = () => {
 	const onClickLogin = async e => {
 		e.preventDefault()
 		if (!validarCampos()) return false
-		if(!validarEmail(email)) return false
+		if (!validarEmail(email)) return false
 		try {
+			setEmail(email.toLowerCase().trim())
+			setPassword(password.trim())
 			const res = await axios.post('http://localhost:3000/login', {
 				email,
 				password,

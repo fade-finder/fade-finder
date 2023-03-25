@@ -7,7 +7,11 @@ import { useState } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 // Utils
-import { validarEmail } from '../utils/validarEmail'
+import {
+	validarEmail,
+	validarTelefono,
+	validarPassword,
+} from '../utils/validaciones'
 
 const Register = () => {
 	const navigate = useNavigate()
@@ -33,9 +37,15 @@ const Register = () => {
 	const onClickRegister = async e => {
 		e.preventDefault()
 		if (!validarCampos()) return false
-		if(!validarEmail(cliente.email)) return false
+		if (!validarEmail(cliente.email)) return false
+		if (!validarTelefono(cliente.telefono)) return false
+		if (!validarPassword(cliente.password)) return false
 		try {
-			await axios.post('http://localhost:3000/cliente/register', cliente)
+			await axios.post(
+				'http://localhost:3000/cliente/register',
+				cliente
+			)
+			// console.log(res)
 			// Lo redireccionamo al login
 			Swal.fire({
 				icon: 'success',
@@ -48,7 +58,15 @@ const Register = () => {
 				navigate('/login')
 			}, 2500)
 		} catch (error) {
-			Swal.fire('Error', error.name + ': ' + error.message, 'error')
+			switch (error.response.data.code) {
+				case 'ER_DUP_ENTRY':
+					Swal.fire('Error', 'El correo electrónico ya esta registrado en nuestra base de datos', 'error')
+					break
+					
+					default:
+					Swal.fire('Error', 'Vuelve a intentarlo más tarde', 'error')
+					break
+			}
 		}
 	}
 
