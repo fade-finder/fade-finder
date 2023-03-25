@@ -24,7 +24,7 @@ exports.getClientes = (req, res) => {
 exports.postLogin = (req, res) => {
   General.Login(req.body.email, req.body.password)
   .then(usuario => {
-    res.send(usuario[0]);
+    res.send(usuario[0][0]);
   })
   .catch(err => {
     res.status(500);

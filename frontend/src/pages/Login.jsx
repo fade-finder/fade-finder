@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/logo.png'
 import Input from '../components/Input'
-import Select from '../components/Select'
 
 // Hooks
 import { useState } from 'react'
@@ -10,6 +9,10 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 const Login = () => {
+	// Const
+	const navigate = useNavigate()
+
+	// useState
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
@@ -20,8 +23,25 @@ const Login = () => {
 				email,
 				password,
 			})
-			// Aqui guardaremos el usuario en nuestro estado global
-			console.log(res.data)
+			if (res.data != '') {
+				// Si existe el usuario
+				// Cargar datos al estado global
+				const { isConfirmed } = await Swal.fire(
+					'Sesión iniciada',
+					'Iniciaste sesión correctamente',
+					'success'
+				)
+				if(isConfirmed){
+					navigate('/dashboard/')
+				}
+			} else {
+				// No existe el usuario
+				Swal.fire(
+					'Error',
+					'Las credenciales ingresadas son incorrectas',
+					'error'
+				)
+			}
 		} catch (error) {
 			Swal.fire('Error', error, 'error')
 		}

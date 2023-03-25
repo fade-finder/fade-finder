@@ -108,11 +108,7 @@ const Barberos = () => {
 				'success'
 			)
 		} catch (error) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Error',
-				text: error.response.data.error + ': ' + error.code,
-			})
+			Swal.fire('Error', error.name + ': ' + error.message, 'error')
 		}
 	}
 
@@ -134,11 +130,7 @@ const Barberos = () => {
 				'success'
 			)
 		} catch (error) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Error',
-				text: error.message + ': ' + error.code,
-			})
+			Swal.fire('Error', error.name + ': ' + error.message, 'error')
 		}
 	}
 
@@ -167,11 +159,7 @@ const Barberos = () => {
 				)
 				setBarberos(barberosFiltrados)
 			} catch (error) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Error',
-					text: error,
-				})
+				Swal.fire('Error', error.name + ': ' + error.message, 'error')
 			}
 		}
 	}
