@@ -1,7 +1,7 @@
 // Iconos
 import { GrClose } from 'react-icons/gr'
 
-const VentanaModal = ({ titulo, cerrarModal, children }) => {
+const VentanaModal = ({ titulo='', cerrarModal, children }) => {
 	return (
 		<div className='fixed top-0 left-0 z-50 min-h-screen min-w-full flex justify-center items-center bg-[#00000071]'>
 			<div className='w-[900px] h-[500px] 2xl:w-[1200px] 2xl:h-[700px] bg-white px-16 2xl:px-20 2xl:pb-20 2xl:pt-16 pb-16 pt-12 rounded-sm overflow-y-auto shadow-2xl'>
