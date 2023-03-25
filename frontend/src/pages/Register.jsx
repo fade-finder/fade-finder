@@ -49,6 +49,11 @@ const Register = () => {
 		}
 	}
 
+	const validarCampos = () => {
+		if(email != '' && password != '' && nombre != '' && ap_paterno != '' && telefono != '') return true
+		return false
+	}
+
 	return (
 		<div className='bg-[#F5F8FE] w-full min-h-[100vh] flex justify-center items-center select-none py-16'>
 			<div className='w-[600px] h-auto bg-white py-[50px] px-[60px] shadow-lg'>

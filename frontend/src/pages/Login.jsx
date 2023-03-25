@@ -18,14 +18,7 @@ const Login = () => {
 
 	const onClickLogin = async e => {
 		e.preventDefault()
-		if(!validarCampos()){
-			Swal.fire(
-				'Campos vacios',
-				'No puedes dejar campos vacíos, intentalo de nuevo',
-				'warning'
-			)
-			return false
-		}
+		if(!validarCampos()) return false
 		try {
 			const res = await axios.post('http://localhost:3000/login', {
 				email,
@@ -57,6 +50,11 @@ const Login = () => {
 
 	const validarCampos = () => {
 		if(email != '' && password != '') return true
+		Swal.fire(
+			'Campos vacios',
+			'No puedes dejar campos vacíos, intentalo de nuevo',
+			'warning'
+		)
 		return false
 	}
 
