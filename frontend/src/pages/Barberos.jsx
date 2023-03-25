@@ -319,7 +319,7 @@ const Barberos = () => {
 					{barberos.map(barbero => (
 						<BarberoCard
 							key={barbero.idUsuario}
-							img='https://elcomercio.pe/resizer/-OZqwZSaiqrZ_moopwodC_iJcRs=/1200x1200/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/FHVPWJMHKVFJ7MNVVGKJZL5JA4.png'
+							img={barbero.foto}
 							nombre={barbero.nombre}
 							servicios={12}
 							pendientes={2}
