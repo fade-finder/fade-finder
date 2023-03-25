@@ -45,17 +45,25 @@ const Perfil = () => {
 		})
 		if (isConfirmed) {
 			try {
-				await axios.delete('http://localhost:3000/cliente/perfil/' + usuario.id)
-				Swal.fire({
-					title: 'Cuenta eliminada!',
-					text: 'La cuenta fue eliminada de la base de datos',
-					icon: 'success',
-					showConfirmButton: false,
-					timer: 2000,
-				})
-				setTimeout(() => {
-					navigate('/login')
-				}, 2000)
+				const res = await axios.delete('http://localhost:3000/cliente/perfil/' + usuario.id)
+				if(res.data.affectedRows > 0) {
+					Swal.fire({
+						title: 'Cuenta eliminada!',
+						text: 'La cuenta fue eliminada de la base de datos',
+						icon: 'success',
+						showConfirmButton: false,
+						timer: 2000,
+					})
+					setTimeout(() => {
+						navigate('/login')
+					}, 2000)
+				} else {
+					Swal.fire(
+						'Error',
+						'No se pudo eliminar la cuenta de la base de datos',
+						'error'
+					)
+				}
 			} catch (error) {
 				Swal.fire('Error', error, 'error')
 			}

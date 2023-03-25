@@ -16,8 +16,9 @@ exports.postRegister = (req, res) => {
 
 exports.deleteCliente = (req, res) => {
   Usuario.BorrarPerfilCliente(req.params.idCliente)
-  .then(() => {
-    res.end()
+  .then(resultado => {
+    // Modifique la res que se envia al frontend porque me di cuenta que siempre mostraba el mensaje de que se elimino un usuario aunque no se alla eliminado. Esto es porque lo que valida el then catch es que la consulta se ejecuta mas no que elimine algo
+    res.json(resultado[0])
   })
   .catch(err => {
     res.status(500)
