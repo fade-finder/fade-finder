@@ -1,21 +1,26 @@
-// Models
-// const Cliente = require('../models/cliente')
+const Usuario = require('../models/usuario')
 
 exports.postRegister = (req, res) => {
   console.log(req.body);
 
-  // De esta forma extraes cada dato
-  console.log(req.body.nombre);
-  console.log(req.body.ap_paterno);
+  const usuario = new Usuario(req.body.nombre, req.body.ap_paterno, req.body.ap_materno, req.body.email, req.body.password, req.body.telefono, req.body.foto)
+  usuario.AgregarCliente()
+  .then(() => {
+    res.end();
+  })
+  .catch(err => {
+    res.status(500);
+  })
 
-  // Aqui va la logica para crear una cuenta de cliente
-
-  // res.end()  //-- todo bien
-  // res.status(500)  //-- error
 }
 
 exports.deleteCliente = (req, res) => {
-  const id = req.params.idCliente;
-  console.log(`El id del cliente a eliminar es ${id}`);
-  res.end()
+  Usuario.BorrarPerfilCliente(req.params.idCliente)
+  .then(() => {
+    res.end()
+  })
+  .catch(err => {
+    res.status(500)
+  })
+
 }

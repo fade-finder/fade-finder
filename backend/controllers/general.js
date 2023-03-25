@@ -1,4 +1,5 @@
 const Usuario = require('../models/usuario')
+const General = require('../models/general')
 
 exports.getBarberos = (req, res) => {
   const barberos = Usuario.VerBarberos()
@@ -11,13 +12,22 @@ exports.getBarberos = (req, res) => {
 }
 
 exports.getClientes = (req, res) => {
-  // aqui hacer logica para traer y devolver los clientes
+  Usuario.VerClientes()
+  .then(clientes => {
+    res.send(clientes[0]);
+  })
+  .catch(err => {
+    console.log(err);
+  })
 }
 
 exports.postLogin = (req, res) => {
-  console.log(req.body.email);
-  console.log(req.body.password);
-  // Desarrolla la logica para el login
-  // res.end()  -- todo bien
-  // res.status(500)  -- error
+  General.Login(req.body.email, req.body.password)
+  .then(usuario => {
+    res.send(usuario[0]);
+  })
+  .catch(err => {
+    res.status(500);
+  })
+
 }
