@@ -31,6 +31,7 @@ const Register = () => {
 
 	const onClickRegister = async e => {
 		e.preventDefault()
+		if(!validarCampos()) return false
 		try {
 			await axios.post('http://localhost:3000/cliente/register', cliente)
 			// Lo redireccionamo al login
@@ -50,7 +51,12 @@ const Register = () => {
 	}
 
 	const validarCampos = () => {
-		if(email != '' && password != '' && nombre != '' && ap_paterno != '' && telefono != '') return true
+		if(cliente.email != '' && cliente.password != '' && cliente.nombre != '' && cliente.ap_paterno != '' && cliente.telefono != '') return true
+		Swal.fire(
+			'Campos vacios',
+			'No puedes dejar campos vacíos, intentalo de nuevo',
+			'warning'
+		)
 		return false
 	}
 
@@ -68,7 +74,7 @@ const Register = () => {
 						<div className='flex items-center gap-x-3'>
 							{/* Email */}
 							<Input
-								label='Correo electrónico'
+								label='Correo electrónico*'
 								type='email'
 								name='email'
 								id='email'
@@ -79,7 +85,7 @@ const Register = () => {
 
 							{/* Pasword */}
 							<Input
-								label='Contraseña'
+								label='Contraseña*'
 								type='text'
 								name='password'
 								id='password'
@@ -90,7 +96,7 @@ const Register = () => {
 						</div>
 					</div>
 					<Input
-						label='Nombre(s)'
+						label='Nombre(s)*'
 						type='text'
 						name='nombre'
 						id='nombre'
@@ -100,7 +106,7 @@ const Register = () => {
 					/>
 					<div className='flex items-center gap-x-3'>
 						<Input
-							label='Apellido paterno'
+							label='Apellido paterno*'
 							type='text'
 							name='ap_paterno'
 							id='ap_paterno'
@@ -120,7 +126,7 @@ const Register = () => {
 					</div>
 					<div className='flex items-center gap-x-3'>
 						<Input
-							label='Teléfono'
+							label='Teléfono*'
 							type='text'
 							name='telefono'
 							id='telefono'
