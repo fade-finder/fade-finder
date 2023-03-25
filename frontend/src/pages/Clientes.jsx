@@ -25,36 +25,9 @@ const Clientes = () => {
 		foto: '',
 		estado: '',
 		servicios: '',
-		citas_pendientes: ''
+		citas_pendientes: '',
 	})
-	const [clientes, setClientes] = useState([
-		{
-			idUsuario: '1',
-			email: 'email@gmail.com',
-			password: '12345',
-			nombre: 'Daniel Ramon',
-			ap_paterno: 'Solis',
-			ap_materno: 'Medina',
-			telefono: '4622835737',
-			foto: 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg',
-			estado: '1',
-			servicios: '5',
-			citas_pendientes: '2'
-		},
-		{
-			idUsuario: '2',
-			email: 'email@gmail.com',
-			password: '12345',
-			nombre: 'Daniel Ramon',
-			ap_paterno: 'Solis',
-			ap_materno: 'Medina',
-			telefono: '4622835737',
-			foto: 'https://media.revistagq.com/photos/5f3243ee64de88802df64b6a/master/pass/patricio.jpg',
-			estado: '0',
-			servicios: '5',
-			citas_pendientes: '6'
-		},
-	])
+	const [clientes, setClientes] = useState([])
 
 	// useEffect
 	useEffect(() => {
@@ -70,7 +43,7 @@ const Clientes = () => {
 			console.log(error)
 		}
 	}
-	const setClienteModal = (id) => {
+	const setClienteModal = id => {
 		const clienteFiltrado = clientes.filter(cliente => cliente.idUsuario == id)
 		setCliente(clienteFiltrado[0])
 		setVentanaModal(true)
@@ -80,35 +53,80 @@ const Clientes = () => {
 	return (
 		<>
 			{ventanaModal && (
-				<VentanaModal cerrarModal={() => setVentanaModal(false)} titulo='Cuenta de cliente'>
+				<VentanaModal
+					cerrarModal={() => setVentanaModal(false)}
+					titulo='Cuenta de cliente'
+				>
 					<div className='w-full h-full flex justify-between'>
 						<div className='w-[35%] h-[270.2px] 2xl:h-[364px] rounded-full overflow-hidden'>
 							<img src={cliente.foto} alt={`Fotografía de ${cliente.nombre}`} />
 						</div>
 						<div className='w-[55%] flex flex-col gap-y-10'>
 							<div className='flex w-full items-center'>
-								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Nombre</h3>
-								<input type="text" disabled={true} value={cliente.nombre} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>
+									Nombre
+								</h3>
+								<input
+									type='text'
+									disabled={true}
+									value={cliente.nombre}
+									className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900'
+								/>
 							</div>
 							<div className='flex w-full items-center'>
-								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Apellido paterno</h3>
-								<input type="text" disabled={true} value={cliente.ap_paterno} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>
+									Apellido paterno
+								</h3>
+								<input
+									type='text'
+									disabled={true}
+									value={cliente.ap_paterno}
+									className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900'
+								/>
 							</div>
 							<div className='flex w-full items-center'>
-								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Apellido materno</h3>
-								<input type="text" disabled={true} value={cliente.ap_materno} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>
+									Apellido materno
+								</h3>
+								<input
+									type='text'
+									disabled={true}
+									value={cliente.ap_materno}
+									className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900'
+								/>
 							</div>
 							<div className='flex w-full items-center'>
-								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Correo electrónico</h3>
-								<input type="text" disabled={true} value={cliente.email} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>
+									Correo electrónico
+								</h3>
+								<input
+									type='text'
+									disabled={true}
+									value={cliente.email}
+									className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900'
+								/>
 							</div>
 							<div className='flex w-full items-center'>
-								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Número telefónico</h3>
-								<input type="text" disabled={true} value={cliente.telefono} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>
+									Número telefónico
+								</h3>
+								<input
+									type='text'
+									disabled={true}
+									value={cliente.telefono}
+									className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900'
+								/>
 							</div>
 							<div className='flex w-full items-center'>
-								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>Estado</h3>
-								<input type="text" disabled={true} value={cliente.estado == 0 ? 'Desactiva' : 'Activa'} className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900' />
+								<h3 className='w-[200px] text-gray-500 uppercase font-semibold text-sm'>
+									Estado
+								</h3>
+								<input
+									type='text'
+									disabled={true}
+									value={cliente.estado == 0 ? 'Desactiva' : 'Activa'}
+									className='bg-transparent border-b flex-1 py-1 px-3 text-gray-900'
+								/>
 							</div>
 						</div>
 					</div>
