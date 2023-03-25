@@ -1,12 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/logo.png'
 import Input from '../components/Input'
-
 // Hooks
 import { useState } from 'react'
-// Extra
+// Paquetes
 import axios from 'axios'
 import Swal from 'sweetalert2'
+// Utils
+import { validarEmail } from '../utils/validarEmail'
 
 const Login = () => {
 	// Const
@@ -18,7 +19,8 @@ const Login = () => {
 
 	const onClickLogin = async e => {
 		e.preventDefault()
-		if(!validarCampos()) return false
+		if (!validarCampos()) return false
+		if(!validarEmail(email)) return false
 		try {
 			const res = await axios.post('http://localhost:3000/login', {
 				email,
@@ -32,7 +34,7 @@ const Login = () => {
 					'Iniciaste sesión correctamente',
 					'success'
 				)
-				if(isConfirmed){
+				if (isConfirmed) {
 					navigate('/dashboard/')
 				}
 			} else {
@@ -49,7 +51,7 @@ const Login = () => {
 	}
 
 	const validarCampos = () => {
-		if(email != '' && password != '') return true
+		if (email != '' && password != '') return true
 		Swal.fire(
 			'Campos vacios',
 			'No puedes dejar campos vacíos, intentalo de nuevo',

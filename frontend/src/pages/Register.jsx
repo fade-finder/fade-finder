@@ -1,12 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/logo.png'
 import Input from '../components/Input'
-
 // Hooks
 import { useState } from 'react'
-// Extra
+// Paquetes
 import axios from 'axios'
 import Swal from 'sweetalert2'
+// Utils
+import { validarEmail } from '../utils/validarEmail'
 
 const Register = () => {
 	const navigate = useNavigate()
@@ -31,7 +32,8 @@ const Register = () => {
 
 	const onClickRegister = async e => {
 		e.preventDefault()
-		if(!validarCampos()) return false
+		if (!validarCampos()) return false
+		if(!validarEmail(cliente.email)) return false
 		try {
 			await axios.post('http://localhost:3000/cliente/register', cliente)
 			// Lo redireccionamo al login
@@ -51,7 +53,14 @@ const Register = () => {
 	}
 
 	const validarCampos = () => {
-		if(cliente.email != '' && cliente.password != '' && cliente.nombre != '' && cliente.ap_paterno != '' && cliente.telefono != '') return true
+		if (
+			cliente.email != '' &&
+			cliente.password != '' &&
+			cliente.nombre != '' &&
+			cliente.ap_paterno != '' &&
+			cliente.telefono != ''
+		)
+			return true
 		Swal.fire(
 			'Campos vacios',
 			'No puedes dejar campos vacíos, intentalo de nuevo',
