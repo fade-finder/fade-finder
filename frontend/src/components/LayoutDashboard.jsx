@@ -1,8 +1,8 @@
-import Dashboard from '../components/Dashboard'
+import Dashboard from './Dashboard'
 // Hooks
 import { Outlet } from 'react-router-dom'
 
-const LayoutAdmin = () => {
+const LayoutDashboard = () => {
 	return (
 		<div>
 			<Dashboard />
@@ -11,4 +11,4 @@ const LayoutAdmin = () => {
 	)
 }
 
-export default LayoutAdmin
+export default LayoutDashboard

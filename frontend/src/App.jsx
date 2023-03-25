@@ -7,7 +7,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import NoPage from './pages/NoPage'
 import Perfil from './pages/Perfil'
-import LayoutAdmin from './components/LayoutAdmin'
+import LayoutDashboard from './components/LayoutDashboard'
 import Barberos from './pages/Barberos'
 import Clientes from './pages/Clientes'
 import Citas from './pages/Citas'
@@ -16,7 +16,7 @@ import Resenas from './pages/Resenas'
 
 function App() {
 	const usuario = {
-		rol: 1
+		rol: 1,
 	}
 	return (
 		<BrowserRouter>
@@ -24,7 +24,7 @@ function App() {
 				{/* plantilla header y footer */}
 				<Route path='/' element={<Layout />}>
 					<Route index element={<LandingPage />} />
-          <Route path='*' element={<NoPage />} />
+					<Route path='*' element={<NoPage />} />
 				</Route>
 				{/* plantilla limpia */}
 				<Route>
@@ -33,7 +33,7 @@ function App() {
 					<Route path='/perfil' element={<Perfil />} />
 				</Route>
 				{/* Plantilla con dashboard */}
-				<Route path='/admin' element={<LayoutAdmin />}>
+				<Route path='/dashboard' element={<LayoutDashboard />}>
 					<Route index element={<Negocio />} />
 					<Route path='negocio' element={<Negocio />} />
 					<Route path='citas' element={<Citas />} />
@@ -45,8 +45,5 @@ function App() {
 		</BrowserRouter>
 	)
 }
-
-// COMENTARIOS
-// El path = '*' significa cualquier ruta que no exista
 
 export default App
