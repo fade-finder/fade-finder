@@ -82,7 +82,7 @@ const Barberos = () => {
 			const res = await axios.get('http://localhost:3000/barberos')
 			setBarberos(res.data)
 		} catch (error) {
-			console.log(error)
+			console.log(error.message)
 		}
 	}
 

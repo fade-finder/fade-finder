@@ -65,7 +65,7 @@ const Perfil = () => {
 					)
 				}
 			} catch (error) {
-				Swal.fire('Error', error, 'error')
+				Swal.fire('Error', error.name + ': ' + error.message, 'error')
 			}
 		}
 	}
