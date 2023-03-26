@@ -71,9 +71,11 @@ const Login = () => {
 		<div className='bg-[#F5F8FE] w-full min-h-[100vh] flex justify-center items-center select-none py-16'>
 			<div className='w-[600px] h-auto bg-white py-[50px] px-[100px] shadow-lg'>
 				<div className='w-full flex justify-center mb-3'>
-					<div className='w-[200px]'>
-						<img src={Logo} alt='Logo' />
-					</div>
+					<Link to='/'>
+						<div className='w-[200px]'>
+							<img src={Logo} alt='Logo' />
+						</div>
+					</Link>
 				</div>
 				<h1 className='text-lg font-bold mb-5'>Login</h1>
 				<form action='' className='flex flex-col gap-y-5'>
