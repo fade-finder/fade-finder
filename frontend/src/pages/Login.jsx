@@ -1,17 +1,21 @@
-import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/logo.png'
 import Input from '../components/Input'
 // Hooks
 import { useState } from 'react'
-// Paquetes
+// Modulos
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 // Utils
 import { validarEmail } from '../utils/validaciones'
+// Redux
+import { useDispatch } from 'react-redux'
+import { setUsuario } from '../redux/usuarioSlice'
 
 const Login = () => {
 	// Const
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	// useState
 	const [email, setEmail] = useState('')
@@ -29,8 +33,10 @@ const Login = () => {
 				password,
 			})
 			if (res.data != '') {
-				// Si existe el usuario
-				// Cargar datos al estado global
+				// * * * * * * * * * *
+				dispatch(setUsuario(res.data))
+				// * * * * * * * * * *
+
 				const { isConfirmed } = await Swal.fire(
 					'Sesión iniciada',
 					'Iniciaste sesión correctamente',
@@ -40,7 +46,6 @@ const Login = () => {
 					navigate('/dashboard/')
 				}
 			} else {
-				// No existe el usuario
 				Swal.fire(
 					'Error',
 					'Las credenciales ingresadas son incorrectas',

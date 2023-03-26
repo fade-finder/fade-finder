@@ -1,26 +1,29 @@
+// Iconos
 import { AiOutlineLeft } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+// Modulos
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+// Hooks
+import { useState, useEffect } from 'react'
+// Componentes
 import Input from '../components/Input'
 import SmallButton from '../components/SmallButton'
 import Header from '../components/Header'
-import Swal from 'sweetalert2'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 
 const Perfil = () => {
+	// Redux
 	const navigate = useNavigate()
-	const [usuario, setUsuario] = useState({
-		id: '1',
-		email: '',
-		password: '',
-		nombre: '',
-		ap_paterno: '',
-		ap_materno: '',
-		telefono: '',
-		foto: '',
-		rol: '0',
-	})
+	const usuarioSlice = useSelector(state => state.usuario)
+
+	// useState
+	const [usuario, setUsuario] = useState({})
+
+	// useEffect
+	useEffect(() => {
+		setUsuario(usuarioSlice)
+	}, [])
 
 	// Funciones
 	const changeStateValue = (name, value) => {
@@ -45,8 +48,10 @@ const Perfil = () => {
 		})
 		if (isConfirmed) {
 			try {
-				const res = await axios.delete('http://localhost:3000/cliente/perfil/' + usuario.id)
-				if(res.data.affectedRows > 0) {
+				const res = await axios.delete(
+					'http://localhost:3000/cliente/perfil/' + usuario.idUsuario
+				)
+				if (res.data.affectedRows > 0) {
 					Swal.fire({
 						title: 'Cuenta eliminada!',
 						text: 'La cuenta fue eliminada de la base de datos',
@@ -89,13 +94,13 @@ const Perfil = () => {
 							</div>
 							<div className='absolute w-[80px] h-[80px] rounded-full overflow-hidden top-[50%] left-10 -translate-y-1/2 '>
 								<img
-									src='https://www.edarling.es/wp-content/uploads/sites/24/2019/06/fotos_para_perfil_2.jpg'
-									alt=''
+									src={usuario.foto}
+									alt={`Fotografía de ${usuario.nombre}`}
 								/>
 							</div>
 							<div className='h-1/2 w-full flex items-end p-6'>
 								<h2 className='text-xl font-semibold uppercase text-gray-800'>
-									Daniel Ramón Solís Medina
+									{usuario.nombre}
 								</h2>
 							</div>
 						</div>
@@ -148,7 +153,6 @@ const Perfil = () => {
 								name='foto'
 								id='foto'
 								placeholder='Nueva foto'
-								value={usuario.foto}
 								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
 						</div>
@@ -179,7 +183,7 @@ const Perfil = () => {
 								texto='Guardar todo'
 								onClick={() => handleClickGuardarTodo()}
 							/>
-							{usuario.rol == 0 && (
+							{usuario.idRol == 1 && (
 								<SmallButton
 									type='submit'
 									texto='Eliminar cuenta'
