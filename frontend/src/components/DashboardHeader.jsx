@@ -4,18 +4,28 @@ import { HiMoon } from 'react-icons/hi'
 import { BiLogOut } from 'react-icons/bi'
 
 // Modulos
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { cleanUsuario } from '../redux/usuarioSlice'
 
 const DashboardHeader = ({ titulo, largo=false }) => {
-	const navigate = useNavigate()
 	const dispatch = useDispatch()
+	const usuarioSlice = useSelector(state => state.usuario)
 
 	// Funciones
 	const handleClickLogout = () => {
-		localStorage.removeItem('idToken')
-		dispatch(cleanUsuario())
+		Swal.fire({
+			title: 'Hecho',
+			text: 'Cerraste tu sesión',
+			icon: 'success',
+			showConfirmButton: false,
+			timer: 2000,
+		})
+		setTimeout(() => {
+			localStorage.removeItem('idToken')
+			dispatch(cleanUsuario())
+		}, 2000)
 	}
 
 	return (
@@ -43,8 +53,8 @@ const DashboardHeader = ({ titulo, largo=false }) => {
 				<Link to='/perfil'>
 					<img
 						className='rounded-full w-[40px] h-[40px] 2xl:w-[45px] 2xl:h-[45px]'
-						src='https://editorialtelevisa.brightspotcdn.com/dims4/default/4876408/2147483647/strip/true/crop/1194x672+1+0/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-editorial-televisa.s3.amazonaws.com%2Fbrightspot%2Fwp-content%2Fuploads%2F2022%2F09%2F10-datos-curiosos-que-debes-saber-sobre-Mario-Bros.jpg'
-						alt='Foto de perfil'
+						src={usuarioSlice.foto}
+						alt={`Foto de perfil de ${usuarioSlice.nombre}`}
 					/>
 				</Link>
 			</div>

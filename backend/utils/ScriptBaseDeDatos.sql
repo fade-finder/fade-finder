@@ -70,6 +70,7 @@ insert into usuario values (null, 'Kike', 'Camarena', 'Garcia', 'kike@gmail.com'
 insert into usuario values (null, 'Daniel Ramón', 'Solis', 'Medina', 'daniel@gmail.com', '140503', '4291002030', 'https://media.revistagq.com/photos/5f3243ee64de88802df64b6a/master/pass/patricio.jpg', 1, 1);
 
 select * from usuario;
+
 select * from rol;
 
 

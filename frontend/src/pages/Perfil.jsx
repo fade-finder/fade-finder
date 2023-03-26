@@ -1,10 +1,11 @@
 // Iconos
 import { AiOutlineLeft } from 'react-icons/ai'
 // Modulos
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { cleanUsuario } from '../redux/usuarioSlice'
 // Hooks
 import { useState, useEffect } from 'react'
 // Componentes
@@ -14,11 +15,22 @@ import Header from '../components/Header'
 
 const Perfil = () => {
 	// Redux
-	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	const usuarioSlice = useSelector(state => state.usuario)
 
 	// useState
-	const [usuario, setUsuario] = useState({})
+	const [usuario, setUsuario] = useState({
+		idUsuario:'',
+		email: '',
+		password: '',
+		nombre: '',
+		ap_paterno: '',
+		ap_materno: '',
+		telefono: '',
+		foto: '',
+		estado: '',
+		idRol: '',
+	})
 
 	// useEffect
 	useEffect(() => {
@@ -60,7 +72,8 @@ const Perfil = () => {
 						timer: 2000,
 					})
 					setTimeout(() => {
-						navigate('/login')
+						localStorage.removeItem('idToken')
+						dispatch(cleanUsuario())
 					}, 2000)
 				} else {
 					Swal.fire(
@@ -94,7 +107,7 @@ const Perfil = () => {
 							</div>
 							<div className='absolute w-[80px] h-[80px] rounded-full overflow-hidden top-[50%] left-10 -translate-y-1/2 '>
 								<img
-									src={usuario.foto}
+									src={usuarioSlice.foto}
 									alt={`Fotografía de ${usuario.nombre}`}
 								/>
 							</div>
