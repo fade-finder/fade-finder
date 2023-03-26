@@ -21,14 +21,15 @@ import Clientes from './pages/Clientes'
 import Citas from './pages/Citas'
 import Negocio from './pages/Negocio'
 import Resenas from './pages/Resenas'
+import Cliente from './pages/Cliente'
 
 function App() {
-	const dispatch = useDispatch()	// se usa para ejecutar una accion con mi estado (actualizarlo)
-	const usuarioSlice = useSelector(state => state.usuario)	// obtengo el estado
-	const [isLoading, setIsLoading] = useState(true)	// me indica si debo mostrar el spinner
+	const dispatch = useDispatch() // se usa para ejecutar una accion con mi estado (actualizarlo)
+	const usuarioSlice = useSelector(state => state.usuario) // obtengo el estado
+	const [isLoading, setIsLoading] = useState(true) // me indica si debo mostrar el spinner
 
 	useEffect(() => {
-		const idToken = localStorage.getItem('idToken')		//obtengo la variable local idToken que contiene la idUsuario
+		const idToken = localStorage.getItem('idToken') //obtengo la variable local idToken que contiene la idUsuario
 		getDatosUsuario(idToken) // ejecutamos funcion para cargar los datos del usuario
 		setTimeout(() => {
 			setIsLoading(false)
@@ -36,9 +37,9 @@ function App() {
 	}, [])
 
 	const getDatosUsuario = async idToken => {
-		const res = await axios.get('http://localhost:3000/datos/' + idToken)		// cargamos datos del backend con ayuda del id
+		const res = await axios.get('http://localhost:3000/datos/' + idToken) // cargamos datos del backend con ayuda del id
 		dispatch(setUsuario(res.data)) // Actualizamos el estado del usuario
- 	}
+	}
 
 	if (isLoading) {
 		return (
@@ -58,6 +59,18 @@ function App() {
 					<Route index element={<LandingPage />} />
 					<Route path='*' element={<NoPage />} />
 				</Route>
+
+				{/* Plantilla en blanco */}
+				<Route
+					path='/citas'
+					element={
+						usuarioSlice.idUsuario != null ? (
+							<Cliente />
+						) : (
+							<Navigate to='/login' />
+						)
+					}
+				/>
 				<Route
 					path='/login'
 					element={
@@ -88,6 +101,7 @@ function App() {
 						)
 					}
 				/>
+
 				{/* Plantilla con dashboard */}
 				<Route
 					path='/dashboard'

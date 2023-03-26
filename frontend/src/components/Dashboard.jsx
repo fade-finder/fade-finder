@@ -14,31 +14,31 @@ const Dashboard = () => {
 				<span className='font-bold'>Fade</span> Finder
 			</h2>
 			<div className='w-full h-[1px] bg-[#00000083] mb-7'></div>
-			<div className='w-full pl-8 flex flex-col gap-y-4'>
+			<div className='w-full pl-8 flex flex-col gap-y-4 2xl:gap-y-7'>
 				<DashboardLink
 					to='negocio'
 					texto='Negocio'
-					icono={<TbBusinessplan className='text-xl' />}
+					icono={<TbBusinessplan className='text-xl 2xl:text-2xl' />}
 				/>
 				<DashboardLink
 					to='citas'
 					texto='Citas'
-					icono={<BsFillJournalBookmarkFill className='text-xl' />}
+					icono={<BsFillJournalBookmarkFill className='text-xl 2xl:text-2xl' />}
 				/>
 				<DashboardLink
 					to='clientes'
 					texto='Clientes'
-					icono={<BsPersonSquare className='text-xl' />}
+					icono={<BsPersonSquare className='text-xl 2xl:text-2xl' />}
 				/>
 				<DashboardLink
 					to='barberos'
 					texto='Barberos'
-					icono={<RxPerson className='text-xl' />}
+					icono={<RxPerson className='text-xl 2xl:text-2xl' />}
 				/>
 				<DashboardLink
 					to='resenas'
 					texto='Reseñas'
-					icono={<BiCommentDetail className='text-xl' />}
+					icono={<BiCommentDetail className='text-xl 2xl:text-2xl' />}
 				/>
 			</div>
 		</div>

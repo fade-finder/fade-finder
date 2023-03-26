@@ -1,6 +1,5 @@
 import DashboardHeader from '../components/DashboardHeader'
 import DashboardContainer from '../components/DashboardContainer'
-import BuscadorAdmin from '../components/BuscadorAdmin'
 import CardWidget from '../components/CardWidget'
 import Select from '../components/Select'
 
@@ -24,6 +23,7 @@ import {
 	PointElement,
 	Legend,
 	Tooltip,
+	// Filler
 } from 'chart.js'
 
 ChartJS.register(
@@ -33,6 +33,7 @@ ChartJS.register(
 	PointElement,
 	Legend,
 	Tooltip
+	// Filler
 )
 
 const Negocio = () => {
@@ -92,7 +93,9 @@ const Negocio = () => {
 						Servicios completados
 					</h3>
 					<div>
-						<Line data={dataIngresos} options={optionsIngresos}></Line>
+						{/* <div className='w-full'> */}
+							<Line data={dataIngresos} options={optionsIngresos}></Line>
+						{/* </div> */}
 					</div>
 					<div>
 						<Line data={dataServicios} options={optionsServicios}></Line>

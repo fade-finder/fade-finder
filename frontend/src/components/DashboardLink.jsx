@@ -9,7 +9,7 @@ const DashboardLink = ({ texto, icono, to }) => {
 			}
 		>
 			{icono}
-			<span className='text-base font-semibold'>{texto}</span>
+			<span className='text-base 2xl:text-lg font-semibold'>{texto}</span>
 		</NavLink>
 	)
 }
