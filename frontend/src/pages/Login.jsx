@@ -33,17 +33,17 @@ const Login = () => {
 				password,
 			})
 			if (res.data != '') {
-				// * * * * * * * * * *
-				dispatch(setUsuario(res.data))
-				// * * * * * * * * * *
-
 				const { isConfirmed } = await Swal.fire(
 					'Sesión iniciada',
 					'Iniciaste sesión correctamente',
 					'success'
 				)
 				if (isConfirmed) {
-					navigate('/dashboard/')
+					// * * * * * * * * * *
+					localStorage.setItem('idToken', res.data.idUsuario) //almacenamos el token
+					dispatch(setUsuario(res.data))
+					// * * * * * * * * * *
+					// navigate('/dashboard/')
 				}
 			} else {
 				Swal.fire(

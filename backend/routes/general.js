@@ -6,6 +6,7 @@ const controladorGeneral = require('../controllers/general')
 // * * * * * * * * GET * * * * * * * * *
 router.get('/barberos', controladorGeneral.getBarberos)
 router.get('/clientes', controladorGeneral.getClientes)
+router.get('/datos/:idToken', controladorGeneral.getDatos)
 
 // * * * * * * * * POST * * * * * * * * *
 router.post('/login', controladorGeneral.postLogin)

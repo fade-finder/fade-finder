@@ -39,6 +39,11 @@ class Usuario
         return baseDeDatos.execute('SELECT * FROM usuario where idRol = 1')
     }
 
+    static GetDatos(id)
+    {
+        return baseDeDatos.execute('SELECT * FROM usuario where idUsuario = ?', [id])
+    }
+
     AgregarCliente()
     {
         return baseDeDatos.execute('INSERT INTO usuario (idUsuario, nombre, ap_paterno, ap_materno, email, password, telefono, foto, estado, idRol) VALUES (?,?,?,?,?,?,?,?,?,?)',

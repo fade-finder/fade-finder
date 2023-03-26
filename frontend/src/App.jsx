@@ -1,4 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+// Modulos
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setUsuario } from './redux/usuarioSlice'
+import axios from 'axios'
+
+// Imagen
+import Cargando from './assets/cargando.svg'
 
 // Pages
 import Layout from './components/Layout'
@@ -15,9 +23,33 @@ import Negocio from './pages/Negocio'
 import Resenas from './pages/Resenas'
 
 function App() {
-	const usuario = {
-		rol: 1,
+	const dispatch = useDispatch()	// se usa para ejecutar una accion con mi estado (actualizarlo)
+	const usuarioSlice = useSelector(state => state.usuario)	// obtengo el estado
+	const [isLoading, setIsLoading] = useState(true)	// me indica si debo mostrar el spinner
+
+	useEffect(() => {
+		const idToken = localStorage.getItem('idToken')		//obtengo la variable local idToken que contiene la idUsuario
+		getDatosUsuario(idToken) // ejecutamos funcion para cargar los datos del usuario
+		setTimeout(() => {
+			setIsLoading(false)
+		}, 500)
+	}, [])
+
+	const getDatosUsuario = async idToken => {
+		const res = await axios.get('http://localhost:3000/datos/' + idToken)		// cargamos datos del backend con ayuda del id
+		dispatch(setUsuario(res.data)) // Actualizamos el estado del usuario
+ 	}
+
+	if (isLoading) {
+		return (
+			<div className='bg-white absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center'>
+				<div className='w-[60px] h-[60px] '>
+					<img src={Cargando} alt='Spinner' />
+				</div>
+			</div>
+		)
 	}
+
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -26,14 +58,47 @@ function App() {
 					<Route index element={<LandingPage />} />
 					<Route path='*' element={<NoPage />} />
 				</Route>
-				{/* plantilla limpia */}
-				<Route>
-					<Route path='login' element={<Login />} />
-					<Route path='/cliente/register' element={<Register />} />
-					<Route path='/perfil' element={<Perfil />} />
-				</Route>
+				<Route
+					path='/login'
+					element={
+						usuarioSlice.idUsuario != null ? (
+							<Navigate to='/dashboard' />
+						) : (
+							<Login />
+						)
+					}
+				/>
+				<Route
+					path='/cliente/register'
+					element={
+						usuarioSlice.idUsuario != null ? (
+							<Navigate to='/dashboard' />
+						) : (
+							<Register />
+						)
+					}
+				/>
+				<Route
+					path='/perfil'
+					element={
+						usuarioSlice.idUsuario != null ? (
+							<Perfil />
+						) : (
+							<Navigate to='/login' />
+						)
+					}
+				/>
 				{/* Plantilla con dashboard */}
-				<Route path='/dashboard' element={<LayoutDashboard />}>
+				<Route
+					path='/dashboard'
+					element={
+						usuarioSlice.idUsuario != null ? (
+							<LayoutDashboard />
+						) : (
+							<Navigate to='/login' />
+						)
+					}
+				>
 					<Route index element={<Negocio />} />
 					<Route path='negocio' element={<Negocio />} />
 					<Route path='citas' element={<Citas />} />

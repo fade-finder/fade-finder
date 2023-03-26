@@ -1,16 +1,30 @@
+// Iconos
 import { AiOutlineBell, AiOutlineComment } from 'react-icons/ai'
 import { HiMoon } from 'react-icons/hi'
 import { BiLogOut } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
+
+// Modulos
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { cleanUsuario } from '../redux/usuarioSlice'
 
 const DashboardHeader = ({ titulo }) => {
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
+	// Funciones
+	const handleClickLogout = () => {
+		localStorage.removeItem('idToken')
+		dispatch(cleanUsuario())
+	}
+
 	return (
 		<div className='fixed z-40 top-0 right-0 left-[290px] bg-[#F5F8FE] h-[100px] flex justify-between items-center px-10'>
 			<h1 className='text-3xl font-semibold'>{titulo}</h1>
 			<div className='flex items-center gap-x-4 px-4 py-2 rounded-full bg-white shadow-sm'>
-				<a href='/' className=''>
+				<button onClick={() => handleClickLogout()}>
 					<BiLogOut className='text-lg text-[#2424249c] hover:text-[#242424e5] duration-200' />
-				</a>
+				</button>
 				<button className='relative select-none'>
 					<AiOutlineBell className='text-xl text-[#2424249c] hover:text-[#242424e5] duration-200' />
 					<span className='absolute -top-[14px] left-2 bg-red-500 text-white rounded-full p-2 h-[20px] min-w-[20px] w-auto text-xs flex justify-center items-center'>
