@@ -65,7 +65,11 @@ function App() {
 					path='/citas'
 					element={
 						usuarioSlice.idUsuario != null ? (
-							<Cliente />
+							usuarioSlice.idRol == 1 ? (
+								<Cliente />
+							) : (
+								<Navigate to='/dashboard' />
+							)
 						) : (
 							<Navigate to='/login' />
 						)
@@ -107,7 +111,11 @@ function App() {
 					path='/dashboard'
 					element={
 						usuarioSlice.idUsuario != null ? (
-							<LayoutDashboard />
+							usuarioSlice.idRol != 1 ? (
+								<LayoutDashboard />
+							) : (
+								<Navigate to='/citas' />
+							)
 						) : (
 							<Navigate to='/login' />
 						)

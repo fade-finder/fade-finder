@@ -1,8 +1,11 @@
 import React from 'react'
+import DashboardHeader from '../components/DashboardHeader'
 
 const Cliente = () => {
   return (
-    <div>Cliente</div>
+    <>
+    <DashboardHeader titulo='Citas' largo={true} />
+    </>
   )
 }
 
