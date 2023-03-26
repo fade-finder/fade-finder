@@ -3,7 +3,7 @@ const SmallButton = ({ type, texto, onClick, color='bg-[var(--colorPrimario)]' }
 		<button
 			type={type}
 			onClick={onClick}
-			className={`${color} text-white px-4 py-2 rounded-sm hover:opacity-80 duration-200 hover:shadow-md`}
+			className={`${color} text-white px-4 py-2 rounded-sm hover:opacity-80 duration-200 hover:shadow-md w-fit`}
 		>
 			{texto}
 		</button>

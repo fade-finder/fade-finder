@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { cleanUsuario } from '../redux/usuarioSlice'
 
-const DashboardHeader = ({ titulo, largo=false }) => {
+const DashboardHeader = ({ titulo='', largo=false }) => {
 	const dispatch = useDispatch()
 	const usuarioSlice = useSelector(state => state.usuario)
 
