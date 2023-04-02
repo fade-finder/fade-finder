@@ -11,6 +11,16 @@ exports.getBarberos = (req, res) => {
     });
 };
 
+exports.getServicios = (req, res) => {
+  Usuario.getServicios()
+    .then((servicios) => {
+      res.send(servicios[0]);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 exports.getClientes = (req, res) => {
   Usuario.VerClientes()
     .then((clientes) => {
@@ -25,6 +35,31 @@ exports.getDatos = (req, res) => {
   Usuario.GetDatos(req.params.idToken)
     .then((resultado) => {
       res.send(resultado[0][0]);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
+exports.getHorarioBarbero = (req, res) => {
+  const idBarbero = req.params.idBarbero;
+  const idDia = req.params.idDia;
+
+  Usuario.GetHorario(idBarbero, idDia)
+    .then((resultado) => {
+      res.send(resultado[0]);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
+exports.getCitas = (req, res) => {
+  const idBarbero = req.params.idBarbero;
+  const fecha = req.params.fecha;
+  Usuario.getCitas(idBarbero, fecha)
+    .then((resultado) => {
+      res.send(resultado[0]);
     })
     .catch((err) => {
       res.status(500).send(err);

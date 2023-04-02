@@ -14,7 +14,8 @@ const controladorCliente = require('../controllers/cliente')
 
 // * * * * * * * * * POST * * * * * * * * * * *
 router.post('/register', controladorCliente.postRegister)
-router.post('/agendar-cita')  // agendar cita
+router.post('/agendar-cita', controladorCliente.postCita)  // agendar cita
+router.post('/agregar-servicio', controladorCliente.postCitaServicio)  // agregar servicio a tabla cita_servicio
 // login
 
 // * * * * * * * * * PUT * * * * * * * * * * *

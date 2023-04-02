@@ -23,6 +23,11 @@ class Usuario
         return baseDeDatos.execute('SELECT * FROM usuario where idRol = 2')
     }
 
+    static getServicios()
+    {
+        return baseDeDatos.execute('SELECT * FROM servicio')
+    }
+
     static BorrarBarbero(id)
     {
         return baseDeDatos.execute('DELETE FROM usuario WHERE idUsuario = ?',[id])
@@ -42,6 +47,14 @@ class Usuario
     static GetDatos(id)
     {
         return baseDeDatos.execute('SELECT * FROM usuario where idUsuario = ?', [id])
+    }
+    static GetHorario(idBarbero, idDia)
+    {
+        return baseDeDatos.execute('SELECT * from horario where idBarbero = ? AND idDia = ?', [idBarbero, idDia])
+    }
+
+    static getCitas(idBarbero, fecha){
+        return baseDeDatos.execute('SELECT * from cita where idBarbero = ? AND fecha = ? ORDER BY fecha ASC', [idBarbero, fecha])
     }
 
     AgregarCliente()

@@ -4,9 +4,12 @@ const router = express.Router()
 const controladorGeneral = require('../controllers/general')
 
 // * * * * * * * * GET * * * * * * * * *
-router.get('/barberos', controladorGeneral.getBarberos)
-router.get('/clientes', controladorGeneral.getClientes)
-router.get('/datos/:idToken', controladorGeneral.getDatos)
+router.get('/barberos', controladorGeneral.getBarberos)   //obtener todos los barberos
+router.get('/servicios', controladorGeneral.getServicios)   //obtener todos los servicios
+router.get('/clientes', controladorGeneral.getClientes)   // obtener todos los clientes
+router.get('/datos/:idToken', controladorGeneral.getDatos)  // obtener todos los datos de un barbero con ayuda de su id
+router.get('/horario/:idBarbero/:idDia', controladorGeneral.getHorarioBarbero)  // obtener el horario de un dia de un barbero
+router.get('/citas/:idBarbero/:fecha', controladorGeneral.getCitas)    // obtener las citas de un barbero
 
 // * * * * * * * * POST * * * * * * * * *
 router.post('/login', controladorGeneral.postLogin)
