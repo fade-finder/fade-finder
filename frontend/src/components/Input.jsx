@@ -1,7 +1,7 @@
 const Input = ({ label, type, name, id, placeholder, value, onChange, activo=true }) => {
 	return (
 		<div className='flex flex-col w-full gap-y-1'>
-			<label htmlFor='correo' className='text-base font-semibold text-gray-600'>
+			<label htmlFor={name} className='text-base font-semibold text-gray-600'>
 				{label}
 			</label>
 			<input

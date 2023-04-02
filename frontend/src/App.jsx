@@ -121,11 +121,62 @@ function App() {
 						)
 					}
 				>
-					<Route index element={<Negocio />} />
-					<Route path='negocio' element={<Negocio />} />
-					<Route path='citas' element={<Citas />} />
-					<Route path='clientes' element={<Clientes />} />
-					<Route path='barberos' element={<Barberos />} />
+					<Route
+						index
+						element={
+							usuarioSlice.idRol == 1 ? (
+								<Navigate to='/cliente' />
+							) : usuarioSlice.idRol == 2 ? (
+								<Navigate to='/dashboard/citas' />
+							) : (
+								<Negocio />
+							)
+						}
+					/>
+					<Route
+						path='negocio'
+						element={
+							usuarioSlice.idRol == 1 ? (
+								<Navigate to='/cliente' />
+							) : usuarioSlice.idRol == 2 ? (
+								<Navigate to='/dashboard/citas' />
+							) : (
+								<Negocio />
+							)
+						}
+					/>
+					<Route
+						path='citas'
+						element={
+							usuarioSlice.idRol == 1 ? (
+								<Navigate to='/cliente' />
+							) : (
+								usuarioSlice.idRol >= 2 && <Citas />
+							)
+						}
+					/>
+					<Route
+						path='clientes'
+						element={
+							usuarioSlice.idRol == 1 ? (
+								<Navigate to='/cliente' />
+							) : (
+								usuarioSlice.idRol >= 2 && <Clientes />
+							)
+						}
+					/>
+					<Route
+						path='barberos'
+						element={
+							usuarioSlice.idRol == 1 ? (
+								<Navigate to='/cliente' />
+							) : usuarioSlice.idRol == 2 ? (
+								<Navigate to='/dashboard/citas' />
+							) : (
+								<Barberos />
+							)
+						}
+					/>
 					<Route path='resenas' element={<Resenas />} />
 				</Route>
 			</Routes>
