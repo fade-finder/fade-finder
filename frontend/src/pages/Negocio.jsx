@@ -2,17 +2,17 @@ import DashboardHeader from '../components/DashboardHeader'
 import DashboardContainer from '../components/DashboardContainer'
 import CardWidget from '../components/CardWidget'
 import Select from '../components/Select'
-
+// Modulos
+import { useSelector } from 'react-redux'
 // iconos
 import { GiReceiveMoney, GiMoneyStack, GiComb } from 'react-icons/gi'
-
+// Grafico
 import {
 	dataIngresos,
 	optionsIngresos,
 	dataServicios,
 	optionsServicios,
 } from '../utils/data'
-
 // import Chart from 'chart.js/auto'
 import { Line } from 'react-chartjs-2'
 import {
@@ -37,6 +37,29 @@ ChartJS.register(
 )
 
 const Negocio = () => {
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	G L O B A L E S		* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	const usuarioSlice = useSelector(state => state.usuario)
+
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	const calcularPromedio = () => {
+		const totalPagar = usuarioSlice.citasClientes.reduce(
+			(acomulador, cita) =>
+				cita.estado == 2 ? acomulador + cita.total_pagar : acomulador,
+			0
+		)
+		const promedio =
+			totalPagar /
+			usuarioSlice.citasClientes.reduce(
+				(suma, cita) => (cita.estado == 2 ? suma + 1 : suma),
+				0
+			)
+		return promedio.toFixed(2)
+	}
+
 	return (
 		<>
 			<DashboardHeader titulo='Negocio' />
@@ -63,21 +86,28 @@ const Negocio = () => {
 				<div className='grid grid-cols-4 gap-x-6 mb-10'>
 					<CardWidget
 						texto='Ingresos'
-						numero='28189'
+						numero={usuarioSlice.citasClientes.reduce(
+							(acomulador, cita) =>
+								cita.estado == 2 ? acomulador + cita.total_pagar : acomulador,
+							0
+						)}
 						dinero={true}
 						icono={<GiReceiveMoney className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Promedio de ingresos por cita'
-						numero='79'
+						numero={calcularPromedio()}
 						dinero={true}
 						icono={<GiMoneyStack className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
-						texto='Servicios'
-						numero='29'
+						texto='Servicios completados'
+						numero={usuarioSlice.citasClientes.reduce(
+							(cant, cita) => (cita.estado == 2 ? cant + 1 : cant),
+							0
+						)}
 						icono={<GiComb className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>
@@ -94,7 +124,7 @@ const Negocio = () => {
 					</h3>
 					<div>
 						{/* <div className='w-full'> */}
-							<Line data={dataIngresos} options={optionsIngresos}></Line>
+						<Line data={dataIngresos} options={optionsIngresos}></Line>
 						{/* </div> */}
 					</div>
 					<div>

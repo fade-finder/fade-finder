@@ -12,7 +12,8 @@ const initialState = {
 	idRol: null,
 	citas: null,
 	citasClientes: null,
-	clientes: null
+	clientes: null,
+	barberos: null,
 }
 
 export const usuarioSlice = createSlice({
@@ -62,6 +63,7 @@ export const usuarioSlice = createSlice({
 		  state.citas = null
 			state.citasClientes = null
 			state.clientes = null
+			state.barberos = null
 		},
 
 		// = = = = = = = = = = = = = = = = CITAS DE USUARIO = = = = = = = = = = = = = = = =
@@ -211,6 +213,8 @@ export const usuarioSlice = createSlice({
 			const clientes = action.payload
 			state.clientes = clientes
 		}
+
+		// = = = = = = = = = = = = = = = = BARBEROS = = = = = = = = = = = = = = = =
 	},
 })
 

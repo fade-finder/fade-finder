@@ -160,16 +160,14 @@ const Cliente = () => {
 		setCitasPendientes(usuarioSlice.citas?.filter(cita => cita.estado == 0))
 		setCitasCompletadas(usuarioSlice.citas?.filter(cita => cita.estado == 2))
 		setCitasCanceladas(usuarioSlice.citas?.filter(cita => cita.estado == 3))
-		let sumaTotal = usuarioSlice.citas?.reduce((total, cita) => {
-			if (cita.estado == 2) {
-				return total + cita.total_pagar
-			}
-			return total
-		}, 0)
+		let sumaTotal = usuarioSlice.citas?.reduce(
+			(total, cita) => (cita.estado == 2 ? total + cita.total_pagar : total),
+			0
+		)
 		const promedio = (
 			sumaTotal /
 			usuarioSlice.citas?.reduce(
-				(cont, cita) => cita.estado == 2 && cont + 1,
+				(cont, cita) => (cita.estado == 2 ? cont + 1 : cont),
 				0
 			)
 		).toFixed(2)
