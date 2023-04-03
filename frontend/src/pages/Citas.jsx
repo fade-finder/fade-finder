@@ -31,38 +31,14 @@ const Citas = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	const [citasCompletadas, setCitasCompletadas] = useState(0)
-	const [citasConfirmadas, setCitasConfirmadas] = useState(0)
-	const [citasPorConfirmar, setCitasPorConfirmar] = useState(0)
-	const [citasCanceladas, setCitasCanceladas] = useState(0)
+	
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	useEffect(() => {
-		if (usuarioSlice) {
-			cargarDatosDeEstadoGlobal()
-		}
-	}, [usuarioSlice])
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// Cargar los datos cuando termina de cargar el estado global
-	const cargarDatosDeEstadoGlobal = () => {
-		setCitasCompletadas(
-			usuarioSlice.citasClientes?.filter(cita => cita.estado == 2)
-		)
-		setCitasConfirmadas(
-			usuarioSlice.citasClientes?.filter(cita => cita.estado == 1)
-		)
-		setCitasPorConfirmar(
-			usuarioSlice.citasClientes?.filter(cita => cita.estado == 0)
-		)
-		setCitasCanceladas(
-			usuarioSlice.citasClientes?.filter(cita => cita.estado == 3)
-		)
-	}
-
 	// Funcion para cancelar una cita
 	const handleCancelarCita = async idCita => {
 		const res = await Swal.fire({
@@ -101,25 +77,25 @@ const Citas = () => {
 				<div className='grid grid-cols-4 gap-x-6 mb-8'>
 					<CardWidget
 						texto='Citas completadas'
-						numero={citasCompletadas.length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 2)).length}
 						icono={<BsCardList className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas confirmadas'
-						numero={citasConfirmadas.length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 1)).length}
 						icono={<BsClock className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Por confirmar'
-						numero={citasPorConfirmar.length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 0)).length}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-yellow-500'
 					/>
 					<CardWidget
 						texto='Canceladas'
-						numero={citasCanceladas.length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 3)).length}
 						icono={<FiAlertTriangle className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>
