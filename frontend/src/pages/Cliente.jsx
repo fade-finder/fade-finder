@@ -753,7 +753,7 @@ const Cliente = () => {
 			<DashboardHeader largo={true} />
 			<div className='mt-[100px] bg-[#F5F8FE] min-h-[calc(100vh-100px)] p-[50px] 2xl:px-[100px]'>
 				{/* Contenedor de widgets */}
-				<div className='grid grid-cols-8 gap-x-6 gap-y-12 mb-10'>
+				<div className='grid grid-cols-4 gap-x-6 gap-y-12 mb-10'>
 					<CardWidget
 						texto='Citas completadas'
 						numero={citasCompletadas?.length}
@@ -779,7 +779,53 @@ const Cliente = () => {
 						icono={<GiMoneyStack className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
-					<div className='col-span-6'>
+					<div className='col-span-4 2xl:col-span-1 2xl:col-start-4 2xl:row-start-2'>
+						<div className='p-10 bg-[#fff] rounded-sm shadow-md flex justify-between gap-y-8 2xl:flex-col'>
+							<form className='flex flex-col gap-y-2 w-1/3 2xl:w-full'>
+								<Input
+									label='Buscar'
+									type='search'
+									name='dato'
+									id='dato'
+									placeholder='Escribe algun dato'
+									value={buscador}
+									onChange={e => setBuscador(e.target.value)}
+								/>
+								<SmallButton
+									type='submit'
+									texto='Buscar'
+									onClick={() => handleBuscador()}
+									desactivado={false}
+								/>
+							</form>
+							<div className='w-1/3 2xl:w-full'>
+								<h4 className='text-base font-semibold text-gray-600'>
+									Filtrar por
+								</h4>
+								<Select
+									id='selectorCitaFiltro'
+									opciones={[
+										{ value: '1', texto: 'Recientes - Antiguas' },
+										{ value: '2', texto: 'Antiguas - Recientes' },
+										{ value: '3', texto: '1 Mes' },
+										{ value: '4', texto: '3 Meses' },
+										{ value: '5', texto: '6 Meses' },
+										{ value: '6', texto: '1 Año' },
+										{ value: '7', texto: 'Desde el inicio' },
+									]}
+									value=''
+									onChange={() => handleFiltro()}
+								/>
+							</div>
+							<BigButton
+								type='submit'
+								texto='Agendar cita'
+								icono={<AiOutlinePlusCircle className='text-xl' />}
+								onClick={() => setVentanaModal(true)}
+							/>
+						</div>
+					</div>
+					<div className='col-span-4 2xl:col-span-3 2xl:col-start-1 2xl:row-start-2'>
 						<div className='min-h-[300px] p-14 bg-[#fff] rounded-sm shadow-md'>
 							{usuarioSlice.citas?.length == 0 ? (
 								<p className='text-lg font-semibold text-gray-700'>
@@ -818,52 +864,6 @@ const Cliente = () => {
 									</div>
 								</>
 							)}
-						</div>
-					</div>
-					<div className='col-span-2'>
-						<div className='p-10 bg-[#fff] rounded-sm shadow-md flex flex-col gap-y-8'>
-							<form className='flex flex-col gap-y-2'>
-								<Input
-									label='Buscar'
-									type='search'
-									name='dato'
-									id='dato'
-									placeholder='Escribe algun dato'
-									value={buscador}
-									onChange={e => setBuscador(e.target.value)}
-								/>
-								<SmallButton
-									type='submit'
-									texto='Buscar'
-									onClick={() => handleBuscador()}
-									desactivado={false}
-								/>
-							</form>
-							<div>
-								<h4 className='text-base font-semibold text-gray-600'>
-									Filtrar por
-								</h4>
-								<Select
-									id='selectorCitaFiltro'
-									opciones={[
-										{ value: '1', texto: 'Recientes - Antiguas' },
-										{ value: '2', texto: 'Antiguas - Recientes' },
-										{ value: '3', texto: '1 Mes' },
-										{ value: '4', texto: '3 Meses' },
-										{ value: '5', texto: '6 Meses' },
-										{ value: '6', texto: '1 Año' },
-										{ value: '7', texto: 'Desde el inicio' },
-									]}
-									value=''
-									onChange={() => handleFiltro()}
-								/>
-							</div>
-							<BigButton
-								type='submit'
-								texto='Agendar cita'
-								icono={<AiOutlinePlusCircle className='text-xl' />}
-								onClick={() => setVentanaModal(true)}
-							/>
 						</div>
 					</div>
 				</div>

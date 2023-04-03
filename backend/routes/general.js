@@ -10,6 +10,7 @@ router.get('/clientes', controladorGeneral.getClientes)   // obtener todos los c
 router.get('/datos/:idToken', controladorGeneral.getDatos)  // obtener todos los datos de un barbero con ayuda de su id
 router.get('/horario/:idBarbero/:idDia', controladorGeneral.getHorarioBarbero)  // obtener el horario de un dia de un barbero
 router.get('/citas/:idBarbero/:fecha', controladorGeneral.getCitas)    // obtener las citas de un barbero
+router.get('/citas', controladorGeneral.getCitasDeClientes)    // obtener las citas de un barbero
 
 // * * * * * * * * POST * * * * * * * * *
 router.post('/login', controladorGeneral.postLogin)

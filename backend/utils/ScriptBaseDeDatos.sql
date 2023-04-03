@@ -73,9 +73,9 @@ insert into rol (idRol, nombre) values (3, 'admin');
 
 -- Insertamos en Usuarios 
 -- Admin
-insert into usuario values (null, 'Enrique', 'Camarena', 'Garcia', 'admin@gmail.com', '12345', '1234567890', 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg', 1, 3);
+insert into usuario values (null, 'Enrique', 'Camarena', 'Garcia', 'admin@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', '1234567890', 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg', 1, 3);
 -- Barbero
-insert into usuario values (null, 'Bryan', 'Sanchez', 'Lopez', 'bryan@gmail.com', '12345', '1234567890', 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg', 1, 2); 
+insert into usuario values (null, 'Bryan', 'Sanchez', 'Lopez', 'bryan@gmail.com', '0bcf62b62f026b799d6245fc98591b58f6428db3a828303791f135360461d4ca', '1234567890', 'https://media.gq.com.mx/photos/5bfdcc8f4958a1bc759a27bd/3:2/w_1011,h_674,c_limit/bob%20esponja.jpg', 1, 2); 
 -- Cliente
 insert into usuario values (null, 'Daniel Ramón', 'Solis', 'Medina', 'daniel@gmail.com', '140503', '4291002030', 'https://media.revistagq.com/photos/5f3243ee64de88802df64b6a/master/pass/patricio.jpg', 1, 1);
 

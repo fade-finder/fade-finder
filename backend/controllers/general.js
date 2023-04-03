@@ -54,11 +54,24 @@ exports.getHorarioBarbero = (req, res) => {
     });
 };
 
+// Obtiene las citas de un barbero
 exports.getCitas = (req, res) => {
   const idBarbero = req.params.idBarbero;
   const fecha = req.params.fecha;
   Usuario.getCitas(idBarbero, fecha)
     .then((resultado) => {
+      res.send(resultado[0]);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
+// Obtiene las citas de todos los clientes
+exports.getCitasDeClientes = (req, res) => {
+  Usuario.getCitasClientes()
+    .then((resultado) => {
+      console.log(resultado[0]);
       res.send(resultado[0]);
     })
     .catch((err) => {

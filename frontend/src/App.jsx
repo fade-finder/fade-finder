@@ -2,7 +2,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { SET_USUARIO, SET_CITAS } from './redux/usuarioSlice'
+import { SET_USUARIO, SET_CITAS, SET_CITAS_CLIENTES } from './redux/usuarioSlice'
 import axios from 'axios'
 
 // Imagen
@@ -42,14 +42,18 @@ function App() {
 		dispatch(SET_USUARIO(res.data)) // Actualizamos el estado del usuario
 
 		// En caso de ser cliente, buscaremos sus citas
-		if (res.data.idRol == 1) {
-			getCitasCliente(res.data.idUsuario)
-		}
+		if (res.data.idRol == 1) getCitasCliente(res.data.idUsuario)
+		else if(res.data.idRol == 3) getCitasDeClientes()
 	}
 
 	const getCitasCliente = async id => {
 		const res = await axios.get('http://localhost:3000/cliente/citas/' + id)
 		dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
+	}
+
+	const getCitasDeClientes = async () => {
+		const res = await axios.get('http://localhost:3000/citas')
+		dispatch(SET_CITAS_CLIENTES(res.data)) // actualizamos las citas de los clientes
 	}
 
 	if (isLoading) {
