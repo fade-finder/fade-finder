@@ -4,6 +4,7 @@ const Cita = require("../models/cita");
 exports.getCitas = (req, res) => {
   Usuario.VerCitas(req.params.idCliente)
     .then((respuesta) => {
+      console.log(respuesta[0]);
       res.send(respuesta[0])
     })
     .catch((err) => {

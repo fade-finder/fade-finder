@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 import { validarEmail } from '../utils/validaciones'
 // Redux
 import { useDispatch } from 'react-redux'
-import { SET_USUARIO } from '../redux/usuarioSlice'
+import { SET_USUARIO, SET_CITAS } from '../redux/usuarioSlice'
 
 const Login = () => {
 	// Const
@@ -28,7 +28,7 @@ const Login = () => {
 		try {
 			setEmail(email.toLowerCase().trim())
 			setPassword(password.trim())
-			const res = await axios.post('http://localhost:3000/login', {
+			let res = await axios.post('http://localhost:3000/login', {
 				email,
 				password,
 			})
@@ -42,8 +42,10 @@ const Login = () => {
 					// * * * * * * * * * *
 					localStorage.setItem('idToken', res.data.idUsuario) //almacenamos el token
 					dispatch(SET_USUARIO(res.data))
-					// * * * * * * * * * *
-					// navigate('/dashboard/')
+					res = await axios.get(
+						'http://localhost:3000/cliente/citas/' + res.data.idUsuario
+					)
+					dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
 				}
 			} else {
 				Swal.fire(

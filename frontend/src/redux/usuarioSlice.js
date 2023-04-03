@@ -56,6 +56,7 @@ export const usuarioSlice = createSlice({
 			state.foto = null
 			state.estado = null
 			state.idRol = null
+		  state.citas = null
 		},
 		SET_CITAS: (state, action) => {
 			const citas = action.payload
