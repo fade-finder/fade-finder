@@ -76,6 +76,31 @@ exports.postLogin = (req, res) => {
     });
 };
 
+exports.putPerfil = (req, res) => {
+  const idUsuario = req.body.idUsuario;
+  const password = req.body.password;
+  const nombre = req.body.nombre;
+  const ap_paterno = req.body.ap_paterno;
+  const ap_materno = req.body.ap_materno;
+  const telefono = req.body.telefono;
+  const foto = req.body.foto;
+  General.PutPerfil(
+    idUsuario,
+    password,
+    nombre,
+    ap_paterno,
+    ap_materno,
+    telefono,
+    foto
+  )
+    .then((respuesta) => {
+      res.send(respuesta[0]);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
 exports.putCita = (req, res) => {
   General.PutCita(req.params.idCita)
     .then((respuesta) => {

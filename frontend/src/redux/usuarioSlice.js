@@ -42,6 +42,13 @@ export const usuarioSlice = createSlice({
 			state.estado = estado
 			state.idRol = idRol
 		},
+		UPDATE_USUARIO: (state, action) => {
+			const usuario = action.payload
+			return {
+				...state,
+				...usuario
+			}
+		},
 		CLEAN_USUARIO: state => {
 			state.idUsuario = null
 			state.email = null
@@ -132,5 +139,6 @@ export const {
 	SET_CITAS,
 	UPDATE_CITA,
 	CLEAN_CITAS,
+	UPDATE_USUARIO
 } = usuarioSlice.actions
 export default usuarioSlice.reducer

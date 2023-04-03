@@ -15,7 +15,7 @@ router.get('/citas/:idBarbero/:fecha', controladorGeneral.getCitas)    // obtene
 router.post('/login', controladorGeneral.postLogin)
 
 // * * * * * * * * PUT * * * * * * * * *
-router.put('/perfil')   // actualizar pefil
+router.put('/perfil', controladorGeneral.putPerfil)   // actualizar pefil
 router.put('/cancelar-cita/:idCita', controladorGeneral.putCita)  // cancelar cita
 
 module.exports = router

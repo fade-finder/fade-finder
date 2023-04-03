@@ -5,7 +5,12 @@ import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { CLEAN_USUARIO } from '../redux/usuarioSlice'
+import { CLEAN_USUARIO, UPDATE_USUARIO } from '../redux/usuarioSlice'
+import {
+	validarEmail,
+	validarPassword,
+	validarTelefono,
+} from '../utils/validaciones'
 // Hooks
 import { useState, useEffect } from 'react'
 // Componentes
@@ -14,13 +19,17 @@ import SmallButton from '../components/SmallButton'
 import Header from '../components/Header'
 
 const Perfil = () => {
-	// Redux
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	G L O B A L E S		* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const dispatch = useDispatch()
 	const usuarioSlice = useSelector(state => state.usuario)
 
-	// useState
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const [usuario, setUsuario] = useState({
-		idUsuario:'',
+		idUsuario: '',
 		email: '',
 		password: '',
 		nombre: '',
@@ -32,21 +41,37 @@ const Perfil = () => {
 		idRol: '',
 	})
 
-	// useEffect
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	useEffect(() => {
 		setUsuario(usuarioSlice)
 	}, [])
 
-	// Funciones
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const changeStateValue = (name, value) => {
 		setUsuario({
 			...usuario,
 			[name]: value,
 		})
 	}
-
-	const handleClickGuardarTodo = () => {}
-
+	const handleClickGuardarTodo = async e => {
+		e.preventDefault()
+		if(!validarCampos()) return
+		const res = await axios.put('http://localhost:3000/perfil', usuario)
+		if (res.data.affectedRows > 0) {
+			Swal.fire(
+				'Cambios guardados',
+				'Los cambios fueron registrados en la base de datos.',
+				'success'
+			)
+			dispatch(UPDATE_USUARIO(usuario))
+		} else {
+			Swal.fire('Error', 'Ocurrio un error, contacta al soporte.', 'error')
+		}
+	}
 	const handleClickEliminarCuenta = async () => {
 		const { isConfirmed } = await Swal.fire({
 			title: '¿Estas seguro?',
@@ -86,6 +111,20 @@ const Perfil = () => {
 				Swal.fire('Error', error.name + ': ' + error.message, 'error')
 			}
 		}
+	}
+	const validarCampos = () => {
+		if (!validarEmail(usuario.email)) return false
+		if (!validarPassword(usuario.password)) return false
+		if (!validarTelefono(usuario.telefono)) return false
+		if (usuario.nombre == '' || usuario.ap_paterno == '') {
+			Swal.fire(
+				'Campos vacios',
+				'No puedes dejar campos vacíos, intentalo de nuevo',
+				'warning'
+			)
+			return false
+		}
+		return true
 	}
 
 	return (
@@ -166,6 +205,7 @@ const Perfil = () => {
 								name='foto'
 								id='foto'
 								placeholder='Nueva foto'
+								activo={false}
 								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
 						</div>
@@ -194,7 +234,7 @@ const Perfil = () => {
 							<SmallButton
 								type='submit'
 								texto='Guardar todo'
-								onClick={() => handleClickGuardarTodo()}
+								onClick={e => handleClickGuardarTodo(e)}
 							/>
 							{usuario.idRol == 1 && (
 								<SmallButton

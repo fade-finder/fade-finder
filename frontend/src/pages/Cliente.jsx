@@ -131,17 +131,6 @@ const Cliente = () => {
 		setAgregandoHorario(true)
 	}, [fechaSeleccionada])
 
-	useEffect(() => {
-		// if (agregandoHorario) {
-		// 	if (horariosDisponibles?.length == 0) {
-		// 		Swal.fire(
-		// 			'¡Uyyy!',
-		// 			'No hay horarios disponibles para ese día',
-		// 			'warning'
-		// 		)
-		// 	}
-		// }
-	}, [horariosDisponibles])
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
