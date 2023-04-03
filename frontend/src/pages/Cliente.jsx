@@ -96,13 +96,13 @@ const Cliente = () => {
 
 	// useEffect para actualizar los servicios disponibles despues de agregar uno
 	useEffect(() => {
-		if (agregando) {
+		// if (agregando) {
 			const serviciosFiltrados = servicios?.filter(
 				servicio => !cita.servicios.includes(servicio)
 			)
 			setServicios(serviciosFiltrados)
-			setAgregando(false)
-		}
+			// setAgregando(false)
+		// }
 	}, [cita])
 
 	// useEffect que actualiza los horarios disponibles cada vez que se agregue / elimine un servicio del carrito o cuando se seleccione otro barbero
@@ -128,18 +128,19 @@ const Cliente = () => {
 			fecha: fechaSeleccionada,
 			hora: '',
 		})
+		setAgregandoHorario(true)
 	}, [fechaSeleccionada])
 
 	useEffect(() => {
-		if (agregandoHorario) {
-			if (horariosDisponibles?.length == 0) {
-				Swal.fire(
-					'¡Uyyy!',
-					'No hay horarios disponibles para ese día',
-					'warning'
-				)
-			}
-		}
+		// if (agregandoHorario) {
+		// 	if (horariosDisponibles?.length == 0) {
+		// 		Swal.fire(
+		// 			'¡Uyyy!',
+		// 			'No hay horarios disponibles para ese día',
+		// 			'warning'
+		// 		)
+		// 	}
+		// }
 	}, [horariosDisponibles])
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -305,7 +306,6 @@ const Cliente = () => {
 								(horaActual <= horaInicioCita &&
 									horaActualFin >= horaInicioCita)
 							) {
-								// console.log('entra');
 								disponible = false
 								horaActual = horaFinCita
 								horaActual.setMinutes(horaActual.getMinutes() + 1)
@@ -340,6 +340,14 @@ const Cliente = () => {
 					}
 				}
 				setHorariosDisponibles(espaciosDisponibles)
+
+				if (espaciosDisponibles?.length == 0) {
+					Swal.fire(
+						'¡Uyyy!',
+						'No hay horarios disponibles para ese día',
+						'warning'
+					)
+				}
 			}
 		} catch (error) {
 			console.log(error)
@@ -355,8 +363,8 @@ const Cliente = () => {
 			fecha: fechaSeleccionada,
 			hora: '',
 		})
-		setAgregando(true)
-		setAgregandoHorario(true)
+		// setAgregando(true)
+		
 		// Establecer nuevo total a pagar
 		let totalPagar = cita.total_pagar
 		totalPagar += servicioSeleccionado.precio

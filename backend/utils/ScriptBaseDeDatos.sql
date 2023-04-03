@@ -89,7 +89,7 @@ insert into dia (idDia, dia) values (6, 'Sabado');
 insert into dia (idDia, dia) values (7, 'Domingo');
 
 -- Insertamos horarios
-insert into horario (idHorario, hora_inicio, hora_fin, idBarbero, idDia) values (1, '08:00:00', '16:00:00', 2, 1);	-- lunes
+-- insert into horario (idHorario, hora_inicio, hora_fin, idBarbero, idDia) values (1, '08:00:00', '16:00:00', 2, 1);	-- lunes
 insert into horario (idHorario, hora_inicio, hora_fin, idBarbero, idDia) values (2, '10:30:00', '17:00:00', 2, 2);	-- martes
 insert into horario (idHorario, hora_inicio, hora_fin, idBarbero, idDia) values (3, '07:00:00', '14:00:00', 2, 6);	-- lunes
 insert into horario (idHorario, hora_inicio, hora_fin, idBarbero, idDia) values (4, '17:00:00', '20:00:00', 2, 6);	
