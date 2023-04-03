@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 import { validarEmail } from '../utils/validaciones'
 // Redux
 import { useDispatch } from 'react-redux'
-import { setUsuario } from '../redux/usuarioSlice'
+import { SET_USUARIO } from '../redux/usuarioSlice'
 
 const Login = () => {
 	// Const
@@ -41,7 +41,7 @@ const Login = () => {
 				if (isConfirmed) {
 					// * * * * * * * * * *
 					localStorage.setItem('idToken', res.data.idUsuario) //almacenamos el token
-					dispatch(setUsuario(res.data))
+					dispatch(SET_USUARIO(res.data))
 					// * * * * * * * * * *
 					// navigate('/dashboard/')
 				}

@@ -7,7 +7,7 @@ import { BiLogOut } from 'react-icons/bi'
 import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { cleanUsuario } from '../redux/usuarioSlice'
+import { CLEAN_USUARIO } from '../redux/usuarioSlice'
 
 const DashboardHeader = ({ titulo='', largo=false }) => {
 	const dispatch = useDispatch()
@@ -24,7 +24,7 @@ const DashboardHeader = ({ titulo='', largo=false }) => {
 		})
 		setTimeout(() => {
 			localStorage.removeItem('idToken')
-			dispatch(cleanUsuario())
+			dispatch(CLEAN_USUARIO())
 		}, 2000)
 	}
 

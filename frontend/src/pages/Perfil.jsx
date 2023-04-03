@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { cleanUsuario } from '../redux/usuarioSlice'
+import { CLEAN_USUARIO } from '../redux/usuarioSlice'
 // Hooks
 import { useState, useEffect } from 'react'
 // Componentes
@@ -73,7 +73,7 @@ const Perfil = () => {
 					})
 					setTimeout(() => {
 						localStorage.removeItem('idToken')
-						dispatch(cleanUsuario())
+						dispatch(CLEAN_USUARIO())
 					}, 2000)
 				} else {
 					Swal.fire(

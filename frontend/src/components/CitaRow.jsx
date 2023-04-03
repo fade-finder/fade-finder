@@ -47,7 +47,7 @@ const CitaRow = ({ cita, onClick }) => {
 			<td className='text-center px-5 py-6'>
 				{formatearDuracion(cita.duracion)}
 			</td>
-			<td className='text-center px-5 py-6'>${cita.total_pagar}</td>
+			<td className='text-center px-5 py-6'>${(cita.total_pagar).toFixed(2)}</td>
 			<td className='text-center px-5 py-6'>{`${cita.nombreBarbero} ${cita.ap_paternoBarbero}`}</td>
 			<td className='text-center px-5 py-6 flex flex-col'>
 				{cita.servicios.map(servicio => (

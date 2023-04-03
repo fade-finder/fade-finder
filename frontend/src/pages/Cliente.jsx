@@ -18,7 +18,8 @@ import axios from 'axios'
 import moment from 'moment-timezone'
 import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { UPDATE_CITA } from '../redux/usuarioSlice'
 import { formatearDuracion, formatearHora } from '../utils/formateo'
 
 const Cliente = () => {
@@ -27,6 +28,7 @@ const Cliente = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const fechaActual = moment().tz('America/Mexico_City').format('YYYY-MM-DD')
 	const usuarioSlice = useSelector(state => state.usuario)
+	const dispatch = useDispatch()
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -91,21 +93,6 @@ const Cliente = () => {
 			cargarDatosDeEstadoGlobal()
 		}
 	}, [usuarioSlice])
-
-	const cargarDatosDeEstadoGlobal = () => {
-		// Establecemos las citas pendientes / completadas / canceladas y el promedio
-		setCitasPendientes(usuarioSlice.citas.filter(cita => cita.estado == 0))
-		setCitasCompletadas(usuarioSlice.citas.filter(cita => cita.estado == 2))
-		setCitasCanceladas(usuarioSlice.citas.filter(cita => cita.estado == 3))
-		let sumaTotal = usuarioSlice.citas.reduce((total, cita) => {
-			if(cita.estado == 2){
-				return total + cita.total_pagar
-			}
-			return total
-		}, 0)
-		const promedio = sumaTotal / usuarioSlice.citas.reduce((cont, cita) => cita.estado == 2 && cont + 1, 0)
-		setPromedioPorCita(promedio != NaN && promedio)
-	}
 
 	// useEffect para actualizar los servicios disponibles despues de agregar uno
 	useEffect(() => {
@@ -176,6 +163,29 @@ const Cliente = () => {
 			setServicios(res.data)
 		} catch (error) {
 			console.log(error.message)
+		}
+	}
+
+	// Cargar los datos cuando termina de cargar el estado global
+	const cargarDatosDeEstadoGlobal = () => {
+		// Establecemos las citas pendientes / completadas / canceladas y el promedio
+		setCitasPendientes(usuarioSlice.citas.filter(cita => cita.estado == 0))
+		setCitasCompletadas(usuarioSlice.citas.filter(cita => cita.estado == 2))
+		setCitasCanceladas(usuarioSlice.citas.filter(cita => cita.estado == 3))
+		let sumaTotal = usuarioSlice.citas.reduce((total, cita) => {
+			if (cita.estado == 2) {
+				return total + cita.total_pagar
+			}
+			return total
+		}, 0)
+		if(sumaTotal != 0){
+			const promedio = (
+				sumaTotal /
+				usuarioSlice.citas.reduce((cont, cita) => cita.estado == 2 && cont + 1, 0)
+			).toFixed(2)
+			setPromedioPorCita(promedio != NaN && promedio)
+		} else {
+			setPromedioPorCita(0)
 		}
 	}
 
@@ -484,7 +494,7 @@ const Cliente = () => {
 	}
 
 	// Funcion para cancelar una cita
-	const handleCancelarCita = async (idCita) => {
+	const handleCancelarCita = async idCita => {
 		const res = await Swal.fire({
 			title: 'Cancelar cita',
 			text: '¿Estas seguro que quieres cancelar esta cita? No podras deshacer esta acción',
@@ -495,14 +505,19 @@ const Cliente = () => {
 			confirmButtonColor: '#3085d6',
 			confirmButtonText: 'Si, cancelar',
 		})
-		if(res.isConfirmed) {
-			const respuesta = await axios.put('http://localhost:3000/cancelar-cita/' + idCita)
-			if(respuesta.data.affectedRows > 0) {
+		if (res.isConfirmed) {
+			// Actualizamos en la bd
+			const respuesta = await axios.put(
+				'http://localhost:3000/cancelar-cita/' + idCita
+			)
+			if (respuesta.data.affectedRows > 0) {
 				Swal.fire(
 					'Cita cancelada',
 					'La cita fue cancelada correctamente',
 					'success'
 				)
+				// Actualizamos en el estado global]
+				dispatch(UPDATE_CITA([idCita, { estado: 3 }]))
 			}
 		}
 	}

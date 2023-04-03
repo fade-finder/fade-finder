@@ -18,8 +18,19 @@ export const usuarioSlice = createSlice({
 	name: 'usuario',
 	initialState,
 	reducers: {
-		setUsuario: (state, action) => {
-			const { idUsuario, email, password, nombre, ap_paterno, ap_materno, telefono, foto, estado, idRol } = action.payload
+		SET_USUARIO: (state, action) => {
+			const {
+				idUsuario,
+				email,
+				password,
+				nombre,
+				ap_paterno,
+				ap_materno,
+				telefono,
+				foto,
+				estado,
+				idRol,
+			} = action.payload
 			state.idUsuario = idUsuario
 			state.email = email
 			state.password = password
@@ -31,7 +42,7 @@ export const usuarioSlice = createSlice({
 			state.estado = estado
 			state.idRol = idRol
 		},
-		cleanUsuario: (state) => {
+		CLEAN_USUARIO: state => {
 			state.idUsuario = null
 			state.email = null
 			state.password = null
@@ -43,15 +54,34 @@ export const usuarioSlice = createSlice({
 			state.estado = null
 			state.idRol = null
 		},
-		setCitas: (state, action) => {
+		SET_CITAS: (state, action) => {
 			const { citas } = action.payload
 			state.citas = citas
 		},
-		cleanCitas: (state) => {
+		UPDATE_CITA: (state, action) => {
+			const [idCita, updates] = action.payload
+			state.citas = state.citas.map(cita => {
+				if (cita.idCita == idCita) {
+					return {
+						...cita,
+						...updates
+					}
+				} else {
+					return cita
+				}
+			})
+		},
+		CLEAN_CITAS: state => {
 			state.citas = null
-		}
+		},
 	},
 })
 
-export const { setUsuario, cleanUsuario, setCitas, cleanCitas } = usuarioSlice.actions;
-export default usuarioSlice.reducer;
+export const {
+	SET_USUARIO,
+	CLEAN_USUARIO,
+	SET_CITAS,
+	UPDATE_CITA,
+	CLEAN_CITAS,
+} = usuarioSlice.actions
+export default usuarioSlice.reducer
