@@ -2,7 +2,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setUsuario } from './redux/usuarioSlice'
+import { setUsuario, setCitas } from './redux/usuarioSlice'
 import axios from 'axios'
 
 // Imagen
@@ -31,6 +31,7 @@ function App() {
 	useEffect(() => {
 		const idToken = localStorage.getItem('idToken') //obtengo la variable local idToken que contiene la idUsuario
 		getDatosUsuario(idToken) // ejecutamos funcion para cargar los datos del usuario
+
 		setTimeout(() => {
 			setIsLoading(false)
 		}, 500)
@@ -39,6 +40,67 @@ function App() {
 	const getDatosUsuario = async idToken => {
 		const res = await axios.get('http://localhost:3000/datos/' + idToken) // cargamos datos del backend con ayuda del id
 		dispatch(setUsuario(res.data)) // Actualizamos el estado del usuario
+
+		// En caso de ser cliente, buscaremos sus citas
+		if (res.data.idRol == 1) {
+			getCitasCliente(res.data.idUsuario)
+		}
+	}
+
+	const getCitasCliente = async (id) => {
+		const res = await axios.get(
+			'http://localhost:3000/cliente/citas/' + id
+		)
+	
+		const listaCitas = res.data
+
+		// cargamos los servicios de cada cita en un arreglo
+		const citasUnidas = listaCitas.reduce((acumulador, citaActual) => {
+			// Buscamos si la cita ya existe en el acumulador
+			const citaExistente = acumulador.find(
+				cita => cita.idCita === citaActual.idCita
+			)
+			if (!citaExistente) {
+				// Si la cita no existe en el acumulador, creamos un nuevo objeto
+				// con la información de la cita y un arreglo con el primer servicio
+				const nuevaCita = {
+					idCita: citaActual.idCita,
+					estado: citaActual.estado,
+					fecha_creacion: citaActual.fecha_creacion,
+					fecha: citaActual.fecha,
+					hora: citaActual.hora,
+					duracion: citaActual.duracion,
+					total_pagar: citaActual.total_pagar,
+					idCliente: citaActual.idCliente,
+					idBarbero: citaActual.idBarbero,
+					nombreBarbero: citaActual.nombreBarbero,
+					ap_paternoBarbero: citaActual.ap_paternoBarbero,
+					servicios: [
+						{
+							idServicio: citaActual.idServicio,
+							nombre: citaActual.nombre,
+							precio: citaActual.precio,
+							imagen: citaActual.imagen,
+						},
+					],
+				}
+
+				// Agregamos el nuevo objeto al acumulador
+				return [...acumulador, nuevaCita]
+			} else {
+				// Si la cita ya existe en el acumulador, agregamos el nuevo servicio
+				citaExistente.servicios.push({
+					idServicio: citaActual.idServicio,
+					nombre: citaActual.nombre,
+					precio: citaActual.precio,
+					imagen: citaActual.imagen,
+				})
+
+				// Retornamos el acumulador sin agregar un nuevo objeto
+				return acumulador
+			}
+		}, [])
+		dispatch(setCitas({citas: citasUnidas})) // actualizamos las citas del usuario
 	}
 
 	if (isLoading) {

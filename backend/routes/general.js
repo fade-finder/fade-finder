@@ -16,6 +16,6 @@ router.post('/login', controladorGeneral.postLogin)
 
 // * * * * * * * * PUT * * * * * * * * *
 router.put('/perfil')   // actualizar pefil
-router.put('/cancelar-cita/:idCita')  // cancelar cita
+router.put('/cancelar-cita/:idCita', controladorGeneral.putCita)  // cancelar cita
 
 module.exports = router

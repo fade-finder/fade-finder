@@ -11,6 +11,7 @@ const controladorCliente = require('../controllers/cliente')
 // pagina register
 // pagina agendar cita
 // ver citas
+router.get('/citas/:idCliente', controladorCliente.getCitas)
 
 // * * * * * * * * * POST * * * * * * * * * * *
 router.post('/register', controladorCliente.postRegister)

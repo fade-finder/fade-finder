@@ -11,6 +11,7 @@ import SmallButton from '../components/SmallButton'
 import BigButton from '../components/BigButton'
 import VentanaModal from '../components/VentanaModal'
 import ServicioAgregadoCard from '../components/ServicioAgregadoCard'
+import CitaRow from '../components/CitaRow'
 // Modulos
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -18,18 +19,29 @@ import moment from 'moment-timezone'
 import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector } from 'react-redux'
+import { formatearDuracion, formatearHora } from '../utils/formateo'
 
 const Cliente = () => {
-	const citas = false
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	G L O B A L E S		* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const fechaActual = moment().tz('America/Mexico_City').format('YYYY-MM-DD')
-	// redux
 	const usuarioSlice = useSelector(state => state.usuario)
 
-	// * * * * * * * * * * * * * * * * <-- H O O K S --> * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	const [citas, setCitas] = useState([])
+	//
+	const [citasCompletadas, setCitasCompletadas] = useState([])
+	const [citasPendientes, setCitasPendientes] = useState([])
+	const [citasCanceladas, setCitasCanceladas] = useState([])
+	const [promedioPorCita, setPromedioPorCita] = useState(0)
+	//
 	const [buscador, setBuscador] = useState('')
 	const [agregando, setAgregando] = useState(false) // me ayuda a saber si el cliente agrego recientemente un servicio a la lista
 	const [agregandoHorario, setAgregandoHorario] = useState(false) // ayuda a actualizar el estado de los horariosDisponibles
-	const [ventanaModal, setVentanaModal] = useState(true)
+	const [ventanaModal, setVentanaModal] = useState(false)
 	// = = = = = = = = = = =
 	const [fechaSeleccionada, setFechaSeleccionada] = useState(
 		moment().tz('America/Mexico_City').format('YYYY-MM-DD')
@@ -66,11 +78,36 @@ const Cliente = () => {
 	const [servicios, setServicios] = useState([])
 	const [barberos, setBarberos] = useState([])
 
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// useEffect para cargar los barberos y los servicios
 	useEffect(() => {
 		getBarberos() // Cargamos los barberos de la bd
 		getServicios() //cargamos los servicios de la bd
 	}, [])
+
+	// useEffect cuando se carga el estado de Redux por completo
+	useEffect(() => {
+		if (usuarioSlice) {
+			setCitas(usuarioSlice.citas)
+		}
+	}, [usuarioSlice])
+
+	// Cuando se modifica alguna cita
+	useEffect(() => {
+		cargarDatosDeEstadoGlobal()
+	}, [citas])
+
+	const cargarDatosDeEstadoGlobal = () => {
+		// Establecemos las citas pendientes / completadas / canceladas y el promedio
+		setCitasPendientes(citas.filter(cita => cita.estado == 0))
+		setCitasCompletadas(citas.filter(cita => cita.estado == 2))
+		setCitasCanceladas(citas.filter(cita => cita.estado == 3))
+		let promedio = citas.reduce((total, cita) => total + cita.total_pagar, 0)
+		promedio = promedio / citas.length
+		setPromedioPorCita(promedio != NaN && promedio)
+	}
 
 	// useEffect para actualizar los servicios disponibles despues de agregar uno
 	useEffect(() => {
@@ -120,7 +157,9 @@ const Cliente = () => {
 		}
 	}, [horariosDisponibles])
 
-	// * * * * * * * * * * * * * * * * <-- F U N C I O N E S --> * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 	// Obtiene los barberos de la bd
 	const getBarberos = async () => {
@@ -156,10 +195,7 @@ const Cliente = () => {
 			foto: '',
 		})
 		// pasamos los servicios de nuestra lista a la lista global
-		setServicios([
-			...servicios,
-			...cita.servicios
-		])
+		setServicios([...servicios, ...cita.servicios])
 		setCita({
 			hora: '',
 			fecha: moment().tz('America/Mexico_City').format('YYYY-MM-DD'),
@@ -297,32 +333,6 @@ const Cliente = () => {
 		} catch (error) {
 			console.log(error)
 		}
-	}
-
-	// Funcion que devuelve los minutos formateados
-	const formatearDuracion = duracion => {
-		if (duracion < 60) return `${duracion} min`
-		const horas = Math.floor(duracion / 60)
-		const minutos = duracion % 60 // calcula los minutos restantes
-		const horasFormateadas = horas < 10 ? '0' + horas : horas // agrega un cero inicial a las horas si son menores a 10
-		const minutosFormateados = minutos < 10 ? '0' + minutos : minutos // agrega un cero inicial a los minutos si son menores a 10
-		return `${horasFormateadas}:${minutosFormateados} hrs` // devuelve el resultado en formato hh:mm
-	}
-
-	// Funcion que devuelve la hora formateada AM o PM
-	const formatearHora = hora => {
-		let tarde = false
-		let min = hora.slice(3, 5)
-		hora = hora.slice(0, 2)
-		// Formateando horas
-		if (hora == 12) tarde = true
-		if (hora > 12) {
-			hora = `0${hora - 12}`
-			tarde = true
-		} else {
-			tarde = false
-		}
-		return tarde ? `${hora}:${min} pm` : `${hora}:${min} am`
 	}
 
 	// Funcion para agregara un nuevo servicio a la lista
@@ -474,6 +484,31 @@ const Cliente = () => {
 			Swal.fire('Error', error.name + ': ' + error.message, 'error')
 		}
 	}
+
+	// Funcion para cancelar una cita
+	const handleCancelarCita = async (idCita) => {
+		const res = await Swal.fire({
+			title: 'Cancelar cita',
+			text: '¿Estas seguro que quieres cancelar esta cita? No podras deshacer esta acción',
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonText: 'No',
+			cancelButtonColor: '#d33',
+			confirmButtonColor: '#3085d6',
+			confirmButtonText: 'Si, cancelar',
+		})
+		if(res.isConfirmed) {
+			const respuesta = await axios.put('http://localhost:3000/cancelar-cita/' + idCita)
+			if(respuesta.data.affectedRows > 0) {
+				Swal.fire(
+					'Cita cancelada',
+					'La cita fue cancelada correctamente',
+					'success'
+				)
+			}
+		}
+	}
+
 	const handleFiltro = () => {}
 	const handleBuscador = () => {}
 
@@ -485,7 +520,6 @@ const Cliente = () => {
 					titulo='Agendar cita'
 				>
 					<div className='grid grid-cols-4 gap-6'>
-						{/* Agregar datos */}
 						<div className='col-span-2 flex flex-col gap-y-4'>
 							<div>
 								{/* Barberos */}
@@ -699,48 +733,76 @@ const Cliente = () => {
 				</VentanaModal>
 			)}
 			<DashboardHeader largo={true} />
-			<div className='mt-[100px] bg-[#F5F8FE] min-h-[calc(100vh-100px)] px-[100px] 2xl:px-[200px] py-[50px]'>
+			<div className='mt-[100px] bg-[#F5F8FE] min-h-[calc(100vh-100px)] p-[50px] 2xl:px-[100px]'>
 				{/* Contenedor de widgets */}
-				<div className='grid grid-cols-4 gap-x-6 gap-y-12 mb-10'>
+				<div className='grid grid-cols-8 gap-x-6 gap-y-12 mb-10'>
 					<CardWidget
-						texto='Citas concluidas'
-						numero='5'
+						texto='Citas completadas'
+						numero={citasCompletadas.length}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas pendientes'
-						numero='1'
+						numero={citasPendientes.length}
 						icono={<MdOutlinePending className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Citas canceladas'
-						numero='2'
+						numero={citasCanceladas.length}
 						icono={<MdOutlineCancel className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>
 					<CardWidget
 						texto='Promedio por cita'
 						dinero={true}
-						numero='125.50'
+						numero={promedioPorCita}
 						icono={<GiMoneyStack className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
-					<div className='col-span-3'>
+					<div className='col-span-6'>
 						<div className='min-h-[300px] p-14 bg-[#fff] rounded-sm shadow-md'>
-							{!citas ? (
+							{citas?.length == 0 ? (
 								<p className='text-lg font-semibold text-gray-700'>
 									No hay citas
 								</p>
 							) : (
 								<>
 									<h2 className='text-lg font-bold text-gray-700'>Citas</h2>
+									{/* Contenedor de las Cards */}
+									<div className='w-full h-max my-10'>
+										<table className='w-full bg-white rounded-lg shadow-sm select-none'>
+											<thead>
+												<tr className='h-[50px] text-gray-500 text-base border-b'>
+													<th className='font-medium px-5 py-3'>Estado</th>
+													<th className='font-medium px-5 py-3'>Fecha</th>
+													<th className='font-medium px-5 py-3'>Hora</th>
+													<th className='font-medium px-5 py-3'>Duración</th>
+													<th className='font-medium px-5 py-3'>
+														Total a pagar
+													</th>
+													<th className='font-medium px-5 py-3'>Barbero</th>
+													<th className='font-medium px-5 py-3'>Servicios</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+												{citas?.map(cita => (
+													<CitaRow
+														key={cita.idCita}
+														cita={cita}
+														onClick={() => handleCancelarCita(cita.idCita)}
+													/>
+												))}
+											</tbody>
+										</table>
+									</div>
 								</>
 							)}
 						</div>
 					</div>
-					<div className='col-span-1'>
+					<div className='col-span-2'>
 						<div className='p-10 bg-[#fff] rounded-sm shadow-md flex flex-col gap-y-8'>
 							<form className='flex flex-col gap-y-2'>
 								<Input

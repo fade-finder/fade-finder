@@ -96,7 +96,6 @@ insert into horario (idHorario, hora_inicio, hora_fin, idBarbero, idDia) values 
 
 -- Insertamos citas
 insert into cita (idCita, estado, fecha_creacion, fecha, hora, duracion, total_pagar, idCliente, idBarbero) values (1, 0, '2023-03-28', '2023-04-01', '17:30:00', 10, 250.0, 3, 2);
-insert into cita (idCita, estado, fecha_creacion, fecha, hora, duracion, total_pagar, idCliente, idBarbero) values (2, 0, '2023-03-28', '2023-04-01', '11:30:00', 100, 500.0, 3, 2);
 
 -- insrtamos servicios
 insert into servicio (idServicio, nombre, precio, duracion, imagen) values (1, 'Corte escolar', 75, 40, 'https://ciudadtrendy.mx/wp-content/uploads/2022/04/Corte-de-cabello-de-nino-Ciudad-Trendy-2.jpg');
@@ -113,6 +112,7 @@ select * from dia;
 select * from horario;
 select * from cita;
 select * from servicio;
+
 select * from cita_servicio;
 
 

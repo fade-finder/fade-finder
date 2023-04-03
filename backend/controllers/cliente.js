@@ -1,6 +1,16 @@
 const Usuario = require("../models/usuario");
 const Cita = require("../models/cita");
 
+exports.getCitas = (req, res) => {
+  Usuario.VerCitas(req.params.idCliente)
+    .then((respuesta) => {
+      res.send(respuesta[0])
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+
 exports.postRegister = (req, res) => {
   const usuario = new Usuario(
     req.body.nombre,

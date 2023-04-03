@@ -11,6 +11,7 @@ const initialState = {
 	foto: null,
 	estado: null,
 	idRol: null,
+	citas: null,
 }
 
 export const usuarioSlice = createSlice({
@@ -41,9 +42,16 @@ export const usuarioSlice = createSlice({
 			state.foto = null
 			state.estado = null
 			state.idRol = null
+		},
+		setCitas: (state, action) => {
+			const { citas } = action.payload
+			state.citas = citas
+		},
+		cleanCitas: (state) => {
+			state.citas = null
 		}
 	},
 })
 
-export const { setUsuario, cleanUsuario } = usuarioSlice.actions;
+export const { setUsuario, cleanUsuario, setCitas, cleanCitas } = usuarioSlice.actions;
 export default usuarioSlice.reducer;

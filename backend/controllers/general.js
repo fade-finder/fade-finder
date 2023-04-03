@@ -75,3 +75,13 @@ exports.postLogin = (req, res) => {
       res.status(500).send(err);
     });
 };
+
+exports.putCita = (req, res) => {
+  General.PutCita(req.params.idCita)
+    .then((respuesta) => {
+      res.send(respuesta[0]);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
