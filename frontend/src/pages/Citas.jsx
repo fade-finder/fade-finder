@@ -77,25 +77,25 @@ const Citas = () => {
 				<div className='grid grid-cols-4 gap-x-6 mb-8'>
 					<CardWidget
 						texto='Citas completadas'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 2)).length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 2))?.length}
 						icono={<BsCardList className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas confirmadas'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 1)).length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 1))?.length}
 						icono={<BsClock className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Por confirmar'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 0)).length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 0))?.length}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-yellow-500'
 					/>
 					<CardWidget
 						texto='Canceladas'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 3)).length}
+						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 3))?.length}
 						icono={<FiAlertTriangle className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>

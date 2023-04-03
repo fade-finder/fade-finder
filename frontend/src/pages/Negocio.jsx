@@ -57,7 +57,7 @@ const Negocio = () => {
 				(suma, cita) => (cita.estado == 2 ? suma + 1 : suma),
 				0
 			)
-		return promedio.toFixed(2)
+		return !isNaN(promedio) ? promedio.toFixed(2) : 0
 	}
 
 	return (

@@ -33,11 +33,6 @@ const Cliente = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	const [citasCompletadas, setCitasCompletadas] = useState([])
-	const [citasPendientes, setCitasPendientes] = useState([])
-	const [citasCanceladas, setCitasCanceladas] = useState([])
-	const [promedioPorCita, setPromedioPorCita] = useState(0)
-	//
 	const [buscador, setBuscador] = useState('')
 	const [agregando, setAgregando] = useState(false) // me ayuda a saber si el cliente agrego recientemente un servicio a la lista
 	const [agregandoHorario, setAgregandoHorario] = useState(false) // ayuda a actualizar el estado de los horariosDisponibles
@@ -85,13 +80,6 @@ const Cliente = () => {
 		getBarberos() // Cargamos los barberos de la bd
 		getServicios() //cargamos los servicios de la bd
 	}, [])
-
-	// useEffect cuando se carga el estado de Redux por completo
-	useEffect(() => {
-		if (usuarioSlice) {
-			cargarDatosDeEstadoGlobal()
-		}
-	}, [usuarioSlice])
 
 	// useEffect para actualizar los servicios disponibles despues de agregar uno
 	useEffect(() => {
@@ -154,24 +142,19 @@ const Cliente = () => {
 		}
 	}
 
-	// Cargar los datos cuando termina de cargar el estado global
-	const cargarDatosDeEstadoGlobal = () => {
-		// Establecemos las citas pendientes / completadas / canceladas y el promedio
-		setCitasPendientes(usuarioSlice.citas?.filter(cita => cita.estado == 0))
-		setCitasCompletadas(usuarioSlice.citas?.filter(cita => cita.estado == 2))
-		setCitasCanceladas(usuarioSlice.citas?.filter(cita => cita.estado == 3))
-		let sumaTotal = usuarioSlice.citas?.reduce(
-			(total, cita) => (cita.estado == 2 ? total + cita.total_pagar : total),
+	const calcularPromedio = () => {
+		const totalPagar = usuarioSlice.citas?.reduce(
+			(acomulador, cita) =>
+				cita.estado == 2 ? acomulador + cita.total_pagar : acomulador,
 			0
 		)
-		const promedio = (
-			sumaTotal /
-			usuarioSlice.citas?.reduce(
-				(cont, cita) => (cita.estado == 2 ? cont + 1 : cont),
+		const promedio =
+			totalPagar /
+			usuarioSlice.citas.reduce(
+				(suma, cita) => (cita.estado == 2 ? suma + 1 : suma),
 				0
 			)
-		).toFixed(2)
-		setPromedioPorCita(!isNaN(promedio) ? promedio : 0)
+		return !isNaN(promedio) ? promedio.toFixed(2) : 0
 	}
 
 	// Limpia todo el formulario despues de insertar a la bd
@@ -750,26 +733,26 @@ const Cliente = () => {
 				<div className='grid grid-cols-4 gap-x-6 gap-y-12 mb-10'>
 					<CardWidget
 						texto='Citas completadas'
-						numero={citasCompletadas?.length}
+						numero={(usuarioSlice.citas?.filter(cita => cita.estado == 2))?.length}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas pendientes'
-						numero={citasPendientes?.length}
+						numero={(usuarioSlice.citas?.filter(cita => cita.estado == 0))?.length}
 						icono={<MdOutlinePending className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Citas canceladas'
-						numero={citasCanceladas?.length}
+						numero={(usuarioSlice.citas?.filter(cita => cita.estado == 3))?.length}
 						icono={<MdOutlineCancel className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>
 					<CardWidget
 						texto='Promedio por cita'
 						dinero={true}
-						numero={promedioPorCita}
+						numero={calcularPromedio()}
 						icono={<GiMoneyStack className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
