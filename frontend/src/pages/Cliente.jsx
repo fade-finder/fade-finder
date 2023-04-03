@@ -31,8 +31,6 @@ const Cliente = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	const [citas, setCitas] = useState([])
-	//
 	const [citasCompletadas, setCitasCompletadas] = useState([])
 	const [citasPendientes, setCitasPendientes] = useState([])
 	const [citasCanceladas, setCitasCanceladas] = useState([])
@@ -90,22 +88,22 @@ const Cliente = () => {
 	// useEffect cuando se carga el estado de Redux por completo
 	useEffect(() => {
 		if (usuarioSlice) {
-			setCitas(usuarioSlice.citas)
+			cargarDatosDeEstadoGlobal()
 		}
 	}, [usuarioSlice])
 
-	// Cuando se modifica alguna cita
-	useEffect(() => {
-		cargarDatosDeEstadoGlobal()
-	}, [citas])
-
 	const cargarDatosDeEstadoGlobal = () => {
 		// Establecemos las citas pendientes / completadas / canceladas y el promedio
-		setCitasPendientes(citas.filter(cita => cita.estado == 0))
-		setCitasCompletadas(citas.filter(cita => cita.estado == 2))
-		setCitasCanceladas(citas.filter(cita => cita.estado == 3))
-		let promedio = citas.reduce((total, cita) => total + cita.total_pagar, 0)
-		promedio = promedio / citas.length
+		setCitasPendientes(usuarioSlice.citas.filter(cita => cita.estado == 0))
+		setCitasCompletadas(usuarioSlice.citas.filter(cita => cita.estado == 2))
+		setCitasCanceladas(usuarioSlice.citas.filter(cita => cita.estado == 3))
+		let sumaTotal = usuarioSlice.citas.reduce((total, cita) => {
+			if(cita.estado == 2){
+				return total + cita.total_pagar
+			}
+			return total
+		}, 0)
+		const promedio = sumaTotal / usuarioSlice.citas.reduce((cont, cita) => cita.estado == 2 && cont + 1, 0)
 		setPromedioPorCita(promedio != NaN && promedio)
 	}
 
@@ -763,7 +761,7 @@ const Cliente = () => {
 					/>
 					<div className='col-span-6'>
 						<div className='min-h-[300px] p-14 bg-[#fff] rounded-sm shadow-md'>
-							{citas?.length == 0 ? (
+							{usuarioSlice.citas?.length == 0 ? (
 								<p className='text-lg font-semibold text-gray-700'>
 									No hay citas
 								</p>
@@ -788,7 +786,7 @@ const Cliente = () => {
 												</tr>
 											</thead>
 											<tbody>
-												{citas?.map(cita => (
+												{usuarioSlice.citas.map(cita => (
 													<CitaRow
 														key={cita.idCita}
 														cita={cita}
