@@ -19,7 +19,7 @@ import moment from 'moment-timezone'
 import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector, useDispatch } from 'react-redux'
-import { UPDATE_CITA } from '../redux/usuarioSlice'
+import { UPDATE_CITA, SET_CITAS } from '../redux/usuarioSlice'
 import { formatearDuracion, formatearHora } from '../utils/formateo'
 
 const Cliente = () => {
@@ -97,7 +97,7 @@ const Cliente = () => {
 	// useEffect para actualizar los servicios disponibles despues de agregar uno
 	useEffect(() => {
 		if (agregando) {
-			const serviciosFiltrados = servicios.filter(
+			const serviciosFiltrados = servicios?.filter(
 				servicio => !cita.servicios.includes(servicio)
 			)
 			setServicios(serviciosFiltrados)
@@ -107,7 +107,7 @@ const Cliente = () => {
 
 	// useEffect que actualiza los horarios disponibles cada vez que se agregue / elimine un servicio del carrito o cuando se seleccione otro barbero
 	useEffect(() => {
-		if (barberoSeleccionado.idUsuario != '' && cita.servicios.length != 0) {
+		if (barberoSeleccionado.idUsuario != '' && cita.servicios?.length != 0) {
 			getHorariosDisponibles()
 		}
 	}, [cita, barberoSeleccionado, fechaSeleccionada])
@@ -132,7 +132,7 @@ const Cliente = () => {
 
 	useEffect(() => {
 		if (agregandoHorario) {
-			if (horariosDisponibles.length == 0) {
+			if (horariosDisponibles?.length == 0) {
 				Swal.fire(
 					'¡Uyyy!',
 					'No hay horarios disponibles para ese día',
@@ -169,19 +169,22 @@ const Cliente = () => {
 	// Cargar los datos cuando termina de cargar el estado global
 	const cargarDatosDeEstadoGlobal = () => {
 		// Establecemos las citas pendientes / completadas / canceladas y el promedio
-		setCitasPendientes(usuarioSlice.citas.filter(cita => cita.estado == 0))
-		setCitasCompletadas(usuarioSlice.citas.filter(cita => cita.estado == 2))
-		setCitasCanceladas(usuarioSlice.citas.filter(cita => cita.estado == 3))
-		let sumaTotal = usuarioSlice.citas.reduce((total, cita) => {
+		setCitasPendientes(usuarioSlice.citas?.filter(cita => cita.estado == 0))
+		setCitasCompletadas(usuarioSlice.citas?.filter(cita => cita.estado == 2))
+		setCitasCanceladas(usuarioSlice.citas?.filter(cita => cita.estado == 3))
+		let sumaTotal = usuarioSlice.citas?.reduce((total, cita) => {
 			if (cita.estado == 2) {
 				return total + cita.total_pagar
 			}
 			return total
 		}, 0)
-		if(sumaTotal != 0){
+		if (sumaTotal != 0) {
 			const promedio = (
 				sumaTotal /
-				usuarioSlice.citas.reduce((cont, cita) => cita.estado == 2 && cont + 1, 0)
+				usuarioSlice.citas?.reduce(
+					(cont, cita) => cita.estado == 2 && cont + 1,
+					0
+				)
 			).toFixed(2)
 			setPromedioPorCita(promedio != NaN && promedio)
 		} else {
@@ -246,7 +249,7 @@ const Cliente = () => {
 			)
 
 			// Validamos si trabaja ese dia
-			if (horario.data.length == 0) {
+			if (horario.data?.length == 0) {
 				Swal.fire(
 					'¡Uyyy!',
 					'El barbero no trabaja este dia, elige otro o cambia la fecha',
@@ -256,7 +259,7 @@ const Cliente = () => {
 			} else {
 				let espaciosDisponibles = []
 				// Recorremos cada horario
-				for (let i = 0; i < horario.data.length; i++) {
+				for (let i = 0; i < horario.data?.length; i++) {
 					const horaInicioBarbero = new Date(
 						`${fechaSeleccionada}T${horario.data[i].hora_inicio}`
 					)
@@ -277,7 +280,7 @@ const Cliente = () => {
 						let disponible = true
 
 						// Recorremos las citas agendadas para el mismo día y verificamos si se superponen
-						for (let j = 0; j < citas.data.length; j++) {
+						for (let j = 0; j < citas.data?.length; j++) {
 							const fechaCita = new Date(citas.data[j].fecha)
 							const horaCita = citas.data[j].hora
 							const duracionCitaExistente = citas.data[j].duracion
@@ -398,7 +401,7 @@ const Cliente = () => {
 
 		setCita({
 			...cita,
-			servicios: cita.servicios.filter(servicio => servicio.idServicio != id),
+			servicios: cita.servicios?.filter(servicio => servicio.idServicio != id),
 			total_pagar: totalPagar,
 			duracion: nuevaDuracion,
 		})
@@ -416,7 +419,7 @@ const Cliente = () => {
 			Swal.fire('Error', 'Debes seleccionar una fecha para tu cita', 'error')
 			return false
 		}
-		if (cita.servicios.length == 0) {
+		if (cita.servicios?.length == 0) {
 			Swal.fire('Error', 'Debes al menos un servicios', 'error')
 			return false
 		}
@@ -486,6 +489,13 @@ const Cliente = () => {
 						'success'
 					)
 					limpiarTodo()
+					setVentanaModal(false)
+
+					// Consultamos a la bd las citas y las actualizamos en el estado global
+					res = await axios.get(
+						'http://localhost:3000/cliente/citas/' + usuarioSlice.idUsuario
+					)
+					dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
 				}
 			}
 		} catch (error) {
@@ -628,7 +638,7 @@ const Cliente = () => {
 								</div>
 							)}
 							{/* poner aqui */}
-							{cita.servicios.length > 0 && (
+							{cita.servicios?.length > 0 && (
 								<>
 									{/* Seleccionar dia */}
 									<div className='col-span-2 flex flex-col gap-y-3 mt-5'>
@@ -685,7 +695,7 @@ const Cliente = () => {
 						</div>
 						{/* Ver servicios agregados */}
 						<div className='col-span-2'>
-							{cita.servicios.length == 0 ? (
+							{cita.servicios?.length == 0 ? (
 								<div className='min-h-[100px] bg-[#fcfcfcfa] shadow-sm p-8 '>
 									<p className='font-light'>
 										Aun no has agregado ningun servicio
@@ -751,19 +761,19 @@ const Cliente = () => {
 				<div className='grid grid-cols-8 gap-x-6 gap-y-12 mb-10'>
 					<CardWidget
 						texto='Citas completadas'
-						numero={citasCompletadas.length}
+						numero={citasCompletadas?.length}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas pendientes'
-						numero={citasPendientes.length}
+						numero={citasPendientes?.length}
 						icono={<MdOutlinePending className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Citas canceladas'
-						numero={citasCanceladas.length}
+						numero={citasCanceladas?.length}
 						icono={<MdOutlineCancel className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>
@@ -801,7 +811,7 @@ const Cliente = () => {
 												</tr>
 											</thead>
 											<tbody>
-												{usuarioSlice.citas.map(cita => (
+												{usuarioSlice.citas?.map(cita => (
 													<CitaRow
 														key={cita.idCita}
 														cita={cita}

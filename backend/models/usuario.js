@@ -25,7 +25,7 @@ class Usuario
 
     static VerCitas(id)
     {
-        return baseDeDatos.execute('SELECT cita.*, usuario.nombre AS nombreBarbero, usuario.ap_paterno AS ap_paternoBarbero, servicio.* FROM cita JOIN usuario ON cita.idBarbero = usuario.idUsuario JOIN cita_servicio ON cita.idCita = cita_servicio.idCita JOIN servicio ON cita_servicio.idServicio = servicio.idServicio WHERE cita.idCliente = ?', [id])
+        return baseDeDatos.execute('SELECT cita.*, cita.duracion AS duracionCita, usuario.nombre AS nombreBarbero, usuario.ap_paterno AS ap_paternoBarbero, servicio.*, servicio.duracion AS duracionServicio FROM cita JOIN usuario ON cita.idBarbero = usuario.idUsuario JOIN cita_servicio ON cita.idCita = cita_servicio.idCita JOIN servicio ON cita_servicio.idServicio = servicio.idServicio WHERE cita.idCliente = ?', [id])
     }
 
     static getServicios()

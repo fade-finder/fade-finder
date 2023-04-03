@@ -47,60 +47,9 @@ function App() {
 		}
 	}
 
-	const getCitasCliente = async (id) => {
-		const res = await axios.get(
-			'http://localhost:3000/cliente/citas/' + id
-		)
-	
-		const listaCitas = res.data
-
-		// cargamos los servicios de cada cita en un arreglo
-		const citasUnidas = listaCitas.reduce((acumulador, citaActual) => {
-			// Buscamos si la cita ya existe en el acumulador
-			const citaExistente = acumulador.find(
-				cita => cita.idCita === citaActual.idCita
-			)
-			if (!citaExistente) {
-				// Si la cita no existe en el acumulador, creamos un nuevo objeto
-				// con la información de la cita y un arreglo con el primer servicio
-				const nuevaCita = {
-					idCita: citaActual.idCita,
-					estado: citaActual.estado,
-					fecha_creacion: citaActual.fecha_creacion,
-					fecha: citaActual.fecha,
-					hora: citaActual.hora,
-					duracion: citaActual.duracion,
-					total_pagar: citaActual.total_pagar,
-					idCliente: citaActual.idCliente,
-					idBarbero: citaActual.idBarbero,
-					nombreBarbero: citaActual.nombreBarbero,
-					ap_paternoBarbero: citaActual.ap_paternoBarbero,
-					servicios: [
-						{
-							idServicio: citaActual.idServicio,
-							nombre: citaActual.nombre,
-							precio: citaActual.precio,
-							imagen: citaActual.imagen,
-						},
-					],
-				}
-
-				// Agregamos el nuevo objeto al acumulador
-				return [...acumulador, nuevaCita]
-			} else {
-				// Si la cita ya existe en el acumulador, agregamos el nuevo servicio
-				citaExistente.servicios.push({
-					idServicio: citaActual.idServicio,
-					nombre: citaActual.nombre,
-					precio: citaActual.precio,
-					imagen: citaActual.imagen,
-				})
-
-				// Retornamos el acumulador sin agregar un nuevo objeto
-				return acumulador
-			}
-		}, [])
-		dispatch(SET_CITAS({citas: citasUnidas})) // actualizamos las citas del usuario
+	const getCitasCliente = async id => {
+		const res = await axios.get('http://localhost:3000/cliente/citas/' + id)
+		dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
 	}
 
 	if (isLoading) {

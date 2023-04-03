@@ -55,8 +55,57 @@ export const usuarioSlice = createSlice({
 			state.idRol = null
 		},
 		SET_CITAS: (state, action) => {
-			const { citas } = action.payload
-			state.citas = citas
+			const citas = action.payload
+
+			const listaCitas = citas
+			// cargamos los servicios de cada cita en un arreglo
+			const citasUnidas = listaCitas.reduce((acumulador, citaActual) => {
+				// Buscamos si la cita ya existe en el acumulador
+				const citaExistente = acumulador.find(
+					cita => cita.idCita === citaActual.idCita
+				)
+				if (!citaExistente) {
+					// Si la cita no existe en el acumulador, creamos un nuevo objeto
+					// con la información de la cita y un arreglo con el primer servicio
+					const nuevaCita = {
+						idCita: citaActual.idCita,
+						estado: citaActual.estado,
+						fecha_creacion: citaActual.fecha_creacion,
+						fecha: citaActual.fecha,
+						hora: citaActual.hora,
+						duracion: citaActual.duracionCita,
+						total_pagar: citaActual.total_pagar,
+						idCliente: citaActual.idCliente,
+						idBarbero: citaActual.idBarbero,
+						nombreBarbero: citaActual.nombreBarbero,
+						ap_paternoBarbero: citaActual.ap_paternoBarbero,
+						servicios: [
+							{
+								idServicio: citaActual.idServicio,
+								nombre: citaActual.nombre,
+								precio: citaActual.precio,
+								duracion: citaActual.duracionServicio,
+								imagen: citaActual.imagen,
+							},
+						],
+					}
+
+					// Agregamos el nuevo objeto al acumulador
+					return [...acumulador, nuevaCita]
+				} else {
+					// Si la cita ya existe en el acumulador, agregamos el nuevo servicio
+					citaExistente.servicios.push({
+						idServicio: citaActual.idServicio,
+						nombre: citaActual.nombre,
+						precio: citaActual.precio,
+						imagen: citaActual.imagen,
+					})
+
+					// Retornamos el acumulador sin agregar un nuevo objeto
+					return acumulador
+				}
+			}, [])
+			state.citas = citasUnidas
 		},
 		UPDATE_CITA: (state, action) => {
 			const [idCita, updates] = action.payload
@@ -64,7 +113,7 @@ export const usuarioSlice = createSlice({
 				if (cita.idCita == idCita) {
 					return {
 						...cita,
-						...updates
+						...updates,
 					}
 				} else {
 					return cita

@@ -25,9 +25,9 @@ export const formatearHora = hora => {
 }
 
 export const formatearFecha = (fecha) => {
-  const fechaCompleta = new Date(fecha.slice(0, 10))
+  const fechaCompleta = new Date(fecha)
   let dia = fechaCompleta.getDate()
-  let mes = fechaCompleta.getMonth()
+  let mes = fechaCompleta.getMonth()+1
   let anio = fechaCompleta.getFullYear()
   if(dia < 10) dia = `0${dia}`
   if(mes < 10) mes = `0${mes}`
