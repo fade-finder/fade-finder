@@ -92,7 +92,7 @@ const Barberos = () => {
 	// Funcion que carga los datos del barbero seleccionado para editar al formulario
 	const cargarDatosBarberoFormulario = id => {
 		const barberoEditar = barberos.filter(barbero => barbero.idUsuario == id)
-		setBarbero(barberoEditar[0])
+		setBarbero({ ...barberoEditar[0], password: '' })
 		setEditando(true)
 	}
 
@@ -136,7 +136,8 @@ const Barberos = () => {
 		if (!validarCamposVacios()) return false
 		if (!validarEmail(barbero.email)) return false
 		if (!validarTelefono(barbero.telefono)) return false
-		if (!validarPassword(barbero.password)) return false
+		if (barbero.password != '' && !validarPassword(barbero.password))
+			return false
 		try {
 			await axios.put(
 				'http://localhost:3000/admin/barberos/' + barbero.idUsuario,
@@ -202,14 +203,25 @@ const Barberos = () => {
 	}
 
 	const validarCamposVacios = () => {
-		if (
-			barbero.email != '' &&
-			barbero.password != '' &&
-			barbero.nombre != '' &&
-			barbero.ap_paterno != '' &&
-			barbero.telefono != ''
-		)
-			return true
+		if (editando) {
+			if (
+				barbero.email != '' &&
+				barbero.nombre != '' &&
+				barbero.ap_paterno != '' &&
+				barbero.telefono != ''
+			)
+				return true
+		} else {
+			if (
+				barbero.email != '' &&
+				barbero.password != '' &&
+				barbero.nombre != '' &&
+				barbero.ap_paterno != '' &&
+				barbero.telefono != ''
+			)
+				return true
+		}
+
 		Swal.fire(
 			'Campos vacios',
 			'No puedes dejar campos vacíos, intentalo de nuevo',
@@ -305,6 +317,7 @@ const Barberos = () => {
 									type='file'
 									name='foto'
 									id='foto'
+									disabled={true}
 									onChange={e => changeInputValue(e.target.id, e.target.value)}
 									className='w-full outline-none border border-gray-300 duration-200 focus:border-[var(--colorPrimario)] px-3 py-2 text-sm'
 								/>
@@ -315,6 +328,7 @@ const Barberos = () => {
 								type='file'
 								name='foto'
 								id='foto'
+								activo={false}
 								placeholder='Selecciona una foto'
 								value={barbero.foto}
 								onChange={e => changeInputValue(e.target.id, e.target.value)}

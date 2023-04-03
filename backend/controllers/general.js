@@ -90,7 +90,7 @@ exports.postLogin = (req, res) => {
 
 exports.putPerfil = (req, res) => {
   const idUsuario = req.body.usuario.idUsuario;
-  const password = req.body.password;
+  const password = req.body.usuario.password;
   const nombre = req.body.usuario.nombre;
   const ap_paterno = req.body.usuario.ap_paterno;
   const ap_materno = req.body.usuario.ap_materno;

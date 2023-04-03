@@ -31,6 +31,7 @@ const Perfil = () => {
 	const [usuario, setUsuario] = useState({
 		idUsuario: '',
 		email: '',
+		password: '',
 		nombre: '',
 		ap_paterno: '',
 		ap_materno: '',
@@ -39,13 +40,11 @@ const Perfil = () => {
 		estado: '',
 		idRol: '',
 	})
-	const [password, setPassword] = useState('')
-
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	useEffect(() => {
-		setUsuario(usuarioSlice)
+		setUsuario({ ...usuarioSlice, password: '' })
 	}, [])
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -62,7 +61,6 @@ const Perfil = () => {
 		if (!validarCampos()) return
 		const res = await axios.put('http://localhost:3000/perfil', {
 			usuario,
-			password,
 		})
 		if (res.data.affectedRows > 0) {
 			Swal.fire(
@@ -70,7 +68,7 @@ const Perfil = () => {
 				'Los cambios fueron registrados en la base de datos.',
 				'success'
 			)
-			setPassword('')
+			setUsuario({ ...usuario, password: '' })
 			dispatch(UPDATE_USUARIO(usuario))
 		} else {
 			Swal.fire('Error', 'Ocurrio un error, contacta al soporte.', 'error')
@@ -118,7 +116,8 @@ const Perfil = () => {
 	}
 	const validarCampos = () => {
 		if (!validarEmail(usuario.email)) return false
-		if (password != '' && !validarPassword(password)) return false
+		if (usuario.password != '' && !validarPassword(usuario.password))
+			return false
 		if (!validarTelefono(usuario.telefono)) return false
 		if (usuario.nombre == '' || usuario.ap_paterno == '') {
 			Swal.fire(
@@ -230,8 +229,8 @@ const Perfil = () => {
 								name='password'
 								id='password'
 								placeholder='Nueva contraseña'
-								value={password}
-								onChange={e => setPassword(e.target.value)}
+								value={usuario.password}
+								onChange={e => changeStateValue(e.target.id, e.target.value)}
 							/>
 						</div>
 						<div className='w-full flex flex-col justify-center items-start gap-y-5'>

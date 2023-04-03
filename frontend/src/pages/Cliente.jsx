@@ -150,7 +150,7 @@ const Cliente = () => {
 		)
 		const promedio =
 			totalPagar /
-			usuarioSlice.citas.reduce(
+			usuarioSlice.citas?.reduce(
 				(suma, cita) => (cita.estado == 2 ? suma + 1 : suma),
 				0
 			)

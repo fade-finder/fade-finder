@@ -86,11 +86,11 @@ const Negocio = () => {
 				<div className='grid grid-cols-4 gap-x-6 mb-10'>
 					<CardWidget
 						texto='Ingresos'
-						numero={usuarioSlice.citasClientes.reduce(
+						numero={(usuarioSlice.citasClientes?.reduce(
 							(acomulador, cita) =>
 								cita.estado == 2 ? acomulador + cita.total_pagar : acomulador,
 							0
-						)}
+						))?.toFixed(2)}
 						dinero={true}
 						icono={<GiReceiveMoney className='text-2xl text-white' />}
 						color='bg-green-500'
