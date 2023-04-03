@@ -56,7 +56,6 @@ const Cliente = () => {
 	const [barberoSeleccionado, setBarberoSeleccionado] = useState({
 		idUsuario: '',
 		email: '',
-		password: '',
 		nombre: '',
 		ap_paterno: '',
 		ap_materno: '',
@@ -187,7 +186,6 @@ const Cliente = () => {
 		setBarberoSeleccionado({
 			idUsuario: '',
 			email: '',
-			password: '',
 			nombre: '',
 			ap_paterno: '',
 			ap_materno: '',

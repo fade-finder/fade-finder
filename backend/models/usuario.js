@@ -1,4 +1,5 @@
 const baseDeDatos = require('../utils/baseDeDatos');
+const CryptoJS = require("crypto-js");
 
 class Usuario
 {
@@ -64,8 +65,11 @@ class Usuario
 
     AgregarCliente()
     {
+        const hash = CryptoJS.SHA256(this.password);
+        const hashString = hash.toString(CryptoJS.enc.Hex);
+
         return baseDeDatos.execute('INSERT INTO usuario (idUsuario, nombre, ap_paterno, ap_materno, email, password, telefono, foto, estado, idRol) VALUES (?,?,?,?,?,?,?,?,?,?)',
-        [null, this.nombre, this.ap_paterno, this.ap_materno, this.email, this.password, this.telefono, this.foto, 1, 1])
+        [null, this.nombre, this.ap_paterno, this.ap_materno, this.email, hashString, this.telefono, this.foto, 1, 1])
     }
 
     static BorrarPerfilCliente(id)

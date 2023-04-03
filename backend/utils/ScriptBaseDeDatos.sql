@@ -13,7 +13,7 @@ create table usuario(
     ap_paterno varchar(45) not null,
     ap_materno varchar(45),
     email varchar(45) unique,
-    password varchar(45) not null,
+    password varchar(256) not null,
     telefono varchar(10) not null,
     foto varchar(100),
     estado int(1) not null,

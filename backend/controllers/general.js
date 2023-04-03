@@ -77,13 +77,13 @@ exports.postLogin = (req, res) => {
 };
 
 exports.putPerfil = (req, res) => {
-  const idUsuario = req.body.idUsuario;
+  const idUsuario = req.body.usuario.idUsuario;
   const password = req.body.password;
-  const nombre = req.body.nombre;
-  const ap_paterno = req.body.ap_paterno;
-  const ap_materno = req.body.ap_materno;
-  const telefono = req.body.telefono;
-  const foto = req.body.foto;
+  const nombre = req.body.usuario.nombre;
+  const ap_paterno = req.body.usuario.ap_paterno;
+  const ap_materno = req.body.usuario.ap_materno;
+  const telefono = req.body.usuario.telefono;
+  const foto = req.body.usuario.foto;
   General.PutPerfil(
     idUsuario,
     password,

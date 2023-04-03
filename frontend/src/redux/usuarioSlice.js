@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
 	idUsuario: null,
 	email: null,
-	password: null,
 	nombre: null,
 	ap_paterno: null,
 	ap_materno: null,
@@ -22,7 +21,6 @@ export const usuarioSlice = createSlice({
 			const {
 				idUsuario,
 				email,
-				password,
 				nombre,
 				ap_paterno,
 				ap_materno,
@@ -33,7 +31,6 @@ export const usuarioSlice = createSlice({
 			} = action.payload
 			state.idUsuario = idUsuario
 			state.email = email
-			state.password = password
 			state.nombre = nombre
 			state.ap_paterno = ap_paterno
 			state.ap_materno = ap_materno
@@ -52,7 +49,6 @@ export const usuarioSlice = createSlice({
 		CLEAN_USUARIO: state => {
 			state.idUsuario = null
 			state.email = null
-			state.password = null
 			state.nombre = null
 			state.ap_paterno = null
 			state.ap_materno = null

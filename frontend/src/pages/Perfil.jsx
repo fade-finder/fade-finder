@@ -31,7 +31,6 @@ const Perfil = () => {
 	const [usuario, setUsuario] = useState({
 		idUsuario: '',
 		email: '',
-		password: '',
 		nombre: '',
 		ap_paterno: '',
 		ap_materno: '',
@@ -40,6 +39,7 @@ const Perfil = () => {
 		estado: '',
 		idRol: '',
 	})
+	const [password, setPassword] = useState('')
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
@@ -59,14 +59,18 @@ const Perfil = () => {
 	}
 	const handleClickGuardarTodo = async e => {
 		e.preventDefault()
-		if(!validarCampos()) return
-		const res = await axios.put('http://localhost:3000/perfil', usuario)
+		if (!validarCampos()) return
+		const res = await axios.put('http://localhost:3000/perfil', {
+			usuario,
+			password,
+		})
 		if (res.data.affectedRows > 0) {
 			Swal.fire(
 				'Cambios guardados',
 				'Los cambios fueron registrados en la base de datos.',
 				'success'
 			)
+			setPassword('')
 			dispatch(UPDATE_USUARIO(usuario))
 		} else {
 			Swal.fire('Error', 'Ocurrio un error, contacta al soporte.', 'error')
@@ -114,7 +118,7 @@ const Perfil = () => {
 	}
 	const validarCampos = () => {
 		if (!validarEmail(usuario.email)) return false
-		if (!validarPassword(usuario.password)) return false
+		if (password != '' && !validarPassword(password)) return false
 		if (!validarTelefono(usuario.telefono)) return false
 		if (usuario.nombre == '' || usuario.ap_paterno == '') {
 			Swal.fire(
@@ -226,8 +230,8 @@ const Perfil = () => {
 								name='password'
 								id='password'
 								placeholder='Nueva contraseña'
-								value={usuario.password}
-								onChange={e => changeStateValue(e.target.id, e.target.value)}
+								value={password}
+								onChange={e => setPassword(e.target.value)}
 							/>
 						</div>
 						<div className='w-full flex flex-col justify-center items-start gap-y-5'>
