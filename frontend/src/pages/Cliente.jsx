@@ -97,11 +97,11 @@ const Cliente = () => {
 	// useEffect para actualizar los servicios disponibles despues de agregar uno
 	useEffect(() => {
 		// if (agregando) {
-			const serviciosFiltrados = servicios?.filter(
-				servicio => !cita.servicios.includes(servicio)
-			)
-			setServicios(serviciosFiltrados)
-			// setAgregando(false)
+		const serviciosFiltrados = servicios?.filter(
+			servicio => !cita.servicios.includes(servicio)
+		)
+		setServicios(serviciosFiltrados)
+		// setAgregando(false)
 		// }
 	}, [cita])
 
@@ -130,7 +130,6 @@ const Cliente = () => {
 		})
 		setAgregandoHorario(true)
 	}, [fechaSeleccionada])
-
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
@@ -353,7 +352,7 @@ const Cliente = () => {
 			hora: '',
 		})
 		// setAgregando(true)
-		
+
 		// Establecer nuevo total a pagar
 		let totalPagar = cita.total_pagar
 		totalPagar += servicioSeleccionado.precio
@@ -515,7 +514,8 @@ const Cliente = () => {
 		if (res.isConfirmed) {
 			// Actualizamos en la bd
 			const respuesta = await axios.put(
-				'http://localhost:3000/cancelar-cita/' + idCita
+				'http://localhost:3000/cita/' + idCita,
+				{ estado: 3 }
 			)
 			if (respuesta.data.affectedRows > 0) {
 				Swal.fire(

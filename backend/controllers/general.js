@@ -102,7 +102,7 @@ exports.putPerfil = (req, res) => {
 };
 
 exports.putCita = (req, res) => {
-  General.PutCita(req.params.idCita)
+  General.PutCita(req.params.idCita, req.body.estado)
     .then((respuesta) => {
       res.send(respuesta[0]);
     })

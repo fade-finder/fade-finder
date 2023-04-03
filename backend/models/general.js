@@ -17,8 +17,8 @@ class General
         return baseDeDatos.execute('UPDATE usuario SET nombre = ?, ap_paterno = ?, ap_materno = ?, password = ?, telefono = ?, foto = ? WHERE idUsuario = ?', [nombre, ap_paterno, ap_materno, password, telefono, foto, idUsuario])
     }
 
-    static PutCita(idCita) {
-        return baseDeDatos.execute('UPDATE cita SET estado = 3 WHERE idCita = ?', [idCita])
+    static PutCita(idCita, estado) {
+        return baseDeDatos.execute('UPDATE cita SET estado = ? WHERE idCita = ?', [estado, idCita])
     }
 
 }
