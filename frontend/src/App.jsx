@@ -2,7 +2,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { SET_USUARIO, SET_CITAS, SET_CITAS_CLIENTES } from './redux/usuarioSlice'
+import { SET_USUARIO, SET_CITAS, SET_CITAS_CLIENTES, SET_CLIENTES } from './redux/usuarioSlice'
 import axios from 'axios'
 
 // Imagen
@@ -43,17 +43,37 @@ function App() {
 
 		// En caso de ser cliente, buscaremos sus citas
 		if (res.data.idRol == 1) getCitasCliente(res.data.idUsuario)
-		else if(res.data.idRol == 3) getCitasDeClientes()
+		else if(res.data.idRol == 3) {
+			getCitasDeClientes()
+			getClientes()
+		}
 	}
 
 	const getCitasCliente = async id => {
-		const res = await axios.get('http://localhost:3000/cliente/citas/' + id)
-		dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
+		try {
+			const res = await axios.get('http://localhost:3000/cliente/citas/' + id)
+			dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	const getCitasDeClientes = async () => {
-		const res = await axios.get('http://localhost:3000/citas')
-		dispatch(SET_CITAS_CLIENTES(res.data)) // actualizamos las citas de los clientes
+		try {
+			const res = await axios.get('http://localhost:3000/citas')
+			dispatch(SET_CITAS_CLIENTES(res.data)) // actualizamos las citas de los clientes
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	const getClientes = async () => {
+		try {
+			const res = await axios.get('http://localhost:3000/clientes')
+			dispatch(SET_CLIENTES(res.data))
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	if (isLoading) {

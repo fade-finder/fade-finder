@@ -25,7 +25,7 @@ const Register = () => {
 		telefono: '',
 		foto: '',
 	})
-
+	
 	// Funciones
 	const changeStateValue = (name, value) => {
 		setCliente({
@@ -36,6 +36,7 @@ const Register = () => {
 
 	const onClickRegister = async e => {
 		e.preventDefault()
+		console.log(cliente);
 		if (!validarCampos()) return false
 		if (!validarEmail(cliente.email)) return false
 		if (!validarTelefono(cliente.telefono)) return false
@@ -167,6 +168,7 @@ const Register = () => {
 							name='foto'
 							id='foto'
 							placeholder='Selecciona una foto'
+							activo={false}
 							value={cliente.foto}
 							onChange={e => changeStateValue(e.target.id, e.target.value)}
 						/>

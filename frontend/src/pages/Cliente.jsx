@@ -166,18 +166,14 @@ const Cliente = () => {
 			}
 			return total
 		}, 0)
-		if (sumaTotal != 0) {
-			const promedio = (
-				sumaTotal /
-				usuarioSlice.citas?.reduce(
-					(cont, cita) => cita.estado == 2 && cont + 1,
-					0
-				)
-			).toFixed(2)
-			setPromedioPorCita(promedio != NaN && promedio)
-		} else {
-			setPromedioPorCita(0)
-		}
+		const promedio = (
+			sumaTotal /
+			usuarioSlice.citas?.reduce(
+				(cont, cita) => cita.estado == 2 && cont + 1,
+				0
+			)
+		).toFixed(2)
+		setPromedioPorCita(!isNaN(promedio) ? promedio : 0)
 	}
 
 	// Limpia todo el formulario despues de insertar a la bd

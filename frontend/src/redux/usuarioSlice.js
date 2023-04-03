@@ -12,12 +12,14 @@ const initialState = {
 	idRol: null,
 	citas: null,
 	citasClientes: null,
+	clientes: null
 }
 
 export const usuarioSlice = createSlice({
 	name: 'usuario',
 	initialState,
 	reducers: {
+		// = = = = = = = = = = = = = = = = USUARIOS = = = = = = = = = = = = = = = =
 		SET_USUARIO: (state, action) => {
 			const {
 				idUsuario,
@@ -59,7 +61,10 @@ export const usuarioSlice = createSlice({
 			state.idRol = null
 		  state.citas = null
 			state.citasClientes = null
+			state.clientes = null
 		},
+
+		// = = = = = = = = = = = = = = = = CITAS DE USUARIO = = = = = = = = = = = = = = = =
 		SET_CITAS: (state, action) => {
 			const citas = action.payload
 
@@ -130,6 +135,7 @@ export const usuarioSlice = createSlice({
 			state.citas = null
 		},
 
+		// = = = = = = = = = = = = = = = = CITAS DE CLIENTES = = = = = = = = = = = = = = = =
 		SET_CITAS_CLIENTES: (state, action) => {
 			const citas = action.payload
 
@@ -199,6 +205,12 @@ export const usuarioSlice = createSlice({
 				}
 			})
 		},
+
+		// = = = = = = = = = = = = = = = = CLIENTES = = = = = = = = = = = = = = = =
+		SET_CLIENTES: (state, action) => {
+			const clientes = action.payload
+			state.clientes = clientes
+		}
 	},
 })
 
@@ -210,6 +222,7 @@ export const {
 	CLEAN_CITAS,
 	UPDATE_USUARIO,
 	SET_CITAS_CLIENTES,
-	UPDATE_CITAS_CLIENTES
+	UPDATE_CITAS_CLIENTES,
+	SET_CLIENTES,
 } = usuarioSlice.actions
 export default usuarioSlice.reducer

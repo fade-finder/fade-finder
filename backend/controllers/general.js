@@ -71,7 +71,6 @@ exports.getCitas = (req, res) => {
 exports.getCitasDeClientes = (req, res) => {
   Usuario.getCitasClientes()
     .then((resultado) => {
-      console.log(resultado[0]);
       res.send(resultado[0]);
     })
     .catch((err) => {

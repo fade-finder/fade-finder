@@ -4,15 +4,19 @@ import DashboardContainer from '../components/DashboardContainer'
 import ClienteRow from '../components/ClienteRow'
 import BuscadorAdmin from '../components/BuscadorAdmin'
 import VentanaModal from '../components/VentanaModal'
-
 // Hooks
 import { useState, useEffect } from 'react'
-
-// Paquetes
-import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const Clientes = () => {
-	// useState
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	G L O B A L E S		* * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	const usuarioSlice = useSelector(state => state.usuario)
+
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const [ventanaModal, setVentanaModal] = useState(false)
 	const [cliente, setCliente] = useState({
 		idUsuario: '',
@@ -27,24 +31,18 @@ const Clientes = () => {
 		servicios: '',
 		citas_pendientes: '',
 	})
-	const [clientes, setClientes] = useState([])
 
-	// useEffect
-	useEffect(() => {
-		getClientes()
-	}, [])
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-	// Funciones
-	const getClientes = async () => {
-		try {
-			const res = await axios.get('http://localhost:3000/clientes')
-			setClientes(res.data)
-		} catch (error) {
-			console.log(error)
-		}
-	}
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const setClienteModal = id => {
-		const clienteFiltrado = clientes.filter(cliente => cliente.idUsuario == id)
+		const clienteFiltrado = usuarioSlice.clientes.filter(
+			cliente => cliente.idUsuario == id
+		)
 		setCliente(clienteFiltrado[0])
 		setVentanaModal(true)
 	}
@@ -58,8 +56,14 @@ const Clientes = () => {
 					titulo='Cuenta de cliente'
 				>
 					<div className='w-full h-full flex justify-between'>
-						<div className='w-[35%] h-[270.2px] 2xl:h-[364px] rounded-full overflow-hidden'>
-							<img src={cliente.foto} alt={`Fotografía de ${cliente.nombre}`} />
+						{/* <div className='w-[35%] h-[270.2px] 2xl:h-[364px] rounded-full overflow-hidden'> */}
+						<div className='w-[35%] flex justify-center'>
+							<div className='h-[300px] w-[300px] 2xl:h-[360px] 2xl:w-[360px] rounded-full overflow-hidden'>
+								<img
+									src={cliente.foto}
+									alt={`Fotografía de ${cliente.nombre}`}
+								/>
+							</div>
 						</div>
 						<div className='w-[55%] flex flex-col gap-y-10'>
 							<div className='flex w-full items-center'>
@@ -144,17 +148,19 @@ const Clientes = () => {
 					<table className='w-full bg-white rounded-lg shadow-sm select-none'>
 						<thead>
 							<tr className='h-[50px] text-gray-500 text-base border-b'>
-								<th className='font-medium px-5 py-3'>Nombre completo</th>
+								<th className='font-medium px-5 py-3 min-w-[250px]'>
+									Nombre completo
+								</th>
 								<th className='font-medium px-5 py-3'>Correo electrónico</th>
 								<th className='font-medium px-5 py-3'>Teléfono</th>
 								<th className='font-medium px-5 py-3'>Estado de cuenta</th>
-								<th className='font-medium px-5 py-3'>Servicios tomados</th>
-								<th className='font-medium px-5 py-3'>Citas pendientes</th>
+								{/* <th className='font-medium px-5 py-3'>Servicios tomados</th>
+								<th className='font-medium px-5 py-3'>Citas pendientes</th> */}
 								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-							{clientes.map(cliente => (
+							{usuarioSlice.clientes?.map(cliente => (
 								<ClienteRow
 									key={cliente.idUsuario}
 									email={cliente.email}

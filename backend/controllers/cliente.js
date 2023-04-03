@@ -1,5 +1,6 @@
 const Usuario = require("../models/usuario");
 const Cita = require("../models/cita");
+require('dotenv').config()
 
 exports.getCitas = (req, res) => {
   Usuario.VerCitas(req.params.idCliente)
@@ -20,7 +21,7 @@ exports.postRegister = (req, res) => {
     req.body.email,
     req.body.password,
     req.body.telefono,
-    req.body.foto
+    `https://api.multiavatar.com/${req.body.nombre}.png?apikey=${process.env.MULTIAVATAR_API_KEY}`
   );
   usuario
     .AgregarCliente()
