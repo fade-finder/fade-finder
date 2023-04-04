@@ -46,14 +46,14 @@ const Negocio = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const calcularPromedio = () => {
-		const totalPagar = usuarioSlice.citasClientes.reduce(
+		const totalPagar = usuarioSlice.citasClientes?.reduce(
 			(acomulador, cita) =>
 				cita.estado == 2 ? acomulador + cita.total_pagar : acomulador,
 			0
 		)
 		const promedio =
 			totalPagar /
-			usuarioSlice.citasClientes.reduce(
+			usuarioSlice.citasClientes?.reduce(
 				(suma, cita) => (cita.estado == 2 ? suma + 1 : suma),
 				0
 			)
@@ -104,7 +104,7 @@ const Negocio = () => {
 					/>
 					<CardWidget
 						texto='Servicios completados'
-						numero={usuarioSlice.citasClientes.reduce(
+						numero={usuarioSlice.citasClientes?.reduce(
 							(cant, cita) => (cita.estado == 2 ? cant + 1 : cant),
 							0
 						)}
