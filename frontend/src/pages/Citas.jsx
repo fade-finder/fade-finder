@@ -15,7 +15,7 @@ import { FiAlertTriangle } from 'react-icons/fi'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { UPDATE_CITAS_CLIENTES } from '../redux/usuarioSlice'
+import { UPDATE_CITAS_CLIENTES, UPDATE_CITAS_BARBERO } from '../redux/usuarioSlice'
 import {
 	formatearFecha,
 	formatearDuracion,
@@ -64,7 +64,9 @@ const Citas = () => {
 					'success'
 				)
 				// Actualizamos en el estado global
-				dispatch(UPDATE_CITAS_CLIENTES([idCita, { estado: nuevoEstado }]))
+				if(usuarioSlice.idRol == 3) dispatch(UPDATE_CITAS_CLIENTES([idCita, { estado: nuevoEstado }]))
+				if(usuarioSlice.idRol == 2) dispatch(UPDATE_CITAS_BARBERO([idCita, { estado: nuevoEstado }]))
+				
 			}
 		}
 	}
@@ -78,8 +80,7 @@ const Citas = () => {
 					<CardWidget
 						texto='Citas completadas'
 						numero={
-							usuarioSlice.citasClientes?.filter(cita => cita.estado == 2)
-								?.length
+							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 2)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 2)?.length
 						}
 						icono={<BsCardList className='text-2xl text-white' />}
 						color='bg-green-500'
@@ -87,26 +88,23 @@ const Citas = () => {
 					<CardWidget
 						texto='Citas confirmadas'
 						numero={
-							usuarioSlice.citasClientes?.filter(cita => cita.estado == 1)
-								?.length
+							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 1)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 1)?.length
 						}
-						icono={<BsClock className='text-2xl text-white' />}
+						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Por confirmar'
 						numero={
-							usuarioSlice.citasClientes?.filter(cita => cita.estado == 0)
-								?.length
+							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 0)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 0)?.length
 						}
-						icono={<AiOutlineCheck className='text-2xl text-white' />}
+						icono={<BsClock className='text-2xl text-white' />}
 						color='bg-yellow-500'
 					/>
 					<CardWidget
 						texto='Canceladas'
 						numero={
-							usuarioSlice.citasClientes?.filter(cita => cita.estado == 3)
-								?.length
+							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 3)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 3)?.length
 						}
 						icono={<FiAlertTriangle className='text-2xl text-white' />}
 						color='bg-red-500'

@@ -34,10 +34,12 @@ const Login = () => {
 		try {
 			setEmail(email.toLowerCase().trim())
 			setPassword(password.trim())
-			var res = await axios.post('http://localhost:3000/login', {
+			let res = await axios.post('http://localhost:3000/login', {
 				email,
 				password,
 			})
+			const idUsuario = res.data.idUsuario
+			const idRol = res.data.idRol
 			if (res.data != '') {
 				const { isConfirmed } = await Swal.fire(
 					'Sesión iniciada',
@@ -46,14 +48,14 @@ const Login = () => {
 				)
 				if (isConfirmed) {
 					// * * * * * * * * * *
-					localStorage.setItem('idToken', res.data.idUsuario) //almacenamos el token
+					localStorage.setItem('idToken', idUsuario) //almacenamos el token
 					dispatch(SET_USUARIO(res.data))
 
 					// Obtenemos los datos de nuestras citas cuando somos clientes
-					if (res.data.idRol == 1) {
+					if (idRol == 1) {
 						try {
 							res = await axios.get(
-								'http://localhost:3000/cliente/citas/' + res.data.idUsuario
+								'http://localhost:3000/cliente/citas/' + idUsuario
 							)
 							dispatch(SET_CITAS(res.data))
 						} catch (error) {
@@ -62,9 +64,9 @@ const Login = () => {
 					}
 
 					
-					if (res.data.idRol == 2) {
+					if (idRol == 2) {
 						try {
-							res = await axios.get('http://localhost:3000/barbero/citas/' + res.data.idUsuario)
+							res = await axios.get('http://localhost:3000/barbero/citas/' + idUsuario)
 							dispatch(SET_CITAS_BARBERO(res.data))
 						} catch (error) {
 							console.log(error);
@@ -72,7 +74,7 @@ const Login = () => {
 					}
 
 					// Obtenemos todos los clientes de la barberia
-					if (res.data.idRol >= 2) {
+					if (idRol >= 2) {
 						try {
 							res = await axios.get('http://localhost:3000/clientes')
 							dispatch(SET_CLIENTES(res.data))
@@ -82,9 +84,9 @@ const Login = () => {
 					}
 
 					// Obtenemos las citas de todos los clientes
-					if (res.data.idRol == 3) {
+					if (idRol == 3) {
 						// Cargamos las citas
-						let res = await axios.get('http://localhost:3000/citas')
+						res = await axios.get('http://localhost:3000/citas')
 						dispatch(SET_CITAS_CLIENTES(res.data)) // actualizamos las citas de los clientes
 					}
 				}

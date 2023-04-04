@@ -268,6 +268,19 @@ export const usuarioSlice = createSlice({
 			}, [])
 			state.citasBarbero = citasUnidas
 		},
+		UPDATE_CITAS_BARBERO: (state, action) => {
+			const [idCita, updates] = action.payload
+			state.citasBarbero = state.citasBarbero.map(cita => {
+				if (cita.idCita == idCita) {
+					return {
+						...cita,
+						...updates,
+					}
+				} else {
+					return cita
+				}
+			})
+		}
 	},
 })
 
@@ -282,5 +295,6 @@ export const {
 	UPDATE_CITAS_CLIENTES,
 	SET_CLIENTES,
 	SET_CITAS_BARBERO,
+	UPDATE_CITAS_BARBERO,
 } = usuarioSlice.actions
 export default usuarioSlice.reducer
