@@ -13,7 +13,7 @@ const initialState = {
 	citas: null,
 	citasClientes: null,
 	clientes: null,
-	barberos: null,
+	citasBarbero: null,
 }
 
 export const usuarioSlice = createSlice({
@@ -47,7 +47,7 @@ export const usuarioSlice = createSlice({
 			const usuario = action.payload
 			return {
 				...state,
-				...usuario
+				...usuario,
 			}
 		},
 		CLEAN_USUARIO: state => {
@@ -60,10 +60,10 @@ export const usuarioSlice = createSlice({
 			state.foto = null
 			state.estado = null
 			state.idRol = null
-		  state.citas = null
+			state.citas = null
 			state.citasClientes = null
 			state.clientes = null
-			state.barberos = null
+			state.citasBarbero = null
 		},
 
 		// = = = = = = = = = = = = = = = = CITAS DE USUARIO = = = = = = = = = = = = = = = =
@@ -212,9 +212,62 @@ export const usuarioSlice = createSlice({
 		SET_CLIENTES: (state, action) => {
 			const clientes = action.payload
 			state.clientes = clientes
-		}
+		},
 
-		// = = = = = = = = = = = = = = = = BARBEROS = = = = = = = = = = = = = = = =
+		// = = = = = = = = = = = = = = = = CITAS DE BARBERO = = = = = = = = = = = = = = = =
+		SET_CITAS_BARBERO: (state, action) => {
+			const citas = action.payload
+
+			const listaCitas = citas
+			// cargamos los servicios de cada cita en un arreglo
+			const citasUnidas = listaCitas.reduce((acumulador, citaActual) => {
+				// Buscamos si la cita ya existe en el acumulador
+				const citaExistente = acumulador.find(
+					cita => cita.idCita === citaActual.idCita
+				)
+				if (!citaExistente) {
+					// Si la cita no existe en el acumulador, creamos un nuevo objeto
+					// con la información de la cita y un arreglo con el primer servicio
+					const nuevaCita = {
+						idCita: citaActual.idCita,
+						estado: citaActual.estado,
+						fecha_creacion: citaActual.fecha_creacion,
+						fecha: citaActual.fecha,
+						hora: citaActual.hora,
+						duracion: citaActual.duracionCita,
+						total_pagar: citaActual.total_pagar,
+						idCliente: citaActual.idCliente,
+						nombreCliente: citaActual.nombreCliente,
+						ap_paterno: citaActual.ap_paterno,
+						ap_materno: citaActual.ap_materno,
+						servicios: [
+							{
+								idServicio: citaActual.idServicio,
+								nombre: citaActual.nombre,
+								precio: citaActual.precio,
+								duracion: citaActual.duracionServicio,
+								imagen: citaActual.imagen,
+							},
+						],
+					}
+
+					// Agregamos el nuevo objeto al acumulador
+					return [...acumulador, nuevaCita]
+				} else {
+					// Si la cita ya existe en el acumulador, agregamos el nuevo servicio
+					citaExistente.servicios.push({
+						idServicio: citaActual.idServicio,
+						nombre: citaActual.nombre,
+						precio: citaActual.precio,
+						imagen: citaActual.imagen,
+					})
+
+					// Retornamos el acumulador sin agregar un nuevo objeto
+					return acumulador
+				}
+			}, [])
+			state.citasBarbero = citasUnidas
+		},
 	},
 })
 
@@ -228,5 +281,6 @@ export const {
 	SET_CITAS_CLIENTES,
 	UPDATE_CITAS_CLIENTES,
 	SET_CLIENTES,
+	SET_CITAS_BARBERO,
 } = usuarioSlice.actions
 export default usuarioSlice.reducer

@@ -245,23 +245,20 @@ const Cliente = () => {
 
 						// Recorremos las citas agendadas para el mismo día y verificamos si se superponen
 						for (let j = 0; j < citas.data?.length; j++) {
-							const fechaCita = new Date(citas.data[j].fecha)
+							const fechaCita = new Date(`${(citas.data[j].fecha).slice(0, 10)}T00:00:00`)
 							const horaCita = citas.data[j].hora
 							const duracionCitaExistente = citas.data[j].duracion
-							const horaInicioCita = new Date(
-								`${fechaCita.getFullYear()}-${
-									fechaCita.getMonth() > 9
-										? fechaCita.getMonth() + 1
-										: '0' + (fechaCita.getMonth() + 1)
-								}-${
-									fechaCita.getDate() > 9
-										? fechaCita.getDate()
-										: '0' + fechaCita.getDate()
-								}T${horaCita}`
+							const horaInicioCita = new Date(`${fechaCita.getFullYear()}-${fechaCita.getMonth() > 9 ? fechaCita.getMonth() + 1 : '0' + (fechaCita.getMonth() + 1)}-${fechaCita.getDate() > 9 ? fechaCita.getDate() : '0' + fechaCita.getDate()}T${horaCita}`
 							)
 							const horaFinCita = new Date(
 								horaInicioCita.getTime() + duracionCitaExistente * 60000
 							)
+							// console.log('= = = = = = = = = = = = =');
+							// console.log(`horaActual: ${horaActual}`);
+							// console.log(`horaActualFin: ${horaActualFin}`);
+							// console.log(`horaInicioCita: ${horaInicioCita}`);
+							// console.log(`horaFinCita: ${horaFinCita}`);
+							// console.log('= = = = = = = = = = = = =\n\n');
 
 							// Si se superpone, no está disponible
 							if (
@@ -270,6 +267,7 @@ const Cliente = () => {
 									horaActualFin >= horaInicioCita)
 							) {
 								disponible = false
+								console.log('entro');
 								horaActual = horaFinCita
 								horaActual.setMinutes(horaActual.getMinutes() + 1)
 								break
@@ -733,19 +731,25 @@ const Cliente = () => {
 				<div className='grid grid-cols-4 gap-x-6 gap-y-12 mb-10'>
 					<CardWidget
 						texto='Citas completadas'
-						numero={(usuarioSlice.citas?.filter(cita => cita.estado == 2))?.length}
+						numero={
+							usuarioSlice.citas?.filter(cita => cita.estado == 2)?.length
+						}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas pendientes'
-						numero={(usuarioSlice.citas?.filter(cita => cita.estado == 0))?.length}
+						numero={
+							usuarioSlice.citas?.filter(cita => cita.estado == 0)?.length
+						}
 						icono={<MdOutlinePending className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Citas canceladas'
-						numero={(usuarioSlice.citas?.filter(cita => cita.estado == 3))?.length}
+						numero={
+							usuarioSlice.citas?.filter(cita => cita.estado == 3)?.length
+						}
 						icono={<MdOutlineCancel className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>

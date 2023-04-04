@@ -14,7 +14,8 @@ import {
 	SET_USUARIO,
 	SET_CITAS,
 	SET_CITAS_CLIENTES,
-	SET_CLIENTES
+	SET_CLIENTES,
+	SET_CITAS_BARBERO
 } from '../redux/usuarioSlice'
 
 const Login = () => {
@@ -33,7 +34,7 @@ const Login = () => {
 		try {
 			setEmail(email.toLowerCase().trim())
 			setPassword(password.trim())
-			let res = await axios.post('http://localhost:3000/login', {
+			var res = await axios.post('http://localhost:3000/login', {
 				email,
 				password,
 			})
@@ -47,24 +48,44 @@ const Login = () => {
 					// * * * * * * * * * *
 					localStorage.setItem('idToken', res.data.idUsuario) //almacenamos el token
 					dispatch(SET_USUARIO(res.data))
-					if (res.data.idRol == 1) {
-						// Cargamos las citas personales
-						res = await axios.get(
-							'http://localhost:3000/cliente/citas/' + res.data.idUsuario
-						)
-						dispatch(SET_CITAS(res.data)) // actualizamos las citas del usuario
-					} else if (res.data.idRol == 3) {
-						try {
-							// Cargamos las citas
-							let res = await axios.get('http://localhost:3000/citas')
-							dispatch(SET_CITAS_CLIENTES(res.data)) // actualizamos las citas de los clientes
 
-							// Cargamos los clientes
-							res = await axios.get('http://localhost:3000/clientes')
-							dispatch(SET_CLIENTES(res.data))
+					// Obtenemos los datos de nuestras citas cuando somos clientes
+					if (res.data.idRol == 1) {
+						try {
+							res = await axios.get(
+								'http://localhost:3000/cliente/citas/' + res.data.idUsuario
+							)
+							dispatch(SET_CITAS(res.data))
+						} catch (error) {
+							console.log(error)
+						}
+					}
+
+					
+					if (res.data.idRol == 2) {
+						try {
+							res = await axios.get('http://localhost:3000/barbero/citas/' + res.data.idUsuario)
+							dispatch(SET_CITAS_BARBERO(res.data))
 						} catch (error) {
 							console.log(error);
 						}
+					}
+
+					// Obtenemos todos los clientes de la barberia
+					if (res.data.idRol >= 2) {
+						try {
+							res = await axios.get('http://localhost:3000/clientes')
+							dispatch(SET_CLIENTES(res.data))
+						} catch (error) {
+							console.log(error)
+						}
+					}
+
+					// Obtenemos las citas de todos los clientes
+					if (res.data.idRol == 3) {
+						// Cargamos las citas
+						let res = await axios.get('http://localhost:3000/citas')
+						dispatch(SET_CITAS_CLIENTES(res.data)) // actualizamos las citas de los clientes
 					}
 				}
 			} else {

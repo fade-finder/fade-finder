@@ -4,6 +4,7 @@ import BuscadorAdmin from '../components/BuscadorAdmin'
 import CitaCard from '../components/CitaCard'
 import CardWidget from '../components/CardWidget'
 import Select from '../components/Select'
+import CitaBarberoCard from '../components/CitaBarberoCard'
 
 // iconos
 import { BsCardList, BsClock } from 'react-icons/bs'
@@ -15,7 +16,6 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { UPDATE_CITAS_CLIENTES } from '../redux/usuarioSlice'
-import { useEffect, useState } from 'react'
 import {
 	formatearFecha,
 	formatearDuracion,
@@ -31,7 +31,7 @@ const Citas = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
+
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -40,31 +40,31 @@ const Citas = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// Funcion para cancelar una cita
-	const handleCancelarCita = async idCita => {
+	const handleCambiarEstadoCita = async (idCita, nuevoEstado) => {
 		const res = await Swal.fire({
-			title: 'Cancelar cita',
-			text: '¿Estas seguro que quieres cancelar esta cita? No podras deshacer esta acción',
+			title: '¿Cambiar estado?',
+			text: '¿Estas seguro que quieres cambiar el estado de esta cita?',
 			icon: 'warning',
 			showCancelButton: true,
 			cancelButtonText: 'No',
 			cancelButtonColor: '#d33',
 			confirmButtonColor: '#3085d6',
-			confirmButtonText: 'Si, cancelar',
+			confirmButtonText: 'Si, cambiar',
 		})
 		if (res.isConfirmed) {
 			// Actualizamos en la bd
 			const respuesta = await axios.put(
 				'http://localhost:3000/cita/' + idCita,
-				{ estado: 3 }
+				{ estado: nuevoEstado }
 			)
 			if (respuesta.data.affectedRows > 0) {
 				Swal.fire(
-					'Cita cancelada',
-					'La cita fue cancelada correctamente',
+					'Cambios guardados',
+					'La cita fue actualizada correctamente',
 					'success'
 				)
 				// Actualizamos en el estado global
-				dispatch(UPDATE_CITAS_CLIENTES([idCita, { estado: 3 }]))
+				dispatch(UPDATE_CITAS_CLIENTES([idCita, { estado: nuevoEstado }]))
 			}
 		}
 	}
@@ -77,25 +77,37 @@ const Citas = () => {
 				<div className='grid grid-cols-4 gap-x-6 mb-8'>
 					<CardWidget
 						texto='Citas completadas'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 2))?.length}
+						numero={
+							usuarioSlice.citasClientes?.filter(cita => cita.estado == 2)
+								?.length
+						}
 						icono={<BsCardList className='text-2xl text-white' />}
 						color='bg-green-500'
 					/>
 					<CardWidget
 						texto='Citas confirmadas'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 1))?.length}
+						numero={
+							usuarioSlice.citasClientes?.filter(cita => cita.estado == 1)
+								?.length
+						}
 						icono={<BsClock className='text-2xl text-white' />}
 						color='bg-blue-500'
 					/>
 					<CardWidget
 						texto='Por confirmar'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 0))?.length}
+						numero={
+							usuarioSlice.citasClientes?.filter(cita => cita.estado == 0)
+								?.length
+						}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-yellow-500'
 					/>
 					<CardWidget
 						texto='Canceladas'
-						numero={(usuarioSlice.citasClientes.filter(cita => cita.estado == 3))?.length}
+						numero={
+							usuarioSlice.citasClientes?.filter(cita => cita.estado == 3)
+								?.length
+						}
 						icono={<FiAlertTriangle className='text-2xl text-white' />}
 						color='bg-red-500'
 					/>
@@ -120,17 +132,30 @@ const Citas = () => {
 				<div className='w-full h-max flex gap-x-8 justify-between items-start my-6'>
 					{/* Citas */}
 					<div className='w-full flex flex-col justify-start gap-y-5'>
-						{usuarioSlice.citasClientes?.map(cita => (
-							<CitaCard
-								key={cita.idCita}
-								servicios={cita.servicios}
-								hora={formatearHora(cita.hora)}
-								cliente={`${cita.nombreCliente} ${cita.ap_paternoCliente} ${cita.ap_maternoCliente}`}
-								barbero={`${cita.nombreBarbero} ${cita.ap_paternoBarbero}`}
-								estado={cita.estado}
-								onClickCancelar={() => handleCancelarCita(cita.idCita)}
-							/>
-						))}
+						{usuarioSlice.idRol == 3 &&
+							usuarioSlice.citasClientes?.map(cita => (
+								<CitaCard
+									key={cita.idCita}
+									servicios={cita.servicios}
+									hora={formatearHora(cita.hora)}
+									cliente={`${cita.nombreCliente} ${cita.ap_paternoCliente} ${cita.ap_maternoCliente}`}
+									barbero={`${cita.nombreBarbero} ${cita.ap_paternoBarbero}`}
+									estado={cita.estado}
+									onClickCancelar={() => handleCambiarEstadoCita(cita.idCita, 3)}
+								/>
+							))}
+							{usuarioSlice.idRol == 2 &&
+							usuarioSlice.citasBarbero?.map(cita => (
+								<CitaBarberoCard
+									key={cita.idCita}
+									cita={cita}
+									onClickPendiente={() => handleCambiarEstadoCita(cita.idCita, 0)}
+									onClickConfirmar={() => handleCambiarEstadoCita(cita.idCita, 1)}
+									onClickCompletada={() => handleCambiarEstadoCita(cita.idCita, 2)}
+									onClickCancelar={() => handleCambiarEstadoCita(cita.idCita, 3)}
+									onClickNoAsistio={() => handleCambiarEstadoCita(cita.idCita, 4)}
+								/>
+							))}
 					</div>
 					{/* info de la cita */}
 					<div className='w-[700px] 2xl:w-[900px] min-h-[200px] bg-white shadow-sm p-5 2xl:p-8'>

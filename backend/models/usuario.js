@@ -108,6 +108,14 @@ class Usuario {
     );
   }
 
+  static GetCitasBarbero(idBarbero) {
+    return baseDeDatos.execute(
+      // "SELECT * from cita where idBarbero = ? ORDER BY fecha ASC",
+      "SELECT cita.idCita, cita.estado, cita.fecha_creacion, cita.fecha, cita.hora, cita.duracion AS duracionCita, cita.total_pagar, usuario.idUsuario AS idCliente, usuario.nombre AS nombreCliente, usuario.ap_paterno, usuario.ap_materno, servicio.*, servicio.nombre AS nombreServicio, servicio.duracion AS duracionServicio FROM cita JOIN usuario ON cita.idCliente = usuario.idUsuario JOIN cita_servicio ON cita.idCita = cita_servicio.idCita JOIN servicio ON cita_servicio.idServicio = servicio.idServicio WHERE cita.idBarbero = ? ORDER BY fecha ASC",
+      [idBarbero]
+    );
+  }
+
   static getCitasClientes() {
     return baseDeDatos.execute(
       "SELECT cita.*, cita.duracion AS duracionCita, usuarioBarbero.nombre AS nombreBarbero, usuarioBarbero.ap_paterno AS ap_paternoBarbero, usuarioCliente.nombre AS nombreCliente, usuarioCliente.ap_paterno AS ap_paternoCliente, usuarioCliente.ap_materno AS ap_maternoCliente, servicio.*, servicio.duracion AS duracionServicio FROM cita JOIN usuario AS usuarioBarbero ON cita.idBarbero = usuarioBarbero.idUsuario JOIN usuario AS usuarioCliente ON cita.idCliente = usuarioCliente.idUsuario JOIN cita_servicio ON cita.idCita = cita_servicio.idCita JOIN servicio ON cita_servicio.idServicio = servicio.idServicio"

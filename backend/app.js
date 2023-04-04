@@ -7,6 +7,7 @@ const baseDeDatos = require('./utils/baseDeDatos')
 const clienteRoutes = require('./routes/cliente')
 const adminRoutes = require('./routes/admin')
 const generalRoutes = require('./routes/general')
+const barberoRoutes = require('./routes/barbero')
 
 // * * * * * * * * * * * * * * USE * * * * * * * * * * *
 const app = express()
@@ -15,6 +16,7 @@ app.use(express.json())   // Analiza las solicitudes JSON entrantes y coloca los
 // routes
 app.use('/cliente', clienteRoutes)
 app.use('/admin', adminRoutes)
+app.use('/barbero', barberoRoutes)
 app.use(generalRoutes)
 
 app.get('/', (req, res, next) => {
