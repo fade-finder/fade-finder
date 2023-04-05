@@ -15,7 +15,10 @@ import { FiAlertTriangle } from 'react-icons/fi'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { UPDATE_CITAS_CLIENTES, UPDATE_CITAS_BARBERO } from '../redux/usuarioSlice'
+import {
+	UPDATE_CITAS_CLIENTES,
+	UPDATE_CITAS_BARBERO,
+} from '../redux/usuarioSlice'
 import {
 	formatearFecha,
 	formatearDuracion,
@@ -64,9 +67,10 @@ const Citas = () => {
 					'success'
 				)
 				// Actualizamos en el estado global
-				if(usuarioSlice.idRol == 3) dispatch(UPDATE_CITAS_CLIENTES([idCita, { estado: nuevoEstado }]))
-				if(usuarioSlice.idRol == 2) dispatch(UPDATE_CITAS_BARBERO([idCita, { estado: nuevoEstado }]))
-				
+				if (usuarioSlice.idRol == 3)
+					dispatch(UPDATE_CITAS_CLIENTES([idCita, { estado: nuevoEstado }]))
+				if (usuarioSlice.idRol == 2)
+					dispatch(UPDATE_CITAS_BARBERO([idCita, { estado: nuevoEstado }]))
 			}
 		}
 	}
@@ -80,7 +84,11 @@ const Citas = () => {
 					<CardWidget
 						texto='Citas completadas'
 						numero={
-							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 2)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 2)?.length
+							usuarioSlice.idRol == 3
+								? usuarioSlice.citasClientes?.filter(cita => cita.estado == 2)
+										?.length
+								: usuarioSlice.citasBarbero?.filter(cita => cita.estado == 2)
+										?.length
 						}
 						icono={<BsCardList className='text-2xl text-white' />}
 						color='bg-green-500'
@@ -88,7 +96,11 @@ const Citas = () => {
 					<CardWidget
 						texto='Citas confirmadas'
 						numero={
-							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 1)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 1)?.length
+							usuarioSlice.idRol == 3
+								? usuarioSlice.citasClientes?.filter(cita => cita.estado == 1)
+										?.length
+								: usuarioSlice.citasBarbero?.filter(cita => cita.estado == 1)
+										?.length
 						}
 						icono={<AiOutlineCheck className='text-2xl text-white' />}
 						color='bg-blue-500'
@@ -96,7 +108,11 @@ const Citas = () => {
 					<CardWidget
 						texto='Por confirmar'
 						numero={
-							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 0)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 0)?.length
+							usuarioSlice.idRol == 3
+								? usuarioSlice.citasClientes?.filter(cita => cita.estado == 0)
+										?.length
+								: usuarioSlice.citasBarbero?.filter(cita => cita.estado == 0)
+										?.length
 						}
 						icono={<BsClock className='text-2xl text-white' />}
 						color='bg-yellow-500'
@@ -104,7 +120,11 @@ const Citas = () => {
 					<CardWidget
 						texto='Canceladas'
 						numero={
-							usuarioSlice.idRol == 3 ? usuarioSlice.citasClientes?.filter(cita => cita.estado == 3)?.length : usuarioSlice.citasBarbero?.filter(cita => cita.estado == 3)?.length
+							usuarioSlice.idRol == 3
+								? usuarioSlice.citasClientes?.filter(cita => cita.estado == 3)
+										?.length
+								: usuarioSlice.citasBarbero?.filter(cita => cita.estado == 3)
+										?.length
 						}
 						icono={<FiAlertTriangle className='text-2xl text-white' />}
 						color='bg-red-500'
@@ -131,6 +151,7 @@ const Citas = () => {
 					{/* Citas */}
 					<div className='w-full flex flex-col justify-start gap-y-5'>
 						{usuarioSlice.idRol == 3 &&
+						usuarioSlice.citasClientes.length > 0 ? (
 							usuarioSlice.citasClientes?.map(cita => (
 								<CitaCard
 									key={cita.idCita}
@@ -139,27 +160,49 @@ const Citas = () => {
 									cliente={`${cita.nombreCliente} ${cita.ap_paternoCliente} ${cita.ap_maternoCliente}`}
 									barbero={`${cita.nombreBarbero} ${cita.ap_paternoBarbero}`}
 									estado={cita.estado}
-									onClickCancelar={() => handleCambiarEstadoCita(cita.idCita, 3)}
+									onClickCancelar={() =>
+										handleCambiarEstadoCita(cita.idCita, 3)
+									}
 								/>
-							))}
-							{usuarioSlice.idRol == 2 &&
+							))
+						) : (
+							<div className='w-full min-h-[100px] bg-white borderborder-gray-200 px-8 py-6 select-none'>
+								<p>Aun no hay citas</p>
+							</div>
+						)}
+						{usuarioSlice.idRol == 2 && usuarioSlice.citasBarbero.length > 0 ? (
 							usuarioSlice.citasBarbero?.map(cita => (
 								<CitaBarberoCard
 									key={cita.idCita}
 									cita={cita}
-									onClickPendiente={() => handleCambiarEstadoCita(cita.idCita, 0)}
-									onClickConfirmar={() => handleCambiarEstadoCita(cita.idCita, 1)}
-									onClickCompletada={() => handleCambiarEstadoCita(cita.idCita, 2)}
-									onClickCancelar={() => handleCambiarEstadoCita(cita.idCita, 3)}
-									onClickNoAsistio={() => handleCambiarEstadoCita(cita.idCita, 4)}
+									onClickPendiente={() =>
+										handleCambiarEstadoCita(cita.idCita, 0)
+									}
+									onClickConfirmar={() =>
+										handleCambiarEstadoCita(cita.idCita, 1)
+									}
+									onClickCompletada={() =>
+										handleCambiarEstadoCita(cita.idCita, 2)
+									}
+									onClickCancelar={() =>
+										handleCambiarEstadoCita(cita.idCita, 3)
+									}
+									onClickNoAsistio={() =>
+										handleCambiarEstadoCita(cita.idCita, 4)
+									}
 								/>
-							))}
+							))
+						) : (
+							<div className='w-full min-h-[100px] bg-white borderborder-gray-200 px-8 py-6 select-none'>
+								<p>Aun no tienes citas</p>
+							</div>
+						)}
 					</div>
 					{/* info de la cita */}
 					<div className='w-[700px] 2xl:w-[900px] min-h-[200px] bg-white shadow-sm p-5 2xl:p-8'>
 						<h2 className='text-lg font-semibold'>Sin información</h2>
 						<p className='text-md font-light'>
-							Seleccionia una cita para ver su información
+							Selecciona una cita para ver su información
 						</p>
 					</div>
 				</div>

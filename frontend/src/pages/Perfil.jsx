@@ -69,7 +69,15 @@ const Perfil = () => {
 				'success'
 			)
 			setUsuario({ ...usuario, password: '' })
-			dispatch(UPDATE_USUARIO(usuario))
+			dispatch(
+				UPDATE_USUARIO({
+					nombre: usuario.nombre,
+					ap_paterno: usuario.ap_paterno,
+					ap_materno: usuario.ap_materno,
+					telefono: usuario.telefono,
+					foto: usuario.foto,
+				})
+			)
 		} else {
 			Swal.fire('Error', 'Ocurrio un error, contacta al soporte.', 'error')
 		}
