@@ -63,7 +63,7 @@ const Login = () => {
 						}
 					}
 
-					
+					// Obtenemos nuestras citas cuando somos barberos
 					if (idRol == 2) {
 						try {
 							res = await axios.get('http://localhost:3000/barbero/citas/' + idUsuario)
