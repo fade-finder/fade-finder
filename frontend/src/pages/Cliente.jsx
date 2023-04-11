@@ -19,8 +19,8 @@ import moment from 'moment-timezone'
 import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector, useDispatch } from 'react-redux'
-import { UPDATE_CITA, SET_CITAS } from '../redux/usuarioSlice'
 import { formatearDuracion, formatearHora } from '../utils/formateo'
+import { UPDATE_CITA, SET_CITAS } from '../redux/usuarioSlice'
 
 const Cliente = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -267,7 +267,6 @@ const Cliente = () => {
 									horaActualFin >= horaInicioCita)
 							) {
 								disponible = false
-								console.log('entro');
 								horaActual = horaFinCita
 								horaActual.setMinutes(horaActual.getMinutes() + 1)
 								break

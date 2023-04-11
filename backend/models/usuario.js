@@ -103,7 +103,7 @@ class Usuario {
 
   static getCitas(idBarbero, fecha) {
     return baseDeDatos.execute(
-      "SELECT * from cita where idBarbero = ? AND fecha = ? ORDER BY fecha ASC",
+      "SELECT * from cita where idBarbero = ? AND fecha = ? AND (estado = 0 OR estado = 1) ORDER BY fecha ASC",
       [idBarbero, fecha]
     );
   }

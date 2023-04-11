@@ -1,3 +1,4 @@
+// Componentes
 import DashboardHeader from '../components/DashboardHeader'
 import DashboardContainer from '../components/DashboardContainer'
 import BuscadorAdmin from '../components/BuscadorAdmin'
@@ -6,7 +7,7 @@ import CardWidget from '../components/CardWidget'
 import Select from '../components/Select'
 import CitaBarberoCard from '../components/CitaBarberoCard'
 
-// iconos
+// Iconos
 import { BsCardList, BsClock } from 'react-icons/bs'
 import { AiOutlineCheck } from 'react-icons/ai'
 import { FiAlertTriangle } from 'react-icons/fi'
@@ -16,14 +17,14 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-	UPDATE_CITAS_CLIENTES,
-	UPDATE_CITAS_BARBERO,
-} from '../redux/usuarioSlice'
-import {
 	formatearFecha,
 	formatearDuracion,
 	formatearHora,
 } from '../utils/formateo'
+import {
+	UPDATE_CITAS_CLIENTES,
+	UPDATE_CITAS_BARBERO,
+} from '../redux/usuarioSlice'
 
 const Citas = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -31,13 +32,6 @@ const Citas = () => {
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	const usuarioSlice = useSelector(state => state.usuario)
 	const dispatch = useDispatch()
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		S T A T E		* * * * * * * * * * * * * * * * * * * * * * * * * *
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// * * * * * * * * * * * * * * * * * * * * * * *	U S E		E F F E C T		* * * * * * * * * * * * * * * * * * * * * * * * *
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * * * * * *		F U N C I O N E S		* * * * * * * * * * * * * * * * * * * * * * * * *
@@ -151,52 +145,53 @@ const Citas = () => {
 					{/* Citas */}
 					<div className='w-full flex flex-col justify-start gap-y-5'>
 						{usuarioSlice.idRol == 3 &&
-						usuarioSlice.citasClientes.length > 0 ? (
-							usuarioSlice.citasClientes?.map(cita => (
-								<CitaCard
-									key={cita.idCita}
-									servicios={cita.servicios}
-									hora={formatearHora(cita.hora)}
-									cliente={`${cita.nombreCliente} ${cita.ap_paternoCliente} ${cita.ap_maternoCliente}`}
-									barbero={`${cita.nombreBarbero} ${cita.ap_paternoBarbero}`}
-									estado={cita.estado}
-									onClickCancelar={() =>
-										handleCambiarEstadoCita(cita.idCita, 3)
-									}
-								/>
-							))
-						) : (
-							<div className='w-full min-h-[100px] bg-white borderborder-gray-200 px-8 py-6 select-none'>
-								<p>Aun no hay citas</p>
-							</div>
-						)}
-						{usuarioSlice.idRol == 2 && usuarioSlice.citasBarbero.length > 0 ? (
-							usuarioSlice.citasBarbero?.map(cita => (
-								<CitaBarberoCard
-									key={cita.idCita}
-									cita={cita}
-									onClickPendiente={() =>
-										handleCambiarEstadoCita(cita.idCita, 0)
-									}
-									onClickConfirmar={() =>
-										handleCambiarEstadoCita(cita.idCita, 1)
-									}
-									onClickCompletada={() =>
-										handleCambiarEstadoCita(cita.idCita, 2)
-									}
-									onClickCancelar={() =>
-										handleCambiarEstadoCita(cita.idCita, 3)
-									}
-									onClickNoAsistio={() =>
-										handleCambiarEstadoCita(cita.idCita, 4)
-									}
-								/>
-							))
-						) : (
-							<div className='w-full min-h-[100px] bg-white borderborder-gray-200 px-8 py-6 select-none'>
-								<p>Aun no tienes citas</p>
-							</div>
-						)}
+							(usuarioSlice.citasClientes?.length > 0 ? (
+								usuarioSlice.citasClientes?.map(cita => (
+									<CitaCard
+										key={cita.idCita}
+										servicios={cita.servicios}
+										hora={formatearHora(cita.hora)}
+										cliente={`${cita.nombreCliente} ${cita.ap_paternoCliente} ${cita.ap_maternoCliente}`}
+										barbero={`${cita.nombreBarbero} ${cita.ap_paternoBarbero}`}
+										estado={cita.estado}
+										onClickCancelar={() =>
+											handleCambiarEstadoCita(cita.idCita, 3)
+										}
+									/>
+								))
+							) : (
+								<div className='w-full min-h-[100px] bg-white borderborder-gray-200 px-8 py-6 select-none'>
+									<p>Aun no hay citas</p>
+								</div>
+							))}
+						{usuarioSlice.idRol == 2 &&
+							(usuarioSlice.citasBarbero?.length > 0 ? (
+								usuarioSlice.citasBarbero?.map(cita => (
+									<CitaBarberoCard
+										key={cita.idCita}
+										cita={cita}
+										onClickPendiente={() =>
+											handleCambiarEstadoCita(cita.idCita, 0)
+										}
+										onClickConfirmar={() =>
+											handleCambiarEstadoCita(cita.idCita, 1)
+										}
+										onClickCompletada={() =>
+											handleCambiarEstadoCita(cita.idCita, 2)
+										}
+										onClickCancelar={() =>
+											handleCambiarEstadoCita(cita.idCita, 3)
+										}
+										onClickNoAsistio={() =>
+											handleCambiarEstadoCita(cita.idCita, 4)
+										}
+									/>
+								))
+							) : (
+								<div className='w-full min-h-[100px] bg-white borderborder-gray-200 px-8 py-6 select-none'>
+									<p>Aun no tienes citas</p>
+								</div>
+							))}
 					</div>
 					{/* info de la cita */}
 					<div className='w-[700px] 2xl:w-[900px] min-h-[200px] bg-white shadow-sm p-5 2xl:p-8'>
