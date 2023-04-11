@@ -39,6 +39,9 @@ MULTIAVATAR_API_KEY=9vCQPGoJqVYelt
 ## Carpeta frontend
 3. Ejecutar el comando `npm i` en la raíz de la carpeta frontend
 
+## Base de datos
+4. Instalar la base de datos en MySQL Workbench la cual se encuentra en la carpeta `/backend/utils/ScriptBaseDeDatos.sql`
+
 ## Uso
 - Iniciar el servidor backend ejecutando `npm run dev` estando en la carpeta /backend
 - Iniciar el servidor de desarrollo ejecutando `npm run dev` estando en la carpeta /frontend
