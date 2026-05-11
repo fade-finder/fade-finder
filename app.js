@@ -222,11 +222,7 @@ function listenFades() {
   }
 
   const now = Timestamp.now();
-  const q = query(
-    collection(db, 'fades'),
-    where('expiresAt', '>', now),
-    where('status', 'in', ['active', 'locked'])
-  );
+  const q = collection(db, 'fades');
 
   onSnapshot(q, snapshot => {
     snapshot.docChanges().forEach(change => {
