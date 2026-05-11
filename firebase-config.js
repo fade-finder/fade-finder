@@ -1,43 +1,21 @@
-// ─────────────────────────────────────────────────────────────────────
-//  FADEFINDER — Firebase Configuration
-//
-//  HOW TO SET UP (free):
-//  1. Go to https://console.firebase.google.com/
-//  2. Click "Add project" → name it "fadefinder" → continue
-//  3. In the project, click "Firestore Database" → Create database
-//     → Start in TEST MODE → choose a region → Done
-//  4. Click "Authentication" → Get started → Anonymous → Enable → Save
-//  5. Go to Project Settings (gear icon) → scroll to "Your apps"
-//  6. Click the </> icon to add a Web app → register it
-//  7. Copy the firebaseConfig values below into the matching fields
-//  8. Push to GitHub and enable GitHub Pages
-//
-//  That's it — Firestore free tier = 50k reads + 20k writes/day.
-// ─────────────────────────────────────────────────────────────────────
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-export const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDsmpO0YVTP7MWzrZ1RI4RPWRbGaGGU05Q",
+  authDomain: "fadefinder-28c28.firebaseapp.com",
+  projectId: "fadefinder-28c28",
+  storageBucket: "fadefinder-28c28.firebasestorage.app",
+  messagingSenderId: "314730594145",
+  appId: "1:314730594145:web:f5c99f37462ff5ab48cf20",
+  measurementId: "G-Z5RFZN7WET"
 };
 
-// ── Firestore Security Rules ─────────────────────────────────────────
-//  Paste these into Firebase Console → Firestore → Rules:
-//
-//  rules_version = '2';
-//  service cloud.firestore {
-//    match /databases/{database}/documents {
-//      match /fades/{fadeId} {
-//        allow read: if true;
-//        allow create: if request.auth != null;
-//        allow update: if request.auth != null
-//          && resource.data.status != 'expired';
-//        allow delete: if request.auth != null
-//          && request.auth.uid == resource.data.creatorId;
-//      }
-//    }
-//  }
-// ─────────────────────────────────────────────────────────────────────
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
