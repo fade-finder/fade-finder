@@ -24,6 +24,8 @@
   --topbar-h:   60px;
   --filter-h:   50px;
   --action-h:   84px;
+  --action-btn-h:52px;  /* throw button height */
+  --action-pad:  10px;  /* top/bottom padding inside bar */
   --safe-top:   env(safe-area-inset-top, 0px);
   --safe-bot:   env(safe-area-inset-bottom, 0px);
   --r:          12px;
@@ -222,7 +224,7 @@ textarea,input{font:inherit;}
 
 /* ── MAP ────────────────────────────────────── */
 #map{position:fixed;inset:0;z-index:0;}
-.leaflet-control-zoom{border:none!important;margin-top:calc(var(--topbar-h) + var(--filter-h) + max(0px,env(safe-area-inset-top)) + 10px)!important;}
+.leaflet-control-zoom{border:none!important;margin-top:calc(var(--topbar-h) + max(0px,env(safe-area-inset-top)) + 10px)!important;}
 .leaflet-control-zoom a{
   background:rgba(14,14,14,.9)!important;
   color:var(--muted2)!important;
@@ -276,19 +278,11 @@ textarea,input{font:inherit;}
 /* ── FILTER BAR ─────────────────────────────── */
 .filter-wrap{
   position:fixed;
-  top:calc(var(--topbar-h) + max(0px, env(safe-area-inset-top)));
-  left:0;right:0;
-  height:var(--filter-h);
-  z-index:900;
-  background:rgba(8,8,8,.92);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  padding:0 16px;
-  overflow-x:auto;overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  /* Float above the throw button - safe area aware */
+  bottom:calc(var(--action-btn-h) + var(--action-pad) + 10px + max(0px, env(safe-area-inset-bottom)));
+  left:50%;
+  transform:translateX(-50%);
+  z-index:600;
 }
 .filter-wrap::-webkit-scrollbar{display:none;}
 .filter-track{
@@ -321,13 +315,14 @@ textarea,input{font:inherit;}
 /* ── ACTION BAR ─────────────────────────────── */
 .action-bar{
   position:fixed;bottom:0;left:0;right:0;
-  height:calc(var(--action-h) + var(--safe-bot));
-  padding:12px 20px calc(12px + var(--safe-bot));
+  /* Height = button + top padding + safe area only — no extra black space */
+  padding:var(--action-pad) 20px;
+  padding-bottom:max(var(--action-pad), env(safe-area-inset-bottom));
   background:rgba(6,6,6,.92);
   backdrop-filter:blur(24px);
   -webkit-backdrop-filter:blur(24px);
   border-top:1px solid var(--border);
-  display:flex;align-items:flex-start;justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   z-index:500;
 }
 .throw-btn{
@@ -489,7 +484,8 @@ textarea,input{font:inherit;}
 .panel-bar{
   display:flex;align-items:center;justify-content:space-between;
   padding:16px 16px;
-  padding-top:calc(var(--topbar-h) + max(0px, env(safe-area-inset-top)) + 12px);
+  /* Just clear the status bar, not the topbar (panel is its own screen) */
+  padding-top:max(14px, env(safe-area-inset-top));
   border-bottom:1px solid var(--border);
   flex-shrink:0;
 }
@@ -511,7 +507,7 @@ textarea,input{font:inherit;}
   flex:1;overflow-y:auto;
   padding:18px 16px;
   display:flex;flex-direction:column;gap:16px;
-  padding-bottom:calc(24px + var(--safe-bot));
+  padding-bottom:max(24px, env(safe-area-inset-bottom));
 }
 
 /* ── DETAIL ELEMENTS ────────────────────────── */
@@ -749,7 +745,7 @@ textarea,input{font:inherit;}
 
 /* ── DESKTOP ADJUSTMENTS ────────────────────── */
 @media(min-width:768px){
-  /* filter-wrap stays top on desktop too */
+
   .panel{width:400px;}
   .panel-bar{padding-top:calc(var(--topbar-h) + 16px);}
   .ob-logo{font-size:72px;}
@@ -758,6 +754,5 @@ textarea,input{font:inherit;}
 
 /* ── SAFE AREA ──────────────────────────────── */
 @supports(padding:max(0px)){
-  .action-bar{padding-bottom:max(12px,env(safe-area-inset-bottom));}
   .sheet-body{padding-bottom:max(20px,env(safe-area-inset-bottom));}
 }
