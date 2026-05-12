@@ -750,13 +750,23 @@ textarea,input{font:inherit;}
 /* ── PANEL STICKY ACTION FOOTER ─────────────── */
 .panel-actions{
   flex-shrink:0;
-  padding:10px 16px;
+  padding:8px 16px 10px;
   border-top:1px solid var(--border);
   background:var(--s1);
-  display:flex;flex-direction:column;gap:8px;
+  display:flex;flex-direction:column;gap:6px;
 }
-/* Hide footer entirely when nothing is showing */
 .panel-actions:empty{display:none;}
+/* Compact button sizing inside panel — matches the info grid cells */
+.panel-actions .cta-btn{
+  height:40px;
+  font-size:14px;
+  letter-spacing:1.5px;
+  border-radius:8px;
+}
+.panel-actions .result-box{padding:10px 12px;gap:7px;}
+.panel-actions .res-btn{height:36px;font-size:13px;}
+.panel-actions .creator-own{gap:5px;}
+.panel-actions .cancel-fade{padding:6px 16px;font-size:11px;}
 
 /* ── CHAT SECTION ───────────────────────────── */
 .chat-section{
