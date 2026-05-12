@@ -24,7 +24,7 @@
   --topbar-h:   60px;
   --filter-h:   50px;
   --action-h:   84px;
-  --action-btn-h:52px;  /* throw button height */
+  --action-btn-h:54px;  /* throw button height */
   --action-pad:  10px;  /* top/bottom padding inside bar */
   --safe-top:   env(safe-area-inset-top, 0px);
   --safe-bot:   env(safe-area-inset-bottom, 0px);
@@ -224,7 +224,7 @@ textarea,input{font:inherit;}
 
 /* ── MAP ────────────────────────────────────── */
 #map{position:fixed;inset:0;z-index:0;}
-.leaflet-control-zoom{border:none!important;margin-top:calc(var(--topbar-h) + max(0px,env(safe-area-inset-top)) + 10px)!important;}
+.leaflet-control-zoom{border:none!important;margin-top:calc(var(--topbar-h) + max(16px,env(safe-area-inset-top)) + 12px)!important;}
 .leaflet-control-zoom a{
   background:rgba(14,14,14,.9)!important;
   color:var(--muted2)!important;
@@ -279,7 +279,8 @@ textarea,input{font:inherit;}
 .filter-wrap{
   position:fixed;
   /* Float above the throw button - safe area aware */
-  bottom:calc(var(--action-btn-h) + var(--action-pad) + 10px + max(0px, env(safe-area-inset-bottom)));
+  /* 54px button + 10px top-pad + 20px gap — reliable in browser and PWA */
+  bottom:calc(84px + max(0px, env(safe-area-inset-bottom)));
   left:50%;
   transform:translateX(-50%);
   z-index:600;
@@ -449,7 +450,7 @@ textarea,input{font:inherit;}
 
 /* ── CTA BUTTON ─────────────────────────────── */
 .cta-btn{
-  width:100%;height:52px;
+  width:100%;height:56px;
   background:var(--yellow);color:#000;
   border-radius:var(--r);
   font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2.5px;
