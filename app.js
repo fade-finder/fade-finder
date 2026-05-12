@@ -8,7 +8,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/fireba
 import {
   getFirestore, collection, addDoc, onSnapshot,
   query, orderBy, limit, updateDoc, doc, deleteDoc,
-  setDoc, getDoc, serverTimestamp, Timestamp, where
+  setDoc, getDoc, serverTimestamp, Timestamp, where,
+  getDocs
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   getAuth, signInAnonymously, onAuthStateChanged, signOut
@@ -56,6 +57,8 @@ const S = {
   profiles:     new Map(),   // uid → profile
   selectedId:   null,
   filter:       'all',
+  chatUnsub:    null,   // active chat listener unsubscribe fn
+  chatFadeId:   null,
   postMode:     'solo',
   squadSize:    3,
   expireMins:   30,
@@ -142,6 +145,14 @@ const D = {
   // Toast / delta
   toast:        $('toast'),
   eloDelta:     $('eloDelta'),
+  // Chat
+  chatSection:  $('chatSection'),
+  chatMessages: $('chatMessages'),
+  chatEmpty:    $('chatEmpty'),
+  chatCount:    $('chatCount'),
+  chatInput:    $('chatInput'),
+  chatSend:     $('chatSend'),
+  chatAv:       $('chatAv'),
 };
 
 // ═══════════════════════════════════════════════════
@@ -547,12 +558,15 @@ async function openDetail(id) {
   const fade = S.fades.get(id);
   if (!fade) return;
   await renderDetail(fade);
+  initChat(id);
   D.detailOverlay.classList.add('open');
 }
 
 function closeDetail() {
   D.detailOverlay.classList.remove('open');
   S.selectedId = null;
+  if (S.chatUnsub) { S.chatUnsub(); S.chatUnsub = null; }
+  S.chatFadeId = null;
 }
 
 async function renderDetail(fade) {
@@ -1036,6 +1050,12 @@ function setupEvents() {
   D.queueBtn.addEventListener('click', queueUp);
   D.leaveBtn.addEventListener('click', leaveQueue);
   D.cancelFadeBtn.addEventListener('click', cancelFade);
+
+  // Chat
+  D.chatSend.addEventListener('click', sendChatMessage);
+  D.chatInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  });
   D.reportWin.addEventListener('click', () => applyResult(S.selectedId, true));
   D.reportLoss.addEventListener('click', () => applyResult(S.selectedId, false));
 
@@ -1071,20 +1091,6 @@ function setupEvents() {
     showOnboarding();
   });
 
-  // Remove expired fades from map every 60 seconds
-  setInterval(() => {
-    const now = Date.now();
-    for (const [id, fade] of S.fades) {
-      const exp = fade.expiresAt?.toMillis?.() || fade.expiresAt || 0;
-      if (exp < now) {
-        removeFadeMarker(id);
-        S.fades.delete(id);
-        if (S.selectedId === id) closeDetail();
-      }
-    }
-    updateCount();
-  }, 60_000);
-  
   // Refresh expiry display every 30s
   setInterval(() => {
     if (S.selectedId && S.fades.has(S.selectedId)) {
@@ -1093,6 +1099,135 @@ function setupEvents() {
       D.dExp.textContent = formatTimeLeft(expMs - Date.now());
     }
   }, 30000);
+}
+
+
+// ═══════════════════════════════════════════════════
+//   CHAT
+// ═══════════════════════════════════════════════════
+function initChat(fadeId) {
+  // Tear down previous listener
+  if (S.chatUnsub) { S.chatUnsub(); S.chatUnsub = null; }
+  S.chatFadeId = fadeId;
+  D.chatMessages.innerHTML = '';
+  D.chatEmpty.style.display = 'block';
+  D.chatMessages.appendChild(D.chatEmpty);
+  D.chatCount.textContent = '0';
+
+  // Seed avatar in input row
+  if (S.userProfile) {
+    D.chatAv.textContent = S.userProfile.avatar || '✊';
+    D.chatAv.style.background = getAvatarBg(S.userId);
+  }
+
+  if (DEMO_MODE) {
+    // Demo: load from localStorage
+    const key = `ff_chat_${fadeId}`;
+    const msgs = JSON.parse(localStorage.getItem(key) || '[]');
+    msgs.forEach(m => appendChatMessage(m, fadeId));
+    updateChatCount(msgs.length);
+    return;
+  }
+
+  const q = query(
+    collection(db, 'fades', fadeId, 'messages'),
+    orderBy('createdAt', 'asc'),
+    limit(100)
+  );
+
+  S.chatUnsub = onSnapshot(q, snapshot => {
+    snapshot.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        const msg = { id: change.doc.id, ...change.doc.data() };
+        appendChatMessage(msg, fadeId);
+      }
+    });
+    updateChatCount(D.chatMessages.querySelectorAll('.chat-msg').length);
+  }, err => console.error('Chat error:', err));
+}
+
+function appendChatMessage(msg, fadeId) {
+  // Remove empty state
+  D.chatEmpty.style.display = 'none';
+
+  const isMe = msg.uid === S.userId;
+  const bg   = getAvatarBg(msg.uid);
+  const time = formatChatTime(msg.createdAt?.toMillis?.() || msg.createdAt || Date.now());
+
+  const div = document.createElement('div');
+  div.className = `chat-msg${isMe ? ' is-me' : ''}`;
+  div.dataset.msgId = msg.id || '';
+  div.innerHTML = `
+    <div class="chat-msg-av" style="background:${bg}">${msg.avatar || '✊'}</div>
+    <div class="chat-bubble-wrap">
+      <div class="chat-name">${isMe ? 'YOU' : (msg.username || 'Anonymous')}</div>
+      <div class="chat-bubble">${escapeHtml(msg.text)}</div>
+      <div class="chat-time">${time}</div>
+    </div>`;
+
+  D.chatMessages.appendChild(div);
+  // Scroll to latest
+  requestAnimationFrame(() => {
+    D.chatMessages.scrollTop = D.chatMessages.scrollHeight;
+  });
+}
+
+function updateChatCount(n) {
+  D.chatCount.textContent = n;
+}
+
+async function sendChatMessage() {
+  const text = D.chatInput.value.trim();
+  if (!text || !S.chatFadeId) return;
+  if (!S.userProfile) { toast('Set up your profile first', 'error'); return; }
+
+  D.chatSend.disabled = true;
+  D.chatInput.value = '';
+
+  const msg = {
+    uid:      S.userId,
+    username: S.userProfile.username || 'Anonymous',
+    avatar:   S.userProfile.avatar   || '✊',
+    text,
+    createdAt: DEMO_MODE ? Date.now() : serverTimestamp(),
+  };
+
+  try {
+    if (DEMO_MODE) {
+      const key  = `ff_chat_${S.chatFadeId}`;
+      const msgs = JSON.parse(localStorage.getItem(key) || '[]');
+      const full = { ...msg, id: 'msg-' + Math.random().toString(36).slice(2, 8) };
+      msgs.push(full);
+      localStorage.setItem(key, JSON.stringify(msgs));
+      appendChatMessage(full, S.chatFadeId);
+      updateChatCount(D.chatMessages.querySelectorAll('.chat-msg').length);
+    } else {
+      await addDoc(collection(db, 'fades', S.chatFadeId, 'messages'), msg);
+      // onSnapshot handles appending
+    }
+  } catch (e) {
+    console.error('Send failed:', e);
+    toast('Message failed to send', 'error');
+    D.chatInput.value = text; // restore
+  } finally {
+    D.chatSend.disabled = false;
+    D.chatInput.focus();
+  }
+}
+
+function formatChatTime(ms) {
+  if (!ms) return '';
+  const d    = new Date(ms);
+  const now  = new Date();
+  const diff = now - d;
+  if (diff < 60000)  return 'just now';
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+  if (d.toDateString() === now.toDateString()) return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  return d.toLocaleDateString([], {month:'short', day:'numeric'});
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ═══════════════════════════════════════════════════
