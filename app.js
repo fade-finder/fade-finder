@@ -1071,6 +1071,20 @@ function setupEvents() {
     showOnboarding();
   });
 
+  // Remove expired fades from map every 60 seconds
+  setInterval(() => {
+    const now = Date.now();
+    for (const [id, fade] of S.fades) {
+      const exp = fade.expiresAt?.toMillis?.() || fade.expiresAt || 0;
+      if (exp < now) {
+        removeFadeMarker(id);
+        S.fades.delete(id);
+        if (S.selectedId === id) closeDetail();
+      }
+    }
+    updateCount();
+  }, 60_000);
+  
   // Refresh expiry display every 30s
   setInterval(() => {
     if (S.selectedId && S.fades.has(S.selectedId)) {
