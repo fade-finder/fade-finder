@@ -2,226 +2,275 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FadeFinder — Find Your Fade</title>
-  <meta name="description" content="Find or throw a fade near you. Queue up, pick your mode, handle your business.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>FadeFinder</title>
+  <meta name="description" content="Find your fade. Queue up. Handle business.">
   <meta name="theme-color" content="#080808">
-
-  <!-- Fonts -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FadeFinder">
+  <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-
-  <!-- Leaflet CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;0,900;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ── TOP BAR ─────────────────────────────── -->
-  <header class="topbar">
+<!-- GRAIN -->
+<canvas id="grain" aria-hidden="true"></canvas>
+
+<!-- SAFARI PWA BANNER -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-inner">
+    <div class="pwa-icon">📲</div>
+    <div class="pwa-text">
+      <strong>Add to Home Screen</strong>
+      <span>Tap <span class="pwa-share">⬆</span> then "Add to Home Screen"</span>
+    </div>
+    <button class="pwa-close" id="pwaBannerClose">✕</button>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="ob-overlay" id="onboarding">
+  <div class="ob-card">
+    <div class="ob-logo">FADE<span>FINDER</span></div>
+    <div class="ob-tag">Handle your business.</div>
+    <div class="ob-section">
+      <div class="ob-label">PICK YOUR AVATAR</div>
+      <div class="av-grid" id="avatarGrid"></div>
+    </div>
+    <div class="ob-section">
+      <div class="ob-label">YOUR NAME IN THE STREETS</div>
+      <input class="ob-input" id="obUsername" type="text" placeholder="No spaces. No cap." maxlength="18" autocomplete="off" spellcheck="false">
+      <div class="ob-hint" id="obHint">&nbsp;</div>
+    </div>
+    <button class="ob-btn" id="obBtn" disabled>ENTER THE FADE</button>
+  </div>
+</div>
+
+<!-- LOCK-IN CELEBRATION -->
+<div class="lockin-overlay" id="lockinOverlay">
+  <div class="lockin-content">
+    <div class="lockin-icon">🔒</div>
+    <div class="lockin-title">LOCKED IN</div>
+    <div class="lockin-sub">Fade is SET. Handle it.</div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <button class="tb-left" id="leaderboardBtn">
+    <span class="tb-icon">🏆</span>
+    <span class="tb-lbl">RANKS</span>
+  </button>
+  <div class="tb-center">
     <div class="logo">FADE<span>FINDER</span></div>
-    <div class="live-indicator">
-      <span class="pulse-dot"></span>
-      <span id="activeCount">0 FADES LIVE</span>
-    </div>
-    <button class="locate-btn" id="locateBtn" title="Re-center map">◎</button>
-  </header>
-
-  <!-- ── MAP ────────────────────────────────── -->
-  <div id="map"></div>
-
-  <!-- ── USER LOCATION DOT ──────────────────── -->
-  <!-- Handled by Leaflet -->
-
-  <!-- ── FILTER BAR ─────────────────────────── -->
-  <div class="filter-bar" id="filterBar">
-    <button class="filter-btn active" data-mode="all">ALL</button>
-    <button class="filter-btn solo-btn" data-mode="solo">SOLO</button>
-    <button class="filter-btn squad-btn" data-mode="squads_fill">SQUADS</button>
-    <button class="filter-btn backup-btn" data-mode="squads_no_fill">NEEDS BACKUP</button>
-  </div>
-
-  <!-- ── BOTTOM ACTION BAR ──────────────────── -->
-  <div class="action-bar">
-    <div class="action-bar-inner">
-      <button class="throw-btn" id="throwFadeBtn">
-        <span class="throw-icon">✊</span>
-        <span class="throw-label">THROW A FADE</span>
-      </button>
+    <div class="live-pill">
+      <span class="live-dot"></span>
+      <span id="activeCount">0 LIVE</span>
     </div>
   </div>
+  <button class="tb-right" id="profileBtn">
+    <div class="av-bubble" id="topbarAv">?</div>
+  </button>
+</header>
 
-  <!-- ═══════════════════════════════════════
-       POST FADE MODAL
-  ══════════════════════════════════════════ -->
-  <div class="modal-overlay" id="postModal">
-    <div class="modal" id="postModalCard">
-      <div class="modal-header">
-        <div class="modal-title">THROW A FADE</div>
-        <button class="modal-close" id="closePostModal">✕</button>
+<!-- MAP -->
+<div id="map"></div>
+
+<!-- FILTER BAR -->
+<div class="filter-wrap">
+  <div class="filter-track" id="filterBar">
+    <button class="f-btn active" data-mode="all">ALL</button>
+    <button class="f-btn" data-mode="solo">SOLO</button>
+    <button class="f-btn" data-mode="squads_fill">SQUADS</button>
+    <button class="f-btn" data-mode="squads_no_fill">BACKUP</button>
+    <div class="f-pill" id="fPill"></div>
+  </div>
+</div>
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+  <button class="throw-btn" id="throwFadeBtn">
+    <span class="throw-fist">✊</span>
+    <span class="throw-lbl">THROW A FADE</span>
+  </button>
+</div>
+
+<!-- POST FADE SHEET -->
+<div class="overlay" id="postOverlay">
+  <div class="sheet" id="postSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hdr">
+      <div class="sheet-title">THROW A FADE</div>
+      <button class="sheet-x" id="closePost">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="flabel">CALLOUT</label>
+        <textarea class="ftarea" id="calloutText" placeholder="Say your piece. Keep it real." maxlength="120"></textarea>
+        <div class="fchar"><span id="charCount">0</span>/120</div>
       </div>
-
-      <div class="modal-body">
-
-        <!-- Callout -->
-        <div class="field-group">
-          <label class="field-label">YOUR CALLOUT</label>
-          <textarea class="callout-input" id="calloutText"
-            placeholder="Say something. Keep it real."
-            maxlength="120"></textarea>
-          <div class="char-row">
-            <span id="charCount">0</span>/120
-          </div>
+      <div class="field">
+        <label class="flabel">MODE</label>
+        <div class="mode-row">
+          <button class="mode-tile active" data-mode="solo">
+            <div class="mt-emoji">👤</div>
+            <div class="mt-name">SOLO</div>
+            <div class="mt-hint">1 on 1</div>
+          </button>
+          <button class="mode-tile" data-mode="squads_fill">
+            <div class="mt-emoji">👥</div>
+            <div class="mt-name">SQUADS</div>
+            <div class="mt-hint">Fill</div>
+          </button>
+          <button class="mode-tile" data-mode="squads_no_fill">
+            <div class="mt-emoji">📡</div>
+            <div class="mt-name">BACKUP</div>
+            <div class="mt-hint">Need crew</div>
+          </button>
         </div>
-
-        <!-- Mode -->
-        <div class="field-group">
-          <label class="field-label">MODE</label>
-          <div class="mode-grid">
-            <button class="mode-card active" data-mode="solo">
-              <div class="mode-icon-wrap solo-color">👤</div>
-              <div class="mode-name">SOLO</div>
-              <div class="mode-sub">1 on 1</div>
-            </button>
-            <button class="mode-card" data-mode="squads_fill">
-              <div class="mode-icon-wrap squad-color">👥</div>
-              <div class="mode-name">SQUADS</div>
-              <div class="mode-sub">Fill enabled</div>
-            </button>
-            <button class="mode-card" data-mode="squads_no_fill">
-              <div class="mode-icon-wrap backup-color">📡</div>
-              <div class="mode-name">BACKUP</div>
-              <div class="mode-sub">Need your crew</div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Squad size (only for squads) -->
-        <div class="field-group" id="squadSizeGroup" style="display:none">
-          <label class="field-label">SQUAD SIZE</label>
-          <div class="chip-row">
-            <button class="chip" data-size="2">2v2</button>
-            <button class="chip active" data-size="3">3v3</button>
-            <button class="chip" data-size="4">4v4</button>
-            <button class="chip" data-size="5">5v5</button>
-          </div>
-        </div>
-
-        <!-- Expiry -->
-        <div class="field-group">
-          <label class="field-label">FADE EXPIRES IN</label>
-          <div class="chip-row">
-            <button class="chip" data-mins="15">15 MIN</button>
-            <button class="chip active" data-mins="30">30 MIN</button>
-            <button class="chip" data-mins="60">1 HOUR</button>
-          </div>
-        </div>
-
-        <!-- Location Status -->
-        <div class="location-row" id="locationStatus">
-          <span class="loc-icon">📍</span>
-          <span id="locText">Waiting for location…</span>
-        </div>
-
-        <button class="submit-btn" id="submitFade" disabled>POST THE FADE</button>
-
       </div>
+      <div class="field" id="squadField" style="display:none">
+        <label class="flabel">SQUAD SIZE</label>
+        <div class="chip-row">
+          <button class="chip" data-size="2">2v2</button>
+          <button class="chip active" data-size="3">3v3</button>
+          <button class="chip" data-size="4">4v4</button>
+          <button class="chip" data-size="5">5v5</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="flabel">EXPIRES IN</label>
+        <div class="chip-row">
+          <button class="chip" data-mins="15">15 MIN</button>
+          <button class="chip active" data-mins="30">30 MIN</button>
+          <button class="chip" data-mins="60">1 HOUR</button>
+        </div>
+      </div>
+      <div class="loc-row" id="locRow">
+        <span>📍</span><span id="locText">Getting location…</span>
+      </div>
+      <button class="cta-btn" id="submitFade" disabled>POST THE FADE</button>
     </div>
   </div>
+</div>
 
-  <!-- ═══════════════════════════════════════
-       FADE DETAIL PANEL (slides in)
-  ══════════════════════════════════════════ -->
-  <div class="detail-panel" id="detailPanel">
-    <div class="panel-topbar">
-      <button class="back-btn" id="closeDetailBtn">← BACK</button>
-      <div class="panel-badge" id="panelBadge">SOLO</div>
+<!-- FADE DETAIL PANEL -->
+<div class="panel-overlay" id="detailOverlay">
+  <div class="panel" id="detailPanel">
+    <div class="panel-bar">
+      <button class="panel-back" id="closeDetail">← BACK</button>
+      <div class="pbadge" id="dBadge">SOLO</div>
     </div>
-
-    <div class="panel-scroll">
-      <!-- Callout -->
-      <div class="detail-callout" id="detailCallout"></div>
-
-      <!-- Meta Grid -->
-      <div class="detail-meta">
-        <div class="meta-box">
-          <div class="meta-label">DISTANCE</div>
-          <div class="meta-value" id="detailDistance">—</div>
-        </div>
-        <div class="meta-box">
-          <div class="meta-label">EXPIRES</div>
-          <div class="meta-value" id="detailExpires">—</div>
-        </div>
-        <div class="meta-box">
-          <div class="meta-label">QUEUE</div>
-          <div class="meta-value" id="detailQueueCount">—</div>
-        </div>
-        <div class="meta-box">
-          <div class="meta-label">NEEDED</div>
-          <div class="meta-value" id="detailNeeded">—</div>
-        </div>
-      </div>
-
-      <!-- NEEDS BACKUP alert -->
-      <div class="backup-banner" id="backupBanner" style="display:none">
-        <span class="backup-signal">📡</span>
+    <div class="panel-body">
+      <div class="d-creator" id="dCreator">
+        <div class="d-av" id="dCreatorAv"></div>
         <div>
-          <div class="backup-title">NEEDS BACKUP</div>
-          <div class="backup-sub">This crew is looking for people to squad up with</div>
+          <div class="d-name" id="dCreatorName">—</div>
+          <div class="d-elo" id="dCreatorElo">—</div>
         </div>
       </div>
-
-      <!-- Queue Visual -->
-      <div class="queue-section">
-        <div class="queue-header">
-          <span class="queue-title">CREATOR'S SIDE</span>
-          <span class="queue-fill" id="creatorFill">0/1</span>
+      <div class="d-callout" id="dCallout"></div>
+      <div class="d-grid">
+        <div class="d-cell"><div class="d-lbl">DISTANCE</div><div class="d-val" id="dDist">—</div></div>
+        <div class="d-cell"><div class="d-lbl">EXPIRES</div><div class="d-val" id="dExp">—</div></div>
+        <div class="d-cell"><div class="d-lbl">QUEUE</div><div class="d-val" id="dQueueCount">—</div></div>
+        <div class="d-cell"><div class="d-lbl">FORMAT</div><div class="d-val" id="dFormat">—</div></div>
+      </div>
+      <div class="backup-banner" id="backupBanner" style="display:none">
+        <span>📡</span>
+        <div><div class="bb-title">NEEDS BACKUP</div><div class="bb-sub">Join this crew first, then opponents queue</div></div>
+      </div>
+      <div class="sides">
+        <div class="side">
+          <div class="side-hdr">CREATOR'S CREW <span id="cFill" class="side-ct">0/1</span></div>
+          <div class="slots" id="cSlots"></div>
         </div>
-        <div class="queue-slots" id="creatorSlots"></div>
-
         <div class="vs-divider"><span>VS</span></div>
-
-        <div class="queue-header">
-          <span class="queue-title">OPPONENT SIDE</span>
-          <span class="queue-fill" id="opponentFill">0/1</span>
+        <div class="side">
+          <div class="side-hdr">OPPONENT SIDE <span id="oFill" class="side-ct">0/1</span></div>
+          <div class="slots" id="oSlots"></div>
         </div>
-        <div class="queue-slots" id="opponentSlots"></div>
       </div>
-
-      <!-- Invite Code (for squads_fill) -->
-      <div class="invite-section" id="inviteSection" style="display:none">
-        <div class="invite-label">YOUR SQUAD INVITE CODE</div>
-        <div class="invite-code-row">
-          <div class="invite-code" id="inviteCode">——</div>
-          <button class="copy-btn" id="copyInviteBtn">COPY LINK</button>
+      <div class="invite-box" id="inviteBox" style="display:none">
+        <div class="inv-lbl">SQUAD INVITE CODE</div>
+        <div class="inv-row">
+          <div class="inv-code" id="invCode">——</div>
+          <button class="inv-copy" id="copyInv">COPY LINK</button>
         </div>
-        <div class="invite-hint">Share with your crew. They join your side hidden.</div>
+        <div class="inv-hint">Share with your crew. They join your side, undisclosed.</div>
       </div>
-
-      <!-- Action -->
-      <button class="queue-btn solo-queue" id="queueBtn">QUEUE UP</button>
-      <button class="queue-btn leave-btn" id="leaveBtn" style="display:none">LEAVE QUEUE</button>
-      <div class="already-creator" id="alreadyCreator" style="display:none">
-        <span>YOU POSTED THIS FADE</span>
-        <button class="cancel-fade-btn" id="cancelFadeBtn">CANCEL FADE</button>
+      <div class="result-box" id="resultBox" style="display:none">
+        <div class="res-lbl">REPORT RESULT — ELO ON THE LINE</div>
+        <div class="res-row">
+          <button class="res-btn win-btn" id="reportWin">✊ I WON</button>
+          <button class="res-btn loss-btn" id="reportLoss">💀 I LOST</button>
+        </div>
+      </div>
+      <button class="cta-btn" id="queueBtn" style="display:none">QUEUE UP</button>
+      <button class="cta-btn leave-btn" id="leaveBtn" style="display:none">LEAVE QUEUE</button>
+      <div class="creator-own" id="creatorOwn" style="display:none">
+        <div class="co-lbl">YOUR FADE</div>
+        <button class="cancel-fade" id="cancelFadeBtn">CANCEL FADE</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ── TOAST ───────────────────────────────── -->
-  <div class="toast" id="toast"></div>
-
-  <!-- ── DEMO MODE BADGE ─────────────────────── -->
-  <div class="demo-badge" id="demoBadge" style="display:none">
-    DEMO MODE — Configure Firebase to go live
+<!-- LEADERBOARD SHEET -->
+<div class="overlay" id="lbOverlay">
+  <div class="sheet lb-sheet" id="lbSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hdr">
+      <div class="sheet-title">🏆 RANKINGS</div>
+      <button class="sheet-x" id="closeLb">✕</button>
+    </div>
+    <div class="lb-body" id="lbBody"></div>
   </div>
+</div>
 
-  <!-- Scripts — Leaflet must load before our module -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script type="module" src="app.js"></script>
+<!-- PROFILE SHEET -->
+<div class="overlay" id="profileOverlay">
+  <div class="sheet" id="profileSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hdr">
+      <div class="sheet-title">PROFILE</div>
+      <button class="sheet-x" id="closeProfile">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="prof-hero">
+        <div class="prof-av" id="profAv"></div>
+        <div class="prof-name" id="profName">—</div>
+        <div class="prof-tier-badge" id="profTier">—</div>
+      </div>
+      <div class="elo-card">
+        <div class="elo-lbl">ELO RATING</div>
+        <div class="elo-num" id="profElo">1000</div>
+        <div class="elo-track"><div class="elo-fill" id="profEloBar" style="width:0%"></div></div>
+        <div class="elo-range" id="profEloRange">—</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-n" id="profWins">0</div><div class="stat-l">WINS</div></div>
+        <div class="stat"><div class="stat-n" id="profLosses">0</div><div class="stat-l">LOSSES</div></div>
+        <div class="stat"><div class="stat-n" id="profFades">0</div><div class="stat-l">FADES</div></div>
+        <div class="stat"><div class="stat-n" id="profWR">—</div><div class="stat-l">WIN %</div></div>
+      </div>
+      <button class="cta-btn danger-btn" id="signOutBtn">WALK AWAY</button>
+    </div>
+  </div>
+</div>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ELO DELTA -->
+<div class="elo-delta" id="eloDelta"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
